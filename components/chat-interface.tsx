@@ -7,11 +7,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { FormattedResponse } from "@/components/formatted-response"
 import type { CustomerProfile } from "@/app/page"
 
 interface ChatInterfaceProps {
   customerProfile: CustomerProfile
-  onRequestQuote?: () => void
 }
 
 interface Message {
@@ -21,12 +21,14 @@ interface Message {
   createdAt: Date
 }
 
-export function ChatInterface({ customerProfile, onRequestQuote }: ChatInterfaceProps) {
+export function ChatInterface({ customerProfile }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       role: "assistant",
-      content: `Hello! I'm your insurance research assistant. Based on your profile (${customerProfile.location}, age ${customerProfile.age}, interested in ${customerProfile.needs.join(", ")}), I can help you research insurance products, regulations, and carriers. What would you like to know?`,
+      content: `Welcome! I'm your personal insurance coverage coach. I've reviewed your profile (${customerProfile.location}, age ${customerProfile.age}, focusing on ${customerProfile.needs.join(", ")}), and I'm here to guide you toward the optimal insurance strategy for your unique situation. 
+
+Think of me as your trusted advisor who will help you navigate coverage options, understand what protection you truly need, and find the best value for your specific circumstances. What aspect of your insurance coverage would you like to explore first?`,
       createdAt: new Date(),
     },
   ])
@@ -57,6 +59,8 @@ export function ChatInterface({ customerProfile, onRequestQuote }: ChatInterface
     setInput("")
     setIsLoading(true)
 
+    const assistantMessageId = (Date.now() + 1).toString()
+
     try {
       console.log("[v0] Sending request to API")
       const response = await fetch("/api/chat", {
@@ -86,7 +90,7 @@ export function ChatInterface({ customerProfile, onRequestQuote }: ChatInterface
       let assistantContent = ""
 
       const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        id: assistantMessageId,
         role: "assistant",
         content: "",
         createdAt: new Date(),
@@ -95,99 +99,85 @@ export function ChatInterface({ customerProfile, onRequestQuote }: ChatInterface
 
       if (reader) {
         console.log("[v0] Starting to read stream")
-        while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
 
-          const chunk = decoder.decode(value, { stream: true })
-          console.log("[v0] Received chunk:", chunk)
+            if (done) {
+              console.log("[v0] Stream completed, final content length:", assistantContent.length)
+              break
+            }
 
-          assistantContent += chunk
+            const chunk = decoder.decode(value, { stream: true })
+            console.log("[v0] Received chunk:", chunk)
 
-          setMessages((prev) =>
-            prev.map((msg) => (msg.id === assistantMessage.id ? { ...msg, content: assistantContent } : msg)),
-          )
+            assistantContent += chunk
+
+            if (assistantContent.trim()) {
+              setMessages((prev) =>
+                prev.map((msg) => (msg.id === assistantMessageId ? { ...msg, content: assistantContent } : msg)),
+              )
+            }
+          }
+        } catch (streamError) {
+          console.error("[v0] Stream reading error:", streamError)
+          throw streamError
+        } finally {
+          reader.releaseLock()
         }
-        console.log("[v0] Final content length:", assistantContent.length)
       }
-
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === assistantMessage.id
-            ? { ...msg, content: assistantContent || generateStructuredResponse(currentInput, customerProfile) }
-            : msg,
-        ),
-      )
     } catch (error) {
       console.error("[v0] Chat error:", error)
-      // Fallback to structured response
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
+      setMessages((prev) => prev.filter((msg) => msg.id !== assistantMessageId))
+
+      const fallbackMessage: Message = {
+        id: (Date.now() + 2).toString(),
         role: "assistant",
         content: generateStructuredResponse(currentInput, customerProfile),
         createdAt: new Date(),
       }
-      setMessages((prev) => [...prev, assistantMessage])
+      setMessages((prev) => [...prev, fallbackMessage])
     } finally {
       setIsLoading(false)
     }
   }
 
   const generateStructuredResponse = (query: string, profile: CustomerProfile): string => {
-    return `## Customer Profile
-- Location: ${profile.location}
-- Age: ${profile.age}
-- Needs: ${profile.needs.join(", ")}
+    return `## Your Coverage Assessment
 
-## Relevant Products
-Based on your query "${query}" and profile, here are the top insurance product categories:
+Based on your question "${query}" and your profile, here's my coaching guidance:
 
-1. **${profile.needs[0] || "Primary Insurance"}** - Core coverage for your main need
-2. **Comprehensive Coverage** - Enhanced protection options
-3. **State-Specific Products** - ${profile.location} compliant policies
+### Your Current Situation
+- **Location**: ${profile.location} - I'll factor in your state's requirements and market conditions
+- **Life Stage**: Age ${profile.age} - This influences your coverage priorities and available options  
+- **Coverage Goals**: ${profile.needs.join(", ")} - Let's align your protection with these objectives
 
-## Regulations & Local Considerations
-- ${profile.location} state insurance requirements
-- Age-specific regulations for ${profile.age}-year-olds
-- Mandatory coverage minimums and optional add-ons
+### My Coaching Recommendations
 
-## Carriers / Market Players
-- **Major National Carriers**: Established providers with strong ${profile.location} presence
-- **Regional Specialists**: Local insurers with competitive rates
-- **Digital-First Options**: Modern platforms with streamlined processes
+**Immediate Focus Areas:**
+1. **Gap Analysis** - Let's identify where your current coverage might fall short
+2. **Priority Setting** - I'll help you rank your insurance needs by importance and urgency
+3. **Budget Optimization** - We'll find the sweet spot between adequate protection and affordability
 
-## Recommendations
-Based on your profile, I recommend:
-1. Start with quotes from 3-5 carriers for comparison
-2. Consider bundling multiple insurance types for discounts
-3. Review coverage annually as your needs change
-4. Take advantage of age-appropriate discounts
+**Next Steps in Your Journey:**
+1. **Coverage Review** - I'll guide you through evaluating your current policies
+2. **Market Research** - Together we'll explore the best carriers for your specific needs
+3. **Strategy Development** - We'll create a personalized insurance roadmap
 
-${onRequestQuote ? '\n**Ready to get quotes?** Click the "Get Quotes" button above to request personalized quotes from top carriers!' : ""}
+### Why This Coaching Approach Works
+Unlike generic insurance advice, I provide personalized guidance based on your unique circumstances. I'm here to educate, not just sell - helping you make informed decisions that protect what matters most to you.
 
-*Note: This is a simulated response. The full AI research capabilities will be available once the integration is properly configured.*`
+**Ready to dive deeper?** Ask me about any specific coverage area, and I'll provide tailored coaching based on your profile and goals.
+
+*This is your personal insurance coach - I'm here to guide you every step of the way toward optimal coverage.*`
   }
 
   return (
-    <Card className="h-[600px] flex flex-col">
+    <Card className="h-[calc(100vh-16rem)] flex flex-col">
       <CardContent className="flex-1 flex flex-col p-0">
-        {onRequestQuote && (
-          <div className="border-b border-border p-4 bg-muted/30">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium">Ready for quotes?</p>
-                <p className="text-xs text-muted-foreground">Get personalized quotes from top carriers</p>
-              </div>
-              <Button onClick={onRequestQuote} size="sm">
-                Get Quotes
-              </Button>
-            </div>
-          </div>
-        )}
-
         {/* Messages */}
         <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-          <div className="space-y-4">
+          <div className="space-y-4 pb-4">
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -195,42 +185,20 @@ ${onRequestQuote ? '\n**Ready to get quotes?** Click the "Get Quotes" button abo
               >
                 {message.role === "assistant" && (
                   <div className="flex items-center justify-center w-8 h-8 bg-primary rounded-full flex-shrink-0">
-                    <span className="text-primary-foreground text-xs font-bold">AI</span>
+                    <span className="text-primary-foreground text-xs font-bold">🎯</span>
                   </div>
                 )}
                 <div
-                  className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                    message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                  className={`max-w-[85%] rounded-lg px-4 py-3 ${
+                    message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted/50 border border-border"
                   }`}
                 >
-                  <div
-                    className={`text-sm leading-relaxed ${
-                      message.role === "assistant"
-                        ? "prose prose-sm max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-strong:text-foreground prose-ul:text-muted-foreground prose-li:text-muted-foreground"
-                        : "whitespace-pre-wrap"
-                    }`}
-                  >
-                    {message.role === "assistant" ? (
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: message.content
-                            .replace(/## (.*)/g, '<h2 class="text-lg font-semibold mt-4 mb-2 text-foreground">$1</h2>')
-                            .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-foreground">$1</strong>')
-                            .replace(/- (.*)/g, '<li class="ml-4">$1</li>')
-                            .replace(
-                              /(\d+)\. \*\*(.*?)\*\*: (.*)/g,
-                              '<div class="mb-2"><strong class="text-foreground">$1. $2:</strong> $3</div>',
-                            )
-                            .replace(/\n\n/g, '</p><p class="mb-2">')
-                            .replace(/^/, '<p class="mb-2">')
-                            .replace(/$/, "</p>"),
-                        }}
-                      />
-                    ) : (
-                      message.content
-                    )}
-                  </div>
-                  <p className="text-xs opacity-70 mt-1">
+                  {message.role === "assistant" ? (
+                    <FormattedResponse content={message.content} />
+                  ) : (
+                    <div className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</div>
+                  )}
+                  <p className="text-xs opacity-70 mt-2">
                     {message.createdAt?.toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -247,9 +215,9 @@ ${onRequestQuote ? '\n**Ready to get quotes?** Click the "Get Quotes" button abo
             {isLoading && (
               <div className="flex gap-3 justify-start">
                 <div className="flex items-center justify-center w-8 h-8 bg-primary rounded-full flex-shrink-0">
-                  <span className="text-primary-foreground text-xs font-bold">AI</span>
+                  <span className="text-primary-foreground text-xs font-bold">🎯</span>
                 </div>
-                <div className="bg-muted rounded-lg px-4 py-2">
+                <div className="bg-muted/50 border border-border rounded-lg px-4 py-2">
                   <div className="flex gap-1">
                     <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
                     <div
@@ -273,7 +241,7 @@ ${onRequestQuote ? '\n**Ready to get quotes?** Click the "Get Quotes" button abo
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about insurance products, regulations, or carriers..."
+              placeholder="Ask your coverage coach about insurance strategies, options, or recommendations..."
               className="flex-1"
               disabled={isLoading}
             />

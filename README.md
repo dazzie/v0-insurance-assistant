@@ -216,3 +216,147 @@ Assistant: [Generates comprehensive toolkit with all sections]
 ```
 
 The toolkit transforms users from unprepared shoppers into informed negotiators ready to secure the best rates.
+
+## Quote Profile System
+
+The app now features a comprehensive Quote Profile System that tracks all collected information and ensures efficient, non-redundant information gathering.
+
+### Key Features
+
+#### 🎯 Intelligent Information Tracking
+- **Real-time profile building** - Automatically extracts information from natural conversation
+- **No repeated questions** - Once information is provided, it won't be asked again
+- **Smart prompting** - Suggested prompts adapt based on what's already collected
+- **Progress visualization** - See exactly how complete your quote profile is
+
+#### 📊 Quote Profile Display
+A visual component that shows:
+- **Completeness percentage** - Progress bar showing profile completion (0-100%)
+- **Information status** - Color-coded indicators for each field:
+  - ✅ Green checkmark - Information collected
+  - 🟡 Yellow circle - Required information missing
+  - ⚪ Gray circle - Optional information missing
+- **Section breakdown** - Organized view of vehicles, drivers, coverage, and history
+- **Ready for quotes indicator** - Clear signal when sufficient information is gathered
+
+#### 🔄 Dynamic Suggested Prompts
+Context-aware prompt suggestions that:
+- **Hide completed sections** - No prompts for already-collected information
+- **Break down complex info** - Individual prompts for each vehicle/driver
+- **Option-based choices** - Quick-select buttons for common responses
+- **Priority ordering** - Most important missing info prompted first
+
+### Information Categories
+
+#### Basic Information
+- Number of vehicles
+- Number of drivers  
+- ZIP code
+- State
+
+#### Vehicle Details (per vehicle)
+- Year, make, model, trim
+- Annual mileage
+- Primary use (commute/pleasure/business)
+- Parking location
+- Safety features
+
+#### Driver Details (per driver)
+- Age
+- Years licensed
+- Marital status
+- Driving record/violations
+- Occupation
+- Education level
+
+#### Coverage Preferences
+- Current carrier
+- Current premium
+- Desired coverage level
+- Deductible preferences
+- Additional coverage needs
+
+#### Insurance History
+- Currently insured status
+- Coverage lapses
+- Years with current carrier
+- Claims history
+
+### How It Works
+
+1. **Information Extraction** - Natural language processing extracts details from conversation
+2. **Profile Building** - Collected information is structured into a comprehensive profile
+3. **Completeness Calculation** - System determines what's required vs optional
+4. **Smart Prompting** - Next prompts generated based on missing information
+5. **Visual Feedback** - Profile display shows progress and what's needed
+
+### Technical Implementation
+
+#### Core Files
+
+- **`lib/quote-profile.ts`** - Quote profile management and completeness tracking
+  - `buildQuoteProfile()` - Constructs profile from conversation
+  - `calculateCompleteness()` - Determines readiness percentage
+  - `getPromptsForMissingInfo()` - Generates targeted prompts
+  
+- **`lib/information-tracker.ts`** - Natural language information extraction
+  - `extractCollectedInfo()` - Parses messages for insurance details
+  - `getMissingInfo()` - Identifies gaps in collected data
+  - `getNextInfoToCollect()` - Prioritizes collection order
+
+- **`components/quote-profile-display.tsx`** - Visual profile component
+  - Progress bar with completion percentage
+  - Sectioned display of all collected information
+  - Color-coded status indicators
+  - Ready-for-quotes status
+
+- **`lib/suggested-prompts.ts`** - Dynamic prompt generation
+  - Context-aware suggestions
+  - Removes prompts for collected info
+  - Provides option-based choices
+
+### Example Flow
+
+```
+Initial State:
+- Profile: 0% complete
+- Prompts: "1 vehicle", "2 vehicles", "3+ vehicles"
+
+User: "I have 2 cars"
+- Profile: 10% complete ✅ Number of vehicles: 2
+- Prompts: "How many drivers?", "Just me", "2 drivers"
+
+User: "Just me driving both"
+- Profile: 20% complete ✅ Number of drivers: 1
+- Prompts: "What year is vehicle 1?", "2024 (brand new)", "2020-2023"
+
+User: "2020 Toyota Camry and 2018 Honda CR-V"
+- Profile: 40% complete ✅ Vehicles identified
+- Prompts: "How old are you?", "Annual mileage for Camry?"
+
+[Continues until 100% complete]
+```
+
+### Benefits
+
+#### For Users
+- **No redundant questions** - Efficient information gathering
+- **Clear progress tracking** - Know exactly what's needed
+- **Faster quote process** - Get to quotes quicker
+- **Better user experience** - Natural conversation flow
+
+#### For Business
+- **Higher completion rates** - Users see progress and continue
+- **Better data quality** - Structured information collection
+- **Reduced drop-off** - Clear path to completion
+- **Improved conversions** - Users reach quote stage faster
+
+### API Integration
+
+The system integrates with the chat API to:
+- Include profile status in system prompts
+- Inform AI of collected information
+- Focus responses on missing details
+- Trigger toolkit generation when complete
+
+This Quote Profile System ensures users have a smooth, efficient experience getting insurance quotes without answering the same questions multiple times.

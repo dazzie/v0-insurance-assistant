@@ -94,7 +94,7 @@ export function buildQuoteProfile(
   messages: Array<{ role: string; content: string }>,
   customerProfile: any
 ): QuoteProfile {
-  const collectedInfo = extractCollectedInfo(messages)
+  const collectedInfo = extractCollectedInfo(messages, customerProfile)
   
   // Initialize profile
   const profile: QuoteProfile = {
@@ -131,9 +131,16 @@ export function buildQuoteProfile(
   if (collectedInfo.numberOfDrivers) {
     for (let i = 0; i < collectedInfo.numberOfDrivers; i++) {
       const driverData = collectedInfo.drivers[i] || {}
+      
+      // For driver 1, use customer profile age if not explicitly collected
+      const driverAge = (i === 0 && !driverData.age && customerProfile.age) 
+        ? parseInt(customerProfile.age) 
+        : driverData.age
+      
       profile.drivers.push({
         id: i + 1,
         ...driverData,
+        age: driverAge,
         violations: driverData.violations !== undefined ? {
           hasViolations: driverData.violations,
           details: driverData.violationDetails
@@ -220,46 +227,79 @@ export function getPromptsForMissingInfo(profile: QuoteProfile): string[] {
   const prompts: string[] = []
   const { missingRequired, missingOptional } = profile.completeness
   
-  // Priority: required fields first
-  if (missingRequired.length > 0) {
-    const firstMissing = missingRequired[0]
+  // Separate missing info by category
+  const allMissing = [...missingRequired, ...missingOptional]
+  const vehicleMissing = allMissing.filter(m => m.includes('Vehicle'))
+  const driverMissing = allMissing.filter(m => m.includes('Driver') || m.includes('driver'))
+  
+  // Check if we're still collecting vehicle info
+  const hasVehicleRequiredMissing = missingRequired.some(m => m.includes('Vehicle') || m.includes('vehicle'))
+  const hasDriverRequiredMissing = missingRequired.some(m => m.includes('Driver') || m.includes('driver'))
+  
+  // Priority: Complete sections in order (Drivers -> Vehicles -> Coverage)
+  
+  // 1. Basic info first
+  if (missingRequired.includes('Number of drivers')) {
+    prompts.push('How many drivers will be on the policy?')
+    return prompts
+  }
+  if (missingRequired.includes('Number of vehicles')) {
+    prompts.push('How many vehicles need coverage?')
+    return prompts
+  }
+  if (missingRequired.includes('ZIP code')) {
+    prompts.push('What ZIP code will the vehicles be garaged in?')
+    return prompts
+  }
+  
+  // 2. Complete ALL driver info first (about the people)
+  if (driverMissing.length > 0) {
+    const firstDriverMissing = driverMissing[0]
     
-    if (firstMissing.includes('Number of vehicles')) {
-      prompts.push('How many vehicles need coverage?')
-    } else if (firstMissing.includes('Number of drivers')) {
-      prompts.push('How many drivers will be on the policy?')
-    } else if (firstMissing.includes('ZIP code')) {
-      prompts.push('What ZIP code will the vehicles be garaged in?')
-    } else if (firstMissing.includes('year')) {
-      const vehicleNum = firstMissing.match(/Vehicle (\d+)/)?.[1]
-      prompts.push(`What year is vehicle ${vehicleNum}?`)
-    } else if (firstMissing.includes('make')) {
-      const vehicleNum = firstMissing.match(/Vehicle (\d+)/)?.[1]
-      prompts.push(`What make is vehicle ${vehicleNum}? (Toyota, Honda, Ford, etc.)`)
-    } else if (firstMissing.includes('model')) {
-      const vehicleNum = firstMissing.match(/Vehicle (\d+)/)?.[1]
-      prompts.push(`What model is vehicle ${vehicleNum}?`)
-    } else if (firstMissing.includes('age')) {
-      const driverNum = firstMissing.match(/Driver (\d+)/)?.[1]
+    if (firstDriverMissing.includes('age')) {
+      const driverNum = firstDriverMissing.match(/Driver (\d+)/)?.[1]
       prompts.push(`How old is driver ${driverNum}?`)
-    }
-  } else if (missingOptional.length > 0) {
-    // If all required fields are complete, ask for optional ones
-    const firstOptional = missingOptional[0]
-    
-    if (firstOptional.includes('annual mileage')) {
-      const vehicleNum = firstOptional.match(/Vehicle (\d+)/)?.[1]
-      prompts.push(`How many miles per year for vehicle ${vehicleNum}?`)
-    } else if (firstOptional.includes('primary use')) {
-      const vehicleNum = firstOptional.match(/Vehicle (\d+)/)?.[1]
-      prompts.push(`Is vehicle ${vehicleNum} for commuting, pleasure, or business?`)
-    } else if (firstOptional.includes('years licensed')) {
-      const driverNum = firstOptional.match(/Driver (\d+)/)?.[1]
+    } else if (firstDriverMissing.includes('years licensed')) {
+      const driverNum = firstDriverMissing.match(/Driver (\d+)/)?.[1]
       prompts.push(`How many years has driver ${driverNum} been licensed?`)
-    } else if (firstOptional.includes('violation history')) {
-      const driverNum = firstOptional.match(/Driver (\d+)/)?.[1]
+    } else if (firstDriverMissing.includes('marital status')) {
+      const driverNum = firstDriverMissing.match(/Driver (\d+)/)?.[1]
+      prompts.push(`What is driver ${driverNum}'s marital status?`)
+    } else if (firstDriverMissing.includes('violation history')) {
+      const driverNum = firstDriverMissing.match(/Driver (\d+)/)?.[1]
       prompts.push(`Does driver ${driverNum} have a clean driving record?`)
     }
+    return prompts
+  }
+  
+  // 3. Then complete ALL vehicle info (after drivers)
+  if (vehicleMissing.length > 0) {
+    const firstVehicleMissing = vehicleMissing[0]
+    
+    if (firstVehicleMissing.includes('year')) {
+      const vehicleNum = firstVehicleMissing.match(/Vehicle (\d+)/)?.[1]
+      prompts.push(`What year is vehicle ${vehicleNum}?`)
+    } else if (firstVehicleMissing.includes('make')) {
+      const vehicleNum = firstVehicleMissing.match(/Vehicle (\d+)/)?.[1]
+      prompts.push(`What make is vehicle ${vehicleNum}? (Toyota, Honda, Ford, etc.)`)
+    } else if (firstVehicleMissing.includes('model')) {
+      const vehicleNum = firstVehicleMissing.match(/Vehicle (\d+)/)?.[1]
+      prompts.push(`What model is vehicle ${vehicleNum}?`)
+    } else if (firstVehicleMissing.includes('annual mileage')) {
+      const vehicleNum = firstVehicleMissing.match(/Vehicle (\d+)/)?.[1]
+      prompts.push(`How many miles per year for vehicle ${vehicleNum}?`)
+    } else if (firstVehicleMissing.includes('primary use')) {
+      const vehicleNum = firstVehicleMissing.match(/Vehicle (\d+)/)?.[1]
+      prompts.push(`Is vehicle ${vehicleNum} for commuting, pleasure, or business?`)
+    }
+    return prompts
+  }
+  
+  // 4. Finally, coverage preferences
+  if (missingOptional.includes('Coverage level preference')) {
+    prompts.push('What level of coverage are you looking for?')
+  } else if (missingOptional.includes('Deductible preference')) {
+    prompts.push('What deductible amount would you prefer?')
   }
   
   return prompts
@@ -270,16 +310,19 @@ export function formatProfileSummary(profile: QuoteProfile): string {
   let summary = '## Your Quote Profile\n\n'
   
   // Basics
-  summary += '### Basic Information\n'
+  const basicsComplete = !!(profile.basics.numberOfVehicles && profile.basics.numberOfDrivers && profile.basics.zipCode)
+  summary += `### Basic Information ${basicsComplete ? '✅' : '🔄'}\n`
   summary += `- **Vehicles:** ${profile.basics.numberOfVehicles || 'Not specified'}\n`
   summary += `- **Drivers:** ${profile.basics.numberOfDrivers || 'Not specified'}\n`
   summary += `- **Location:** ${profile.basics.zipCode || profile.basics.state || 'Not specified'}\n\n`
   
   // Vehicles
   if (profile.vehicles.length > 0) {
-    summary += '### Vehicles\n'
+    const allVehiclesComplete = profile.vehicles.every(v => v.year && v.make && v.model)
+    summary += `### Vehicles ${allVehiclesComplete ? '✅' : '🔄'}\n`
     profile.vehicles.forEach((vehicle, index) => {
-      summary += `**Vehicle ${index + 1}:**\n`
+      const vehicleComplete = !!(vehicle.year && vehicle.make && vehicle.model)
+      summary += `**Vehicle ${index + 1}** ${vehicleComplete ? '✅' : '⏳'}:\n`
       if (vehicle.year || vehicle.make || vehicle.model) {
         summary += `- ${vehicle.year || '____'} ${vehicle.make || '____'} ${vehicle.model || '____'}\n`
       }
@@ -295,9 +338,11 @@ export function formatProfileSummary(profile: QuoteProfile): string {
   
   // Drivers
   if (profile.drivers.length > 0) {
-    summary += '### Drivers\n'
+    const allDriversComplete = profile.drivers.every(d => d.age)
+    summary += `### Drivers ${allDriversComplete ? '✅' : '🔄'}\n`
     profile.drivers.forEach((driver, index) => {
-      summary += `**Driver ${index + 1}:**\n`
+      const driverComplete = !!driver.age
+      summary += `**Driver ${index + 1}** ${driverComplete ? '✅' : '⏳'}:\n`
       if (driver.age) {
         summary += `- Age ${driver.age}`
         if (driver.yearsLicensed) {

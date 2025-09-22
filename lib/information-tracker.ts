@@ -44,7 +44,7 @@ export interface CollectedInfo {
 }
 
 // Parse messages to extract collected information
-export function extractCollectedInfo(messages: Array<{ role: string; content: string }>): CollectedInfo {
+export function extractCollectedInfo(messages: Array<{ role: string; content: string }>, customerProfile?: any): CollectedInfo {
   const info: CollectedInfo = {
     vehicles: [],
     drivers: [],
@@ -65,11 +65,17 @@ export function extractCollectedInfo(messages: Array<{ role: string; content: st
       }
       
       // Extract driver count
-      const driverMatch = content.match(/(\d+)\s*(?:driver|person|people)/i)
-      if (driverMatch && !info.numberOfDrivers) {
-        info.numberOfDrivers = parseInt(driverMatch[1])
-        // Initialize driver array
-        info.drivers = Array(info.numberOfDrivers).fill({}).map(() => ({}))
+      // Check for "just me" or similar phrases first
+      if ((content.includes('just me') || content.includes('only me') || content.includes("i'm the only") || content.includes('myself')) && !info.numberOfDrivers) {
+        info.numberOfDrivers = 1
+        info.drivers = [{}]
+      } else {
+        const driverMatch = content.match(/(\d+)\s*(?:driver|person|people)/i)
+        if (driverMatch && !info.numberOfDrivers) {
+          info.numberOfDrivers = parseInt(driverMatch[1])
+          // Initialize driver array
+          info.drivers = Array(info.numberOfDrivers).fill({}).map(() => ({}))
+        }
       }
       
       // Extract vehicle details
@@ -91,13 +97,49 @@ export function extractCollectedInfo(messages: Array<{ role: string; content: st
           if (vehicleIndex !== -1) {
             info.vehicles[vehicleIndex].make = make
             // Try to find model after make
-            const modelMatch = content.match(new RegExp(`${make}\\s+(\\w+)`, 'i'))
+            // Capture everything after the make as the model (handles multi-word models)
+            const modelPattern = new RegExp(`${make}\\s+(.+?)(?:\\.|,|\\s*$|\\s{2,})`, 'i')
+            const modelMatch = content.match(modelPattern)
             if (modelMatch) {
-              info.vehicles[vehicleIndex].model = modelMatch[1]
+              // Clean up the model name (remove extra spaces, common words at the end)
+              let model = modelMatch[1].trim()
+              // Remove common trailing words that aren't part of the model
+              model = model.replace(/\s*(car|vehicle|auto|suv|truck|sedan)$/i, '').trim()
+              if (model && model.toLowerCase() !== make) {
+                info.vehicles[vehicleIndex].model = model
+              }
             }
           }
         }
       })
+      
+      // Special case: If user just enters a model name (e.g., "Model 3" after being asked for model)
+      // This handles when the assistant specifically asks "What model?" and user responds with just the model
+      if (!content.includes('year') && !content.includes('make')) {
+        // Check if we have a vehicle with a make but no model
+        const vehicleNeedingModel = info.vehicles.find(v => v.make && !v.model)
+        if (vehicleNeedingModel) {
+          // Common Tesla models (Model 3, Model S, Model X, Model Y, Cybertruck)
+          if (content.match(/model\s*[3syxc]/i)) {
+            const modelMatch = content.match(/(model\s*[3syxc])/i)
+            if (modelMatch) {
+              // Normalize the format (e.g., "model3" -> "Model 3", "Model 3" -> "Model 3")
+              const modelLetter = modelMatch[1].match(/[3syxc]/i)?.[0].toUpperCase()
+              vehicleNeedingModel.model = `Model ${modelLetter}`
+            }
+          } else if (content.match(/cybertruck/i)) {
+            vehicleNeedingModel.model = 'Cybertruck'
+          }
+          // For other makes, if the response is short (likely just a model name), use it
+          else if (content.length < 30 && !content.includes('?')) {
+            // Clean up the content and use as model
+            const cleanedModel = content.trim().replace(/[.,!]$/g, '')
+            if (cleanedModel && cleanedModel.length > 0) {
+              vehicleNeedingModel.model = cleanedModel
+            }
+          }
+        }
+      }
       
       // Extract mileage
       const mileageMatch = content.match(/(\d+)(?:k|\s*000)?\s*(?:mile|mi)/i)
@@ -197,6 +239,18 @@ export function extractCollectedInfo(messages: Array<{ role: string; content: st
     }
   })
   
+  // After processing messages, if customer profile has age and we have 1 driver, use it
+  if (customerProfile?.age && info.numberOfDrivers === 1) {
+    // Ensure drivers array exists and has at least one element
+    if (info.drivers.length === 0) {
+      info.drivers = [{}]
+    }
+    // Set age from profile if not explicitly collected
+    if (!info.drivers[0].age) {
+      info.drivers[0].age = parseInt(customerProfile.age)
+    }
+  }
+  
   return info
 }
 
@@ -253,33 +307,89 @@ export function getMissingInfo(collected: CollectedInfo): string[] {
 
 // Get the next piece of information to collect
 export function getNextInfoToCollect(missing: string[]): string | null {
-  // Priority order for collection
-  const priority = [
-    'number_of_vehicles',
-    'number_of_drivers',
-    'zip_code',
-    'vehicle_1_year',
-    'vehicle_1_make',
-    'vehicle_1_model',
-    'vehicle_1_mileage',
-    'vehicle_1_use',
-    'driver_1_age',
-    'driver_1_experience',
-    'driver_1_marital',
-    'driver_1_violations',
-    'coverage_level',
-    'deductible_preference'
-  ]
+  // EFFICIENT COLLECTION: Get only what's absolutely required for quotes
   
-  for (const item of priority) {
-    if (missing.includes(item)) {
-      return item
+  // Separate required from optional
+  const requiredMissing = missing.filter(m => 
+    m.includes('number_of_drivers') ||
+    m.includes('number_of_vehicles') ||
+    m.includes('zip_code') ||
+    (m.includes('vehicle') && (m.includes('year') || m.includes('make') || m.includes('model'))) ||
+    (m.includes('driver') && m.includes('age'))
+  )
+  
+  const optionalMissing = missing.filter(m => !requiredMissing.includes(m))
+  
+  // PRIORITIZE REQUIRED FIELDS ONLY
+  // If any required fields are missing, focus on those first
+  if (requiredMissing.length > 0) {
+    // 1. Basic counts - get these immediately
+    if (requiredMissing.includes('number_of_drivers')) return 'number_of_drivers'
+    if (requiredMissing.includes('number_of_vehicles')) return 'number_of_vehicles'
+    if (requiredMissing.includes('zip_code')) return 'zip_code'
+    
+    // 2. Driver ages (required) - get all quickly
+    const driverAgeMissing = requiredMissing.filter(m => m.includes('driver') && m.includes('age'))
+    if (driverAgeMissing.length > 0) {
+      // Sort by driver number and get first
+      const sorted = driverAgeMissing.sort((a, b) => {
+        const numA = parseInt(a.match(/\d+/)?.[0] || '1')
+        const numB = parseInt(b.match(/\d+/)?.[0] || '1')
+        return numA - numB
+      })
+      return sorted[0]
     }
-    // Check for numbered items (vehicle_2, driver_2, etc)
-    const pattern = item.replace('_1_', '_\\d+_')
-    const match = missing.find(m => m.match(new RegExp(pattern)))
-    if (match) return match
+    
+    // 3. Vehicle year/make/model (required) - get these efficiently
+    const vehicleRequiredMissing = requiredMissing.filter(m => m.includes('vehicle'))
+    if (vehicleRequiredMissing.length > 0) {
+      // Process vehicles in order, year -> make -> model for each
+      const vehicleNums = new Set<string>()
+      vehicleRequiredMissing.forEach(item => {
+        const match = item.match(/vehicle_(\d+)/)
+        if (match) vehicleNums.add(match[1])
+      })
+      
+      const sortedNums = Array.from(vehicleNums).sort((a, b) => parseInt(a) - parseInt(b))
+      
+      // Get year, make, model in that order for each vehicle
+      for (const num of sortedNums) {
+        if (requiredMissing.includes(`vehicle_${num}_year`)) return `vehicle_${num}_year`
+        if (requiredMissing.includes(`vehicle_${num}_make`)) return `vehicle_${num}_make`
+        if (requiredMissing.includes(`vehicle_${num}_model`)) return `vehicle_${num}_model`
+      }
+    }
   }
   
+  // ONLY AFTER ALL REQUIRED FIELDS ARE COMPLETE, get optional info
+  if (optionalMissing.length > 0) {
+    // Priority order for optional fields (most impact on rates first)
+    // 1. Driver years licensed (needed before violations)
+    const experienceMissing = optionalMissing.filter(m => m.includes('experience'))
+    if (experienceMissing.length > 0) return experienceMissing[0]
+    
+    // 2. Driver marital status (affects rates)
+    const maritalMissing = optionalMissing.filter(m => m.includes('marital'))
+    if (maritalMissing.length > 0) return maritalMissing[0]
+    
+    // 3. Driver violations (huge impact)
+    const violationsMissing = optionalMissing.filter(m => m.includes('violations'))
+    if (violationsMissing.length > 0) return violationsMissing[0]
+    
+    // 4. Vehicle mileage (significant impact)
+    const mileageMissing = optionalMissing.filter(m => m.includes('mileage'))
+    if (mileageMissing.length > 0) return mileageMissing[0]
+    
+    // 5. Coverage level (determines quotes)
+    if (optionalMissing.includes('coverage_level')) return 'coverage_level'
+    
+    // 6. Deductible preference
+    if (optionalMissing.includes('deductible_preference')) return 'deductible_preference'
+    
+    // 7. Everything else
+    return optionalMissing[0]
+  }
+  
+  // Fallback
   return missing[0] || null
 }

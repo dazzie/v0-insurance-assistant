@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { generateSuggestedPrompts, formatPromptButton } from "@/lib/suggested-prompts"
+import { validatePrompts } from "@/lib/prompt-validator"
 
 interface SuggestedPromptsProps {
   messages: Array<{ role: string; content: string }>
@@ -18,6 +19,12 @@ export function SuggestedPrompts({
 }: SuggestedPromptsProps) {
   
   const prompts = generateSuggestedPrompts(messages, customerProfile)
+  
+  // Final validation check before rendering
+  const validation = validatePrompts(messages, prompts)
+  if (!validation.valid && process.env.NODE_ENV === 'development') {
+    console.warn('⚠️ Prompt validation failed in SuggestedPrompts component')
+  }
   
   if (isLoading || prompts.length === 0) {
     return null

@@ -2,13 +2,15 @@
 
 import type React from "react"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { FormattedResponse } from "@/components/formatted-response"
 import { SuggestedPrompts } from "@/components/suggested-prompts"
+import { QuoteProfileDisplay } from "@/components/quote-profile-display"
+import { buildQuoteProfile } from "@/lib/quote-profile"
 import type { CustomerProfile } from "@/app/page"
 
 interface ChatInterfaceProps {
@@ -26,16 +28,10 @@ export function ChatInterface({ customerProfile }: ChatInterfaceProps) {
   const isAutoInsurance = customerProfile.needs.includes("auto")
   
   const initialGreeting = isAutoInsurance
-    ? `Welcome! I'm your personal auto insurance coach. I see you're in ${customerProfile.location}, age ${customerProfile.age}, looking for auto insurance coverage.
+    ? `Welcome! I'll help you get accurate auto insurance quotes quickly.
 
-To provide you with accurate quote estimates and personalized recommendations, I'll need to gather some information - similar to what you'd enter on a quote comparison site, but with expert guidance at each step.
-
-**Let's start with the basics:**
-- How many vehicles do you need to insure?
-- How many drivers will be on the policy?
-- What's the ZIP code where your vehicle(s) will be garaged?
-
-I'll explain how each factor affects your rate as we go, and help you understand what coverage makes sense for your situation. Ready to get started?`
+**Quick questions to get started:**
+How many drivers will be on this policy?`
     : `Welcome! I'm your personal insurance coverage coach. I've reviewed your profile (${customerProfile.location}, age ${customerProfile.age}, focusing on ${customerProfile.needs.join(", ")}), and I'm here to guide you toward the optimal insurance strategy for your unique situation. 
 
 Think of me as your trusted advisor who will help you navigate coverage options, understand what protection you truly need, and find the best value for your specific circumstances. What aspect of your insurance coverage would you like to explore first?`
@@ -51,6 +47,12 @@ Think of me as your trusted advisor who will help you navigate coverage options,
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
+  
+  // Build quote profile from messages for auto insurance
+  const quoteProfile = useMemo(() => {
+    if (!isAutoInsurance) return null
+    return buildQuoteProfile(messages, customerProfile)
+  }, [messages, customerProfile, isAutoInsurance])
 
   // Auto-scroll to bottom when new messages are added
   useEffect(() => {
@@ -196,11 +198,17 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
   }
 
   return (
-    <Card className="h-[calc(100vh-16rem)] flex flex-col">
-      <CardContent className="flex-1 flex flex-col p-0">
-        {/* Messages */}
-        <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-          <div className="space-y-4 pb-4">
+    <div className="space-y-4">
+      {/* Quote Profile Display - Only for Auto Insurance */}
+      {isAutoInsurance && quoteProfile && messages.length > 1 && (
+        <QuoteProfileDisplay profile={quoteProfile} />
+      )}
+      
+      <Card className={`h-[calc(100vh-16rem)] flex flex-col`}>
+        <CardContent className="flex-1 flex flex-col p-0">
+          {/* Messages */}
+          <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+            <div className="space-y-4 pb-4">
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -283,5 +291,6 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
         </div>
       </CardContent>
     </Card>
+    </div>
   )
 }

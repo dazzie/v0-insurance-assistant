@@ -1,6 +1,7 @@
 import OpenAI from "openai"
 import { getCarriersByState, getTopCarriers, searchCarriers, type InsuranceCarrier } from "@/lib/carrier-database"
 import { AUTO_INSURANCE_QUESTIONS, STATE_MINIMUM_COVERAGE } from "@/lib/insurance-needs-analysis"
+import { buildQuoteProfile, getPromptsForMissingInfo, formatProfileSummary } from "@/lib/quote-profile"
 
 // Initialize OpenAI client
 const openai = new OpenAI({
@@ -49,7 +50,7 @@ export async function POST(req: Request) {
       })
     } else {
       // Use OpenAI for real responses
-      const systemPrompt = generateSystemPrompt(customerProfile)
+      const systemPrompt = generateSystemPrompt(customerProfile, messages)
       
       // Prepare messages for OpenAI
       const openAIMessages = [
@@ -112,7 +113,7 @@ export async function POST(req: Request) {
   }
 }
 
-function generateSystemPrompt(customerProfile: any): string {
+function generateSystemPrompt(customerProfile: any, messages: any[] = []): string {
   const location = customerProfile?.location || "Not specified"
   const age = customerProfile?.age || "Not specified"
   const needs = customerProfile?.needs || []
@@ -129,38 +130,87 @@ function generateSystemPrompt(customerProfile: any): string {
 ${JSON.stringify(STATE_MINIMUM_COVERAGE[state], null, 2)}`
     : ""
 
+  // Build quote profile if this is for auto insurance
+  let quoteProfileInfo = ""
+  let nextPrompts: string[] = []
+  
+  if (needs.includes("auto") && messages.length > 0) {
+    const quoteProfile = buildQuoteProfile(messages, customerProfile)
+    nextPrompts = getPromptsForMissingInfo(quoteProfile)
+    
+    quoteProfileInfo = `
+
+CURRENT QUOTE PROFILE STATUS:
+${formatProfileSummary(quoteProfile)}
+
+${nextPrompts.length > 0 ? `Next Information Needed:
+${nextPrompts.map(p => `- ${p}`).join('\n')}` : 'All essential information collected! Ready to generate quotes and carrier toolkit.'}
+`
+  }
+
   const needsAnalysisPrompt = needs.includes("auto") ? `
 
-IMPORTANT: For Auto Insurance Quotes, conduct a thorough needs analysis by gathering:
+CRITICAL RULES FOR AUTO INSURANCE QUOTES:
 
-1. **Driver Information** (for each driver):
-   - Age and years licensed
-   - Marital status
-   - Credit score range (affects rates in most states)
-   - Any violations or accidents in past 5 years
+**CUSTOMER PROFILE ALREADY PROVIDED:**
+- Age: ${age} (USE THIS for single driver - DON'T ASK AGAIN)
+- Location: ${location}
+
+1. **ASK FOR ONE PIECE OF INFORMATION AT A TIME**
+   - NEVER provide a long list of questions
+   - Ask ONE specific question, wait for the answer
+   - Move to the next question only after receiving a response
+   - DO NOT provide any quotes, estimates, or summaries while collecting information
    
-2. **Vehicle Information** (for each vehicle):  
-   - Year, make, model, and trim
-   - Own, lease, or finance
-   - Annual mileage and primary use
-   - ZIP code where garaged
-   - Parking location (garage, street, etc.)
+2. **TRACK WHAT'S BEEN COLLECTED**
+   - The Quote Profile shows what you already have
+   - NEVER ask for information that's already been provided
+   - Check the profile status before asking anything
 
-3. **Coverage Preferences**:
-   - Liability limits (state minimum vs higher)
-   - Comprehensive/collision (with deductibles)
-   - Additional coverage (rental, roadside, gap)
+3. **BE EXTREMELY CONCISE**
+   - Keep responses under 2 sentences
+   - Ask the specific question directly
+   - Don't explain unless asked
+
+4. **COLLECTION ORDER** (One at a time):
+   REQUIRED (must collect ALL before providing quotes):
+   - Number of drivers (if not collected)
+   - Number of vehicles (if not collected)  
+   - ZIP code (if not collected)
+   - Age of each driver (NOTE: If only 1 driver, their age is ${age} from profile - DON'T ASK)
+   - Year, make, model of each vehicle (one field at a time)
    
-4. **Insurance History**:
-   - Current carrier and premium
-   - Any coverage lapses
-   - Claims in past 5 years
+   OPTIONAL (collect these AFTER required fields):
+   - Years licensed for each driver
+   - Marital status for each driver
+   - Violation history for each driver
+   - Annual mileage for each vehicle
+   - Primary use for each vehicle
+   
+   DO NOT provide quotes until AT LEAST all required fields are collected!
 
-Guide the conversation naturally to collect this information. Start with the most essential (ZIP code, vehicles, drivers) and progressively gather details. Explain why each piece of information affects their rate.
+5. **EXAMPLE GOOD RESPONSES** (notice: no summaries, just questions):
+   - "Got it, just you driving. How many vehicles?"
+   - "Thanks! What's your ZIP code?"
+   - "Perfect. What year is your vehicle?"
+   - "Great! What make is it?"
+   - "Thanks! What model?" 
+   - "Got it. How many years have you been licensed?"
+   - "Thanks. What's your marital status?"
+   - "Do you have a clean driving record?"
+   - "How many miles per year do you drive?"
+   
+6. **CRITICAL: DO NOT PROVIDE ANY SUMMARY OR QUOTES UNTIL ALL REQUIRED INFO IS COLLECTED**:
+   - Required means: drivers count, vehicles count, ZIP, all driver ages, all vehicle year/make/model
+   - After getting vehicle info, ALWAYS continue to ask for:
+     * Years licensed (for each driver)
+     * Marital status (for each driver)  
+     * Clean driving record (for each driver)
+     * Annual mileage (for each vehicle)
+   - ONLY provide quotes/analysis after collecting BOTH required AND several optional fields
+   - NEVER jump to quotes right after getting vehicle details!
 
-IMPORTANT: Once you have the essential information (number of vehicles, drivers, and basic details about each), acknowledge that you have enough to proceed. Don't keep asking for minor details if the user seems ready to move forward.
-
-When you have enough information (at minimum: vehicles, drivers, ages, and general history), provide:
+Once ALL information is collected, THEN provide:
 - Estimated premium ranges based on their profile
 - Specific carrier recommendations with reasoning
 - Coverage recommendations based on their situation
@@ -176,7 +226,7 @@ IMPORTANT: Once you have collected all necessary information, offer to generate 
 
 Format this toolkit in a way that's easy to copy/paste or print for reference during carrier calls.` : ""
 
-  return `You are an expert insurance coverage coach helping a customer optimize their insurance portfolio. 
+  return `You are an expert insurance coverage coach helping a customer optimize their insurance portfolio.${quoteProfileInfo} 
 You provide personalized guidance that's educational, empowering, and focused on helping them make informed decisions.
 
 Customer Profile:
@@ -298,8 +348,13 @@ function generateMockInsuranceResponse(customerProfile: any, messages: any[]) {
 
   const conversationContext = analyzeConversationContext(messages, customerProfile)
   
-  // Handle auto insurance needs analysis
+  // Build quote profile if this is for auto insurance
+  let quoteProfile = null
+  let nextPrompts: string[] = []
+  
   if (needs.includes("auto")) {
+    quoteProfile = buildQuoteProfile(messages, customerProfile)
+    nextPrompts = getPromptsForMissingInfo(quoteProfile)
     // Check if user is asking for the toolkit
     if (lastMessage.toLowerCase().includes("toolkit") || 
         lastMessage.toLowerCase().includes("summary") || 

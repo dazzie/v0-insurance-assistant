@@ -7,7 +7,10 @@
 
 ## Overview
 
-An intelligent insurance assistant that helps users navigate auto insurance quotes through natural conversation. Unlike traditional quote forms, this app provides personalized coaching, educational insights, and prepares users for successful carrier negotiations.
+An intelligent insurance assistant that helps users navigate insurance quotes through natural conversation. The initial focus is on **auto insurance**, with comprehensive quote gathering and carrier negotiation preparation. Unlike traditional quote forms, this app provides personalized coaching, educational insights, and prepares users for successful carrier negotiations.
+
+**Current Focus**: Auto Insurance (fully implemented)  
+**Future Expansion**: Home, Life, Health insurance modules
 
 ## Key Features
 

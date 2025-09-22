@@ -158,9 +158,7 @@ IMPORTANT: For Auto Insurance Quotes, conduct a thorough needs analysis by gathe
 
 Guide the conversation naturally to collect this information. Start with the most essential (ZIP code, vehicles, drivers) and progressively gather details. Explain why each piece of information affects their rate.
 
-IMPORTANT: Once you have the essential information (number of vehicles, drivers, and basic details about each), acknowledge that you have enough to proceed. Don't keep asking for minor details if the user seems ready to move forward.
-
-When you have enough information (at minimum: vehicles, drivers, ages, and general history), provide:
+When you have enough information, provide:
 - Estimated premium ranges based on their profile
 - Specific carrier recommendations with reasoning
 - Coverage recommendations based on their situation
@@ -299,31 +297,8 @@ function generateMockInsuranceResponse(customerProfile: any, messages: any[]) {
   const conversationContext = analyzeConversationContext(messages, customerProfile)
   
   // Handle auto insurance needs analysis
-  if (needs.includes("auto")) {
-    // Check if user is asking for the toolkit
-    if (lastMessage.toLowerCase().includes("toolkit") || 
-        lastMessage.toLowerCase().includes("summary") || 
-        lastMessage.toLowerCase().includes("prepare") ||
-        (lastMessage.toLowerCase().includes("ready") && lastMessage.toLowerCase().includes("call")) ||
-        lastMessage.toLowerCase().includes("generate my")) {
-      return generateCarrierConversationToolkit(customerProfile, conversationContext)
-    }
-    
-    // Check if we have enough basic info to provide quotes
-    const hasBasicInfo = conversationContext.hasDiscussedCarriers || 
-                         (messages.length > 4 && 
-                          messages.some(m => m.content.toLowerCase().includes("vehicle")) &&
-                          messages.some(m => m.content.toLowerCase().includes("driver")))
-    
-    if (hasBasicInfo && !lastMessage.toLowerCase().includes("what") && !lastMessage.toLowerCase().includes("how")) {
-      // User has provided info, give them options
-      return generateQuoteReadyResponse(location, age, relevantCarriers)
-    }
-    
-    // Continue needs analysis for early messages
-    if (messages.length <= 6) {
-      return generateAutoNeedsAnalysisResponse(lastMessage, location, age, messages.length)
-    }
+  if (needs.includes("auto") && messages.length <= 3) {
+    return generateAutoNeedsAnalysisResponse(lastMessage, location, age, messages.length)
   }
 
   if (
@@ -793,91 +768,6 @@ ${topCarriers
 I'm here to guide you through every step of building the optimal insurance portfolio for your unique situation. Think of me as your dedicated advisor who's always looking out for your best interests!`
 }
 
-function generateCarrierConversationToolkit(profile: any, needs: any): string {
-  return `## 📋 Your Carrier Conversation Toolkit
-
-I've prepared everything you need for successful conversations with insurance carriers. Save or print this for reference!
-
-### 🎯 Your Quick Profile Summary
-**Location:** ${profile.location}  
-**Age:** ${profile.age}  
-**Vehicles:** Specify your vehicles here  
-**Drivers:** Specify number of drivers  
-**Current Insurance:** Yes/No - Current carrier and premium if applicable
-
-### ❓ Essential Questions to Ask Each Carrier
-
-**Pricing & Discounts:**
-1. "What's your best rate for my coverage needs?"
-2. "What discounts do I qualify for?" (multi-policy, safe driver, good student, etc.)
-3. "Is there a discount for paying annually vs monthly?"
-4. "Do you price-match competitors?"
-
-**Coverage & Claims:**
-5. "What's your claims satisfaction rate?"
-6. "Do you offer accident forgiveness?"
-7. "How quickly are claims typically processed?"
-8. "Do you have 24/7 claims support?"
-
-**Service & Features:**
-9. "Do you have local agents or is everything online?"
-10. "Can I manage my policy through a mobile app?"
-11. "What happens at renewal - automatic or review?"
-12. "How much notice for rate changes?"
-
-### 💪 Your Negotiation Power Plays
-
-1. **Open with:** "I'm shopping for the best value and have quotes from [X] other carriers"
-2. **If price is high:** "Company X quoted me $[amount] for the same coverage. Can you beat that?"
-3. **Create urgency:** "I'm making my decision today. What's the absolute best you can do?"
-4. **Ask for supervisor:** "Can you check with your supervisor for any additional discounts?"
-5. **Bundle leverage:** "If I bring my home/renters insurance too, what discount would apply?"
-
-### 📄 Documents to Have Ready
-□ Driver's licenses for all drivers  
-□ Current insurance declaration page  
-□ Vehicle VINs or registration  
-□ Driving record (if you have violations to disclose)  
-
-### ✅ Your Strengths to Emphasize
-- Continuous coverage (if applicable)
-- Clean driving record (if applicable)  
-- Multiple policies to bundle
-- Stable residence/employment
-- Safety features in vehicles
-- Good credit (if applicable)
-
-### 🚩 Red Flags to Avoid
-- Pressure to buy immediately
-- Unclear coverage explanations
-- No local presence/support
-- Poor financial ratings (check AM Best)
-- Hidden fees not in initial quote
-- Extremely low quotes (coverage gaps?)
-
-### 📝 Carrier Comparison Tracker
-Use this to track quotes:
-
-| Carrier | Monthly Premium | Deductible | Coverage Limits | Discounts Applied | Notes |
-|---------|----------------|------------|-----------------|-------------------|-------|
-| Carrier 1 | $ | $ | | | |
-| Carrier 2 | $ | $ | | | |
-| Carrier 3 | $ | $ | | | |
-
-### 🎬 Your Action Plan
-1. ✅ Gathered all my information
-2. ⬜ Call/online quote from Carrier 1
-3. ⬜ Call/online quote from Carrier 2  
-4. ⬜ Call/online quote from Carrier 3
-5. ⬜ Compare all options side-by-side
-6. ⬜ Negotiate with top choice
-7. ⬜ Secure best rate and coverage
-
-**Pro Tip:** The best time to call is Tuesday-Thursday, late morning or mid-afternoon. Avoid Mondays and Fridays when agents are busiest.
-
-💬 **Ready to succeed!** You're now equipped with everything needed for productive carrier conversations. Remember: You're the customer with options - use that power to get the best deal!`
-}
-
 function generateAutoNeedsAnalysisResponse(lastMessage: string, location: string, age: string, messageCount: number): string {
   const userInput = lastMessage.toLowerCase()
   
@@ -963,53 +853,4 @@ Thanks for that information! To provide accurate quote estimates, I need a few k
 - **Insurance history** unlocks loyalty and continuous coverage discounts
 
 Share any of these details you're comfortable with, and I'll start building your personalized quote comparison. What would you like to tell me first?`
-}
-
-function generateQuoteReadyResponse(location: string, age: string, carriers: InsuranceCarrier[]): string {
-  return `## Excellent! I Have What I Need for Initial Quotes
-
-Based on the information you've provided, I can now give you personalized guidance and quote estimates.
-
-### 🎯 Your Quick Summary
-- **Location:** ${location}
-- **Age:** ${age}
-- **Profile:** Based on what you've shared
-
-### 📊 Estimated Premium Ranges
-Based on similar profiles in your area:
-- **State Minimum:** $80-120/month
-- **Standard Coverage:** $150-250/month
-- **Full Coverage:** $200-350/month
-
-*Note: Actual rates depend on specific details like driving record, credit score, and exact vehicle models.*
-
-### 🏆 Top Carriers for Your Profile
-
-${carriers.slice(0, 3).map((carrier, i) => 
-  `**${i + 1}. ${carrier.name}**
-  - Strength: ${carrier.strengths[0]}
-  - Best for: ${carrier.types.slice(0, 2).join(", ")}
-  - Contact: ${carrier.contact.phone}`
-).join("\n\n")}
-
-### 💡 Your Next Steps
-
-**Option 1: Get Your Carrier Toolkit** 📋
-I can generate a complete conversation toolkit with:
-- Your profile summary
-- Questions to ask carriers
-- Negotiation strategies
-- Document checklist
-
-**Option 2: Dive Deeper** 🔍
-- Explore specific carriers
-- Understand coverage options
-- Learn negotiation tactics
-
-**Option 3: Start Calling** 📞
-- Use what we've discussed
-- Reference the carriers above
-- Ask for quotes based on your needs
-
-What would you like to do next? I'm here to help you get the best coverage at the best price!`
 }

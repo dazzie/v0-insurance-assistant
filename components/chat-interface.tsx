@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { FormattedResponse } from "@/components/formatted-response"
+import { SuggestedPrompts } from "@/components/suggested-prompts"
 import type { CustomerProfile } from "@/app/page"
 
 interface ChatInterfaceProps {
@@ -22,13 +23,28 @@ interface Message {
 }
 
 export function ChatInterface({ customerProfile }: ChatInterfaceProps) {
+  const isAutoInsurance = customerProfile.needs.includes("auto")
+  
+  const initialGreeting = isAutoInsurance
+    ? `Welcome! I'm your personal auto insurance coach. I see you're in ${customerProfile.location}, age ${customerProfile.age}, looking for auto insurance coverage.
+
+To provide you with accurate quote estimates and personalized recommendations, I'll need to gather some information - similar to what you'd enter on a quote comparison site, but with expert guidance at each step.
+
+**Let's start with the basics:**
+- How many vehicles do you need to insure?
+- How many drivers will be on the policy?
+- What's the ZIP code where your vehicle(s) will be garaged?
+
+I'll explain how each factor affects your rate as we go, and help you understand what coverage makes sense for your situation. Ready to get started?`
+    : `Welcome! I'm your personal insurance coverage coach. I've reviewed your profile (${customerProfile.location}, age ${customerProfile.age}, focusing on ${customerProfile.needs.join(", ")}), and I'm here to guide you toward the optimal insurance strategy for your unique situation. 
+
+Think of me as your trusted advisor who will help you navigate coverage options, understand what protection you truly need, and find the best value for your specific circumstances. What aspect of your insurance coverage would you like to explore first?`
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
       role: "assistant",
-      content: `Welcome! I'm your personal insurance coverage coach. I've reviewed your profile (${customerProfile.location}, age ${customerProfile.age}, focusing on ${customerProfile.needs.join(", ")}), and I'm here to guide you toward the optimal insurance strategy for your unique situation. 
-
-Think of me as your trusted advisor who will help you navigate coverage options, understand what protection you truly need, and find the best value for your specific circumstances. What aspect of your insurance coverage would you like to explore first?`,
+      content: initialGreeting,
       createdAt: new Date(),
     },
   ])
@@ -42,6 +58,10 @@ Think of me as your trusted advisor who will help you navigate coverage options,
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight
     }
   }, [messages])
+
+  const handlePromptClick = (promptText: string) => {
+    setInput(promptText)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -143,9 +163,12 @@ Think of me as your trusted advisor who will help you navigate coverage options,
   }
 
   const generateStructuredResponse = (query: string, profile: CustomerProfile): string => {
+    // Sanitize query to prevent formatting issues
+    const sanitizedQuery = query.replace(/"/g, "'").substring(0, 100)
+    
     return `## Your Coverage Assessment
 
-Based on your question "${query}" and your profile, here's my coaching guidance:
+Based on your question about ${sanitizedQuery}, here's my coaching guidance:
 
 ### Your Current Situation
 - **Location**: ${profile.location} - I'll factor in your state's requirements and market conditions
@@ -234,6 +257,14 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
             )}
           </div>
         </ScrollArea>
+
+        {/* Suggested Prompts */}
+        <SuggestedPrompts
+          messages={messages}
+          customerProfile={customerProfile}
+          onPromptClick={handlePromptClick}
+          isLoading={isLoading}
+        />
 
         {/* Input */}
         <div className="border-t border-border p-4">

@@ -177,11 +177,12 @@ Updated system rules with strict minimum requirements for auto insurance quotes:
   - Skip lengthy introductions during data collection
   - Ask direct questions: "How many drivers?" not "To provide accurate quotes..."
   - Save coaching/educational content for AFTER all required info is gathered
-- **HELPFUL OPTIONS AFTER INTRO**: When user profile indicates specific insurance type, provide actionable options
+- **MANDATORY SPECIFIC NEXT STEPS**: When user profile indicates specific insurance type, provide numbered options
   - Acknowledge their insurance need immediately (auto, life, home, etc.)
-  - Offer 2-3 specific action options relevant to their type
-  - Make options actionable: "Get quotes", "Compare coverage", "Review current policy"
-  - Example: "I can help you: 1) Calculate coverage needs 2) Compare term vs whole life 3) Find best rates"
+  - NEVER end with vague questions like "What would you like to explore first?"
+  - ALWAYS end with: "I can help you:" followed by 2-3 numbered, specific actions
+  - Make options actionable and relevant to their profile
+  - Example for life insurance: "I can help you: 1) Calculate how much coverage you need 2) Compare term vs whole life options 3) Find the best rates for your age and health"
 
 ### UI/UX Improvements
 - **Fixed chat bubble overflow**: Replaced semi-transparent backgrounds with solid white

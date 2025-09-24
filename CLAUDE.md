@@ -572,6 +572,451 @@ interface LifeRatingFactors {
 - **Rate Filing Requirements**: Follow state-specific rating rules
 - **Fair Credit Reporting**: Comply with FCRA for credit factors
 
+## Carrier API Integration
+
+### Overview
+Automate the quote process by integrating directly with insurance carrier public APIs to get real-time pricing instead of manual quote processes. This replaces the manual "visit carrier websites" workflow with automated API calls.
+
+### Architecture Design
+
+#### 1. Carrier Integration Structure
+```
+/lib/carrier-integration/
+├── core/
+│   ├── carrier-manager.ts       # Orchestrates all carrier calls
+│   ├── quote-aggregator.ts      # Combines and compares quotes
+│   └── api-client.ts           # Base API client with common functionality
+├── carriers/
+│   ├── geico-api.ts            # GEICO integration
+│   ├── progressive-api.ts       # Progressive integration
+│   ├── state-farm-api.ts       # State Farm integration
+│   ├── allstate-api.ts         # Allstate integration
+│   ├── usaa-api.ts             # USAA integration
+│   └── liberty-mutual-api.ts   # Liberty Mutual integration
+├── mappers/
+│   ├── data-mapper.ts          # Maps our data to carrier formats
+│   ├── response-mapper.ts      # Maps carrier responses to our format
+│   └── coverage-mapper.ts      # Standardizes coverage options
+├── types/
+│   ├── carrier-types.ts        # Carrier-specific interfaces
+│   ├── quote-types.ts          # Standardized quote interfaces
+│   └── api-types.ts            # API request/response types
+└── utils/
+    ├── rate-limiter.ts         # API rate limiting
+    ├── retry-handler.ts        # API retry logic
+    └── error-handler.ts        # Carrier-specific error handling
+```
+
+#### 2. Carrier API Specifications
+
+##### GEICO API Integration
+```typescript
+interface GeicoQuoteRequest {
+  // Driver information
+  drivers: Array<{
+    age: number
+    gender: 'M' | 'F'
+    maritalStatus: 'S' | 'M' | 'D'
+    licenseNumber: string
+    yearsLicensed: number
+    violations: ViolationRecord[]
+    accidents: AccidentRecord[]
+  }>
+  
+  // Vehicle information
+  vehicles: Array<{
+    year: number
+    make: string
+    model: string
+    vin?: string
+    annualMileage: number
+    primaryUse: 'commute' | 'pleasure' | 'business'
+    garagedZip: string
+  }>
+  
+  // Coverage selections
+  coverage: {
+    bodilyInjuryLiability: string    // e.g., "100/300"
+    propertyDamageLiability: number  // e.g., 100000
+    comprehensive: {
+      selected: boolean
+      deductible: number             // e.g., 500
+    }
+    collision: {
+      selected: boolean
+      deductible: number             // e.g., 500
+    }
+    uninsuredMotorist: string        // e.g., "100/300"
+    personalInjuryProtection?: number
+  }
+  
+  // Policy information
+  effectiveDate: string
+  zipCode: string
+}
+
+// API Endpoint: https://api.geico.com/v2/auto/quote
+// Method: POST
+// Authentication: API Key + OAuth 2.0
+```
+
+##### Progressive API Integration
+```typescript
+interface ProgressiveQuoteRequest {
+  quoteRequest: {
+    // Personal information
+    applicant: {
+      firstName: string
+      lastName: string
+      dateOfBirth: string
+      gender: 'M' | 'F'
+      maritalStatus: 'Single' | 'Married' | 'Divorced'
+      address: AddressInfo
+    }
+    
+    // Drivers
+    drivers: DriverInfo[]
+    
+    // Vehicles
+    vehicles: Array<{
+      year: number
+      make: string
+      model: string
+      trim?: string
+      vin?: string
+      ownership: 'Own' | 'Lease' | 'Finance'
+      primaryDriver: number        // Driver index
+      annualMileage: number
+      garagingAddress: AddressInfo
+    }>
+    
+    // Coverage
+    coverageSelections: {
+      liabilityLimits: {
+        bodilyInjury: string       // "25/50", "100/300", etc.
+        propertyDamage: number
+      }
+      physicalDamage: {
+        comprehensive: boolean
+        comprehensiveDeductible?: number
+        collision: boolean
+        collisionDeductible?: number
+      }
+      uninsuredMotorist: boolean
+      underinsuredMotorist: boolean
+    }
+  }
+}
+
+// API Endpoint: https://api.progressive.com/quote/auto
+// Method: POST  
+// Authentication: API Key + Client Certificate
+```
+
+##### State Farm API Integration
+```typescript
+interface StateFarmQuoteRequest {
+  // Customer information
+  customer: {
+    personalInfo: PersonalInfo
+    contactInfo: ContactInfo
+    licenseInfo: LicenseInfo
+  }
+  
+  // Policy details
+  policy: {
+    effectiveDate: string
+    term: 6 | 12                   // months
+    paymentPlan: 'monthly' | 'semiannual' | 'annual'
+  }
+  
+  // Vehicles and drivers
+  riskUnits: Array<{
+    vehicle: VehicleInfo
+    primaryDriver: DriverInfo
+    additionalDrivers?: DriverInfo[]
+  }>
+  
+  // Coverage options
+  coverageOptions: {
+    liability: LiabilityCoverage
+    physicalDamage: PhysicalDamageCoverage
+    medicalPayments?: number
+    uninsuredMotorist: UninsuredMotoristCoverage
+  }
+}
+
+// API Endpoint: https://developer.statefarm.com/auto-insurance/v1/quote
+// Method: POST
+// Authentication: OAuth 2.0 + API Key
+```
+
+#### 3. Implementation Flow
+
+##### Quote Request Process
+```typescript
+// lib/carrier-integration/core/carrier-manager.ts
+export class CarrierManager {
+  async getQuotes(
+    customerData: CollectedCustomerData,
+    selectedCarriers: string[] = ['geico', 'progressive', 'statefarm', 'allstate']
+  ): Promise<CarrierQuoteResults> {
+    
+    // 1. Map our data to carrier formats
+    const mappedData = await this.dataMapper.mapToCarrierFormats(customerData)
+    
+    // 2. Make parallel API calls to selected carriers
+    const quotePromises = selectedCarriers.map(carrier => 
+      this.callCarrierAPI(carrier, mappedData[carrier])
+    )
+    
+    // 3. Handle responses and errors
+    const results = await Promise.allSettled(quotePromises)
+    
+    // 4. Process and standardize responses
+    const processedQuotes = this.processCarrierResponses(results)
+    
+    // 5. Rank and return quotes
+    return this.quoteAggregator.rankQuotes(processedQuotes)
+  }
+  
+  private async callCarrierAPI(
+    carrier: string, 
+    requestData: any
+  ): Promise<CarrierQuoteResponse> {
+    const carrierClient = this.getCarrierClient(carrier)
+    
+    try {
+      // Apply rate limiting
+      await this.rateLimiter.waitForSlot(carrier)
+      
+      // Make API call with retry logic
+      const response = await this.retryHandler.execute(
+        () => carrierClient.getQuote(requestData),
+        { maxRetries: 3, backoffMs: 1000 }
+      )
+      
+      return response
+    } catch (error) {
+      return this.errorHandler.handleCarrierError(carrier, error)
+    }
+  }
+}
+```
+
+##### Data Mapping Examples
+```typescript
+// lib/carrier-integration/mappers/data-mapper.ts
+export class DataMapper {
+  mapToGeicoFormat(customerData: CollectedCustomerData): GeicoQuoteRequest {
+    return {
+      drivers: customerData.drivers.map(driver => ({
+        age: driver.age,
+        gender: driver.gender === 'male' ? 'M' : 'F',
+        maritalStatus: this.mapMaritalStatus(driver.maritalStatus),
+        licenseNumber: driver.licenseNumber || '',
+        yearsLicensed: driver.yearsLicensed,
+        violations: driver.violations || [],
+        accidents: driver.accidents || []
+      })),
+      
+      vehicles: customerData.vehicles.map(vehicle => ({
+        year: vehicle.year,
+        make: vehicle.make,
+        model: vehicle.model,
+        vin: vehicle.vin,
+        annualMileage: vehicle.annualMileage || 12000,
+        primaryUse: vehicle.primaryUse || 'commute',
+        garagedZip: customerData.zipCode
+      })),
+      
+      coverage: {
+        bodilyInjuryLiability: customerData.coverage.liability || "100/300",
+        propertyDamageLiability: customerData.coverage.propertyDamage || 100000,
+        comprehensive: {
+          selected: customerData.coverage.comprehensive || true,
+          deductible: customerData.coverage.comprehensiveDeductible || 500
+        },
+        collision: {
+          selected: customerData.coverage.collision || true,
+          deductible: customerData.coverage.collisionDeductible || 500
+        },
+        uninsuredMotorist: customerData.coverage.uninsuredMotorist || "100/300"
+      },
+      
+      effectiveDate: customerData.effectiveDate || new Date().toISOString(),
+      zipCode: customerData.zipCode
+    }
+  }
+}
+```
+
+#### 4. Quote Aggregation & Comparison
+
+```typescript
+// lib/carrier-integration/core/quote-aggregator.ts
+export class QuoteAggregator {
+  rankQuotes(quotes: ProcessedQuote[]): QuoteComparisonResult {
+    const validQuotes = quotes.filter(q => q.status === 'success')
+    
+    // Sort by annual premium (lowest first)
+    const sortedQuotes = validQuotes.sort((a, b) => 
+      a.annualPremium - b.annualPremium
+    )
+    
+    return {
+      quotes: sortedQuotes.map((quote, index) => ({
+        ...quote,
+        rank: index + 1,
+        savings: index === 0 ? 0 : quote.annualPremium - sortedQuotes[0].annualPremium,
+        percentageDifference: index === 0 ? 0 : 
+          ((quote.annualPremium - sortedQuotes[0].annualPremium) / sortedQuotes[0].annualPremium) * 100
+      })),
+      
+      summary: {
+        totalQuotes: validQuotes.length,
+        lowestPremium: sortedQuotes[0]?.annualPremium,
+        highestPremium: sortedQuotes[sortedQuotes.length - 1]?.annualPremium,
+        averagePremium: validQuotes.reduce((sum, q) => sum + q.annualPremium, 0) / validQuotes.length,
+        potentialSavings: sortedQuotes[sortedQuotes.length - 1]?.annualPremium - sortedQuotes[0]?.annualPremium
+      },
+      
+      errors: quotes.filter(q => q.status === 'error'),
+      generatedAt: new Date().toISOString()
+    }
+  }
+}
+```
+
+### Integration Steps
+
+#### Phase 1: API Setup & Authentication
+1. **Register with carrier developer programs**
+   - GEICO Developer Portal
+   - Progressive Partner API
+   - State Farm Developer Platform
+   - Allstate API Program
+   - USAA Developer Access
+   - Liberty Mutual API
+
+2. **Obtain API credentials**
+   ```env
+   # .env.local
+   GEICO_API_KEY=your_geico_api_key
+   GEICO_CLIENT_SECRET=your_geico_secret
+   
+   PROGRESSIVE_API_KEY=your_progressive_key
+   PROGRESSIVE_CLIENT_CERT=path_to_cert.pem
+   
+   STATEFARM_CLIENT_ID=your_statefarm_client_id
+   STATEFARM_CLIENT_SECRET=your_statefarm_secret
+   ```
+
+3. **Implement authentication flows**
+   - OAuth 2.0 token management
+   - API key rotation
+   - Certificate-based auth for some carriers
+
+#### Phase 2: Core Integration
+1. **Build carrier clients**
+   ```typescript
+   // Example: GEICO client
+   export class GeicoClient extends BaseCarrierClient {
+     async getQuote(request: GeicoQuoteRequest): Promise<GeicoQuoteResponse> {
+       const response = await this.post('/v2/auto/quote', request, {
+         headers: {
+           'Authorization': `Bearer ${this.accessToken}`,
+           'X-API-Key': this.apiKey,
+           'Content-Type': 'application/json'
+         }
+       })
+       
+       return this.responseMapper.mapGeicoResponse(response.data)
+     }
+   }
+   ```
+
+2. **Implement data mappers**
+   - Convert collected data to carrier-specific formats
+   - Handle carrier-specific requirements and validations
+   - Map coverage options to carrier terminology
+
+3. **Add error handling**
+   - Carrier-specific error codes
+   - Rate limiting and retry logic
+   - Fallback mechanisms
+
+#### Phase 3: Integration with Existing Flow
+1. **Update quote generation**
+   ```typescript
+   // In chat API route after data collection
+   if (allRequiredDataCollected) {
+     // Get real-time quotes from carriers
+     const carrierQuotes = await carrierManager.getQuotes(
+       collectedData,
+       ['geico', 'progressive', 'statefarm', 'allstate']
+     )
+     
+     // Return actual quotes instead of estimates
+     return {
+       quotes: carrierQuotes.quotes,
+       summary: carrierQuotes.summary,
+       nextSteps: generateCarrierToolkit(carrierQuotes),
+       timestamp: new Date().toISOString()
+     }
+   }
+   ```
+
+2. **Enhance UI for quote results**
+   - Display multiple carrier quotes side-by-side
+   - Show coverage comparisons
+   - Highlight best value options
+   - Provide direct links to carrier websites for purchase
+
+### Benefits of Carrier API Integration
+
+#### For Users
+- **Real-Time Quotes**: Actual prices from multiple carriers instantly
+- **Comprehensive Comparison**: Side-by-side comparison with identical coverage
+- **Time Savings**: No need to visit multiple carrier websites
+- **Accuracy**: Quotes based on exact information provided
+- **Best Price Discovery**: Automatically find the lowest rates
+
+#### For Business
+- **Lead Quality**: Users with real quotes are more likely to convert
+- **Competitive Advantage**: Unique value proposition in the market
+- **Revenue Opportunities**: Carrier partnership and referral programs
+- **Data Insights**: Understanding of market pricing and trends
+- **Scalability**: Automated quote process without manual intervention
+
+### Technical Considerations
+
+#### API Rate Limits
+- **GEICO**: 100 requests/minute
+- **Progressive**: 50 requests/minute  
+- **State Farm**: 200 requests/hour
+- **Allstate**: 75 requests/minute
+
+Implement intelligent rate limiting and queuing to optimize throughput.
+
+#### Error Handling
+- Network timeouts and retries
+- Carrier-specific error codes
+- Partial failure handling (some carriers succeed, others fail)
+- Graceful degradation to estimates if APIs unavailable
+
+#### Data Privacy & Security
+- Encrypt sensitive customer data in transit and at rest
+- Comply with carrier data handling requirements
+- Implement secure token storage and rotation
+- Audit logs for all API interactions
+
+#### Performance Optimization
+- Parallel API calls to multiple carriers
+- Caching of stable data (vehicle information, coverage options)
+- Asynchronous processing for quote requests
+- CDN for static carrier assets and logos
+
 ## Debug Tips
 - Check browser console for API errors
 - Verify `.env.local` has valid OpenAI key

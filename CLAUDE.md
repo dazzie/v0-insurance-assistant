@@ -68,7 +68,11 @@ git push -u origin week-2  # Push to week-2 branch
 
 ### Data Validation Rules
 - **Confidence Threshold**: 75% confidence required for prompt suggestions
-- **Minimum Quote Requirements**: Exactly 5 mandatory fields must be collected:
+- **Universal Rule - ALL Insurance Types**: NEVER end initial responses with vague questions
+  - ALWAYS provide specific numbered options: "I can help you: 1) ... 2) ... 3) ..."
+  - Applies to auto, home, life, renters, pet, health, disability, umbrella insurance
+  - Make options relevant to the specific insurance type and user profile
+- **Auto Insurance Minimum Quote Requirements**: Exactly 5 mandatory fields must be collected:
   1. Number of drivers on policy
   2. Number of vehicles to insure  
   3. Primary ZIP code
@@ -141,11 +145,21 @@ USE_MOCK_RESPONSES=false       # Set to true for testing without API
 
 ## Common Tasks
 
+### Universal Initial Response Format (ALL Insurance Types)
+When implementing any insurance type, ensure initial responses follow this MANDATORY format:
+1. **Acknowledge the insurance type** from user profile immediately
+2. **Never ask vague questions** like "What would you like to explore?"
+3. **Always end with**: "I can help you:" followed by 2-3 numbered, specific actions
+4. **Make options relevant** to the insurance type and user's profile (age, location, etc.)
+
+**Template**: "I can help you: 1) [Specific action] 2) [Specific action] 3) [Specific action]"
+
 ### Adding New Insurance Types
 1. Extend `information-tracker.ts` with new extraction patterns
 2. Update `quote-profile.ts` with new profile structure
 3. Add specific prompts in `suggested-prompts.ts`
-4. Update system prompt in `/app/api/chat/route.ts`
+4. Update system prompt in `/app/api/chat/route.ts` with specific numbered options for the new type
+5. **Add specific "I can help you" options** for the new insurance type following the examples above
 
 ### Modifying Information Collection
 1. Update required/optional fields in `quote-profile.ts`
@@ -182,7 +196,16 @@ Updated system rules with strict minimum requirements for auto insurance quotes:
   - NEVER end with vague questions like "What would you like to explore first?"
   - ALWAYS end with: "I can help you:" followed by 2-3 numbered, specific actions
   - Make options actionable and relevant to their profile
-  - Example for life insurance: "I can help you: 1) Calculate how much coverage you need 2) Compare term vs whole life options 3) Find the best rates for your age and health"
+  
+  **Examples by Insurance Type:**
+  - **Auto Insurance**: "I can help you: 1) Get accurate quotes in minutes 2) Compare your current coverage 3) Find money-saving opportunities"
+  - **Life Insurance**: "I can help you: 1) Calculate how much coverage you need 2) Compare term vs whole life options 3) Find the best rates for your age and health"
+  - **Home Insurance**: "I can help you: 1) Assess your coverage needs 2) Compare policy options and deductibles 3) Find discounts you qualify for"
+  - **Renters Insurance**: "I can help you: 1) Determine how much coverage you need 2) Compare affordable policy options 3) Understand what's covered vs not covered"
+  - **Pet Insurance**: "I can help you: 1) Compare coverage options for your pet 2) Understand what conditions are covered 3) Find the best value plans"
+  - **Health Insurance**: "I can help you: 1) Compare plan options in your area 2) Understand your benefits and costs 3) Find cost-saving strategies"
+  - **Disability Insurance**: "I can help you: 1) Calculate how much income protection you need 2) Compare short-term vs long-term options 3) Find group vs individual policies"
+  - **Umbrella Insurance**: "I can help you: 1) Assess if you need extra liability protection 2) Determine coverage amounts 3) Find affordable umbrella policies"
 
 ### UI/UX Improvements
 - **Fixed chat bubble overflow**: Replaced semi-transparent backgrounds with solid white

@@ -1017,6 +1017,535 @@ Implement intelligent rate limiting and queuing to optimize throughput.
 - Asynchronous processing for quote requests
 - CDN for static carrier assets and logos
 
+## Local Agent Outreach System
+
+### Overview
+After completing the automated quote process, offer users the option to connect with local, reputable insurance agents who can provide personalized service, competitive quotes, and ongoing support.
+
+### Architecture Design
+
+#### 1. Agent Directory Structure
+```
+/lib/agent-directory/
+├── core/
+│   ├── agent-finder.ts          # Locate agents by ZIP code/location
+│   ├── agent-ranker.ts          # Rank agents by reputation/reviews
+│   └── email-composer.ts        # Generate personalized emails
+├── data/
+│   ├── agent-database.ts        # Local agent directory
+│   ├── agency-ratings.ts        # Agent ratings and reviews
+│   └── specialization-data.ts   # Agent specializations
+├── templates/
+│   ├── email-templates.ts       # Professional email templates
+│   ├── introduction-templates.ts # Agent introduction formats
+│   └── quote-request-templates.ts # Quote request structures
+└── types/
+    ├── agent-types.ts           # Agent profile interfaces
+    └── outreach-types.ts        # Email and contact types
+```
+
+#### 2. Agent Profile Structure
+```typescript
+interface LocalAgent {
+  // Basic information
+  id: string
+  name: string
+  title: string
+  agency: string
+  
+  // Contact information
+  email: string
+  phone: string
+  address: {
+    street: string
+    city: string
+    state: string
+    zipCode: string
+  }
+  
+  // Professional details
+  licenses: string[]              // State licenses held
+  certifications: string[]        // Professional certifications
+  yearsExperience: number
+  specializations: InsuranceType[] // auto, home, life, commercial
+  
+  // Reputation metrics
+  ratings: {
+    averageRating: number         // 1-5 stars
+    totalReviews: number
+    googleRating?: number
+    bbbRating?: string           // A+, A, B+, etc.
+  }
+  
+  // Service area
+  serviceRadius: number           // Miles from office
+  servesZipCodes: string[]
+  
+  // Business information
+  website?: string
+  linkedIn?: string
+  businessHours: BusinessHours
+  languages: string[]             // English, Spanish, etc.
+  
+  // Performance metrics
+  responseTime: number            // Average hours to respond
+  clientRetentionRate?: number    // Percentage
+  lastUpdated: string
+}
+```
+
+#### 3. Email Composition System
+
+##### Professional Email Template
+```typescript
+interface EmailComposition {
+  subject: string
+  body: string
+  attachments?: string[]
+  priority: 'normal' | 'high'
+  followUpReminder?: number       // Days
+}
+
+// Email template generation
+export class EmailComposer {
+  composeAgentOutreach(
+    customerData: CollectedCustomerData,
+    quoteResults: CarrierQuoteResults,
+    selectedAgent: LocalAgent
+  ): EmailComposition {
+    
+    const subject = `Insurance Quote Request - ${customerData.insuranceType} - ${customerData.location}`
+    
+    const body = `
+Dear ${selectedAgent.name},
+
+I hope this email finds you well. I am currently shopping for ${customerData.insuranceType.toLowerCase()} insurance and am seeking competitive quotes from reputable local agents in the ${customerData.location} area.
+
+CUSTOMER PROFILE:
+• Location: ${customerData.location}
+• Age: ${customerData.age}
+• Insurance Type: ${customerData.insuranceType}
+• Coverage Effective Date: ${customerData.effectiveDate || 'ASAP'}
+
+${this.generateInsuranceSpecificDetails(customerData)}
+
+CURRENT MARKET RESEARCH:
+I have obtained preliminary quotes through online research:
+${this.formatQuoteComparison(quoteResults)}
+
+WHY I'M REACHING OUT TO YOU:
+• Your agency has excellent ratings (${selectedAgent.ratings.averageRating}/5 stars)
+• ${selectedAgent.yearsExperience} years of experience in the industry
+• Specialization in ${selectedAgent.specializations.join(', ')} insurance
+• Strong local presence in ${selectedAgent.address.city}, ${selectedAgent.address.state}
+
+WHAT I'M LOOKING FOR:
+• Competitive pricing that can beat or match current quotes
+• Personalized service and local expertise
+• Long-term relationship with a trusted advisor
+• Comprehensive coverage review and recommendations
+
+NEXT STEPS:
+I would appreciate the opportunity to discuss my insurance needs with you. I am available for a phone consultation at your convenience and can provide additional details as needed.
+
+Please let me know:
+1. If you can provide competitive quotes for my situation
+2. Your availability for a brief consultation
+3. Any additional information you need from me
+
+Thank you for your time and consideration. I look forward to potentially working with you.
+
+Best regards,
+[Customer Name]
+[Customer Phone]
+[Customer Email]
+
+P.S. I am actively comparing quotes and plan to make a decision within the next [timeframe]. I appreciate prompt responses.
+    `
+    
+    return {
+      subject,
+      body: body.trim(),
+      priority: 'normal',
+      followUpReminder: 3 // Follow up in 3 days if no response
+    }
+  }
+}
+```
+
+##### Insurance-Specific Details Generation
+```typescript
+private generateInsuranceSpecificDetails(data: CollectedCustomerData): string {
+  switch (data.insuranceType.toLowerCase()) {
+    case 'auto':
+      return `
+AUTO INSURANCE DETAILS:
+• Drivers: ${data.drivers?.length || 1}
+• Vehicles: ${data.vehicles?.map(v => `${v.year} ${v.make} ${v.model}`).join(', ')}
+• Current Coverage: ${data.currentCoverage || 'Standard coverage desired'}
+• Annual Mileage: ${data.totalMileage || 'Standard commuting'}
+• Driving Record: ${data.drivingRecord || 'Clean record'}
+• Desired Coverage: Comprehensive protection with competitive rates`
+
+    case 'home':
+      return `
+HOME INSURANCE DETAILS:
+• Property Type: ${data.propertyType || 'Single family home'}
+• Home Value: ${data.homeValue || 'To be assessed'}
+• Year Built: ${data.yearBuilt || 'To be determined'}
+• Square Footage: ${data.squareFootage || 'Standard size'}
+• Current Coverage: ${data.currentCoverage || 'Full replacement cost desired'}
+• Special Features: ${data.specialFeatures || 'Standard home features'}`
+
+    case 'life':
+      return `
+LIFE INSURANCE DETAILS:
+• Coverage Amount: ${data.coverageAmount || 'To be determined based on needs analysis'}
+• Policy Type: ${data.policyType || 'Term life preferred, open to whole life'}
+• Health Status: ${data.healthStatus || 'Good health'}
+• Beneficiaries: ${data.beneficiaries || 'Family members'}
+• Current Coverage: ${data.currentCoverage || 'Limited or no current coverage'}
+• Purpose: ${data.purpose || 'Family protection and financial security'}`
+
+    default:
+      return `
+INSURANCE DETAILS:
+• Coverage Type: ${data.insuranceType}
+• Specific Needs: ${data.specificNeeds || 'Comprehensive coverage'}
+• Current Situation: ${data.currentSituation || 'Seeking new coverage'}
+• Budget Considerations: ${data.budget || 'Competitive rates important'}`
+  }
+}
+```
+
+#### 4. Agent Discovery & Ranking
+
+##### Agent Finder Implementation
+```typescript
+export class AgentFinder {
+  async findLocalAgents(
+    zipCode: string,
+    insuranceType: InsuranceType,
+    radius: number = 25
+  ): Promise<LocalAgent[]> {
+    
+    // 1. Query agent database by location
+    const nearbyAgents = await this.agentDatabase.findByLocation(zipCode, radius)
+    
+    // 2. Filter by insurance type specialization
+    const specializedAgents = nearbyAgents.filter(agent => 
+      agent.specializations.includes(insuranceType) ||
+      agent.specializations.includes('all')
+    )
+    
+    // 3. Rank by reputation and performance
+    const rankedAgents = await this.agentRanker.rankAgents(
+      specializedAgents,
+      {
+        prioritizeRating: true,
+        prioritizeExperience: true,
+        prioritizeResponseTime: true,
+        prioritizeReviews: true
+      }
+    )
+    
+    return rankedAgents.slice(0, 5) // Return top 5 agents
+  }
+}
+
+export class AgentRanker {
+  rankAgents(agents: LocalAgent[], criteria: RankingCriteria): LocalAgent[] {
+    return agents
+      .map(agent => ({
+        ...agent,
+        score: this.calculateScore(agent, criteria)
+      }))
+      .sort((a, b) => b.score - a.score)
+  }
+  
+  private calculateScore(agent: LocalAgent, criteria: RankingCriteria): number {
+    let score = 0
+    
+    // Rating score (40% weight)
+    score += (agent.ratings.averageRating / 5) * 40
+    
+    // Experience score (25% weight)
+    score += Math.min(agent.yearsExperience / 20, 1) * 25
+    
+    // Review count score (20% weight)
+    score += Math.min(agent.ratings.totalReviews / 100, 1) * 20
+    
+    // Response time score (15% weight)
+    score += Math.max(0, (48 - agent.responseTime) / 48) * 15
+    
+    return score
+  }
+}
+```
+
+#### 5. Integration with Quote Flow
+
+##### Final Step Implementation
+```typescript
+// After quote results are generated
+export async function generateAgentOutreach(
+  customerData: CollectedCustomerData,
+  quoteResults: CarrierQuoteResults
+): Promise<AgentOutreachResult> {
+  
+  // 1. Find local agents
+  const localAgents = await agentFinder.findLocalAgents(
+    customerData.zipCode,
+    customerData.insuranceType
+  )
+  
+  // 2. Select top agent
+  const recommendedAgent = localAgents[0]
+  
+  if (!recommendedAgent) {
+    return {
+      success: false,
+      message: "No local agents found in your area"
+    }
+  }
+  
+  // 3. Compose professional email
+  const emailComposition = emailComposer.composeAgentOutreach(
+    customerData,
+    quoteResults,
+    recommendedAgent
+  )
+  
+  // 4. Generate agent profile summary
+  const agentSummary = {
+    name: recommendedAgent.name,
+    agency: recommendedAgent.agency,
+    rating: recommendedAgent.ratings.averageRating,
+    experience: recommendedAgent.yearsExperience,
+    specializations: recommendedAgent.specializations,
+    contact: {
+      phone: recommendedAgent.phone,
+      email: recommendedAgent.email,
+      address: `${recommendedAgent.address.city}, ${recommendedAgent.address.state}`
+    },
+    whyRecommended: [
+      `${recommendedAgent.ratings.averageRating}/5 star rating with ${recommendedAgent.ratings.totalReviews} reviews`,
+      `${recommendedAgent.yearsExperience} years of experience`,
+      `Specializes in ${customerData.insuranceType} insurance`,
+      `Local presence in ${recommendedAgent.address.city}`,
+      `Average response time: ${recommendedAgent.responseTime} hours`
+    ]
+  }
+  
+  return {
+    success: true,
+    recommendedAgent: agentSummary,
+    emailComposition,
+    alternativeAgents: localAgents.slice(1, 4).map(agent => ({
+      name: agent.name,
+      agency: agent.agency,
+      rating: agent.ratings.averageRating,
+      phone: agent.phone,
+      email: agent.email
+    }))
+  }
+}
+```
+
+### User Interface Integration
+
+#### Final Step UI Component
+```typescript
+// After quote results display
+export function AgentOutreachSection({ 
+  customerData, 
+  quoteResults 
+}: AgentOutreachProps) {
+  const [agentOutreach, setAgentOutreach] = useState<AgentOutreachResult | null>(null)
+  const [emailSent, setEmailSent] = useState(false)
+  
+  return (
+    <Card className="mt-6">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <MapPin className="w-5 h-5" />
+          Connect with a Local Agent
+        </CardTitle>
+        <CardDescription>
+          Get personalized service from a highly-rated local insurance professional
+        </CardDescription>
+      </CardHeader>
+      
+      <CardContent>
+        {agentOutreach?.success && (
+          <div className="space-y-4">
+            {/* Recommended Agent Profile */}
+            <div className="bg-muted/50 p-4 rounded-lg">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h4 className="font-semibold">{agentOutreach.recommendedAgent.name}</h4>
+                  <p className="text-sm text-muted-foreground">{agentOutreach.recommendedAgent.agency}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <Star 
+                          key={i} 
+                          className={`w-4 h-4 ${i < agentOutreach.recommendedAgent.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
+                        />
+                      ))}
+                    </div>
+                    <span className="text-sm">{agentOutreach.recommendedAgent.rating}/5</span>
+                    <span className="text-sm text-muted-foreground">
+                      • {agentOutreach.recommendedAgent.experience} years experience
+                    </span>
+                  </div>
+                </div>
+                <div className="text-right text-sm">
+                  <p className="font-medium">{agentOutreach.recommendedAgent.contact.phone}</p>
+                  <p className="text-muted-foreground">{agentOutreach.recommendedAgent.contact.address}</p>
+                </div>
+              </div>
+              
+              <div className="mt-3">
+                <p className="text-sm font-medium mb-2">Why we recommend this agent:</p>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  {agentOutreach.recommendedAgent.whyRecommended.map((reason, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      {reason}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            
+            {/* Email Preview */}
+            <div className="space-y-3">
+              <h5 className="font-medium">Personalized Introduction Email:</h5>
+              <div className="bg-white border rounded-lg p-4 max-h-96 overflow-y-auto">
+                <div className="text-sm space-y-2">
+                  <p><strong>To:</strong> {agentOutreach.recommendedAgent.contact.email}</p>
+                  <p><strong>Subject:</strong> {agentOutreach.emailComposition.subject}</p>
+                  <hr className="my-3" />
+                  <div className="whitespace-pre-wrap font-mono text-xs leading-relaxed">
+                    {agentOutreach.emailComposition.body}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <Button 
+                onClick={() => handleSendEmail(agentOutreach.emailComposition)}
+                className="flex-1"
+                disabled={emailSent}
+              >
+                {emailSent ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Email Sent
+                  </>
+                ) : (
+                  <>
+                    <Mail className="w-4 h-4 mr-2" />
+                    Send Email to Agent
+                  </>
+                )}
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                onClick={() => copyToClipboard(agentOutreach.emailComposition.body)}
+              >
+                <Copy className="w-4 h-4 mr-2" />
+                Copy Email
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                onClick={() => window.open(`tel:${agentOutreach.recommendedAgent.contact.phone}`)}
+              >
+                <Phone className="w-4 h-4 mr-2" />
+                Call Now
+              </Button>
+            </div>
+            
+            {/* Alternative Agents */}
+            {agentOutreach.alternativeAgents && agentOutreach.alternativeAgents.length > 0 && (
+              <div className="mt-6">
+                <h5 className="font-medium mb-3">Other Recommended Agents:</h5>
+                <div className="grid gap-3">
+                  {agentOutreach.alternativeAgents.map((agent, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div>
+                        <p className="font-medium">{agent.name}</p>
+                        <p className="text-sm text-muted-foreground">{agent.agency}</p>
+                        <div className="flex items-center gap-1 mt-1">
+                          <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                          <span className="text-xs">{agent.rating}/5</span>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline" onClick={() => window.open(`tel:${agent.phone}`)}>
+                          Call
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => window.open(`mailto:${agent.email}`)}>
+                          Email
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+        
+        <Button 
+          onClick={() => generateAgentOutreach(customerData, quoteResults)}
+          className="w-full"
+          disabled={!!agentOutreach}
+        >
+          <MapPin className="w-4 h-4 mr-2" />
+          Find Local Agent & Generate Introduction
+        </Button>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+### Benefits of Local Agent Outreach
+
+#### For Users
+- **Personal Touch**: Local agents provide face-to-face service and relationship building
+- **Expert Guidance**: Professional advice tailored to local market conditions
+- **Competitive Quotes**: Agents often have access to exclusive rates and discounts
+- **Ongoing Support**: Claims assistance and policy management over time
+- **Professional Email**: Well-crafted introduction that gets agent attention
+
+#### For Business
+- **Value-Added Service**: Differentiates from generic quote sites
+- **Agent Partnerships**: Potential revenue sharing with referring agents
+- **Lead Quality**: Users who contact agents are serious buyers
+- **Local Market Penetration**: Builds relationships in local insurance markets
+- **Customer Satisfaction**: Provides human element to digital process
+
+### Implementation Considerations
+
+#### Data Sources
+- **Agent Directories**: Insurance department licensee databases
+- **Review Platforms**: Google Reviews, Yelp, Better Business Bureau
+- **Professional Networks**: LinkedIn, industry associations
+- **Carrier Networks**: Agent finder tools from major carriers
+
+#### Compliance & Quality
+- **License Verification**: Ensure agents are properly licensed
+- **Review Authenticity**: Verify rating sources and review legitimacy
+- **Regular Updates**: Keep agent information current
+- **Performance Tracking**: Monitor response rates and customer feedback
+
 ## Debug Tips
 - Check browser console for API errors
 - Verify `.env.local` has valid OpenAI key

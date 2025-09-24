@@ -3,11 +3,6 @@ import { getCarriersByState, getTopCarriers, searchCarriers, type InsuranceCarri
 import { AUTO_INSURANCE_QUESTIONS, STATE_MINIMUM_COVERAGE } from "@/lib/insurance-needs-analysis"
 import { buildQuoteProfile, getPromptsForMissingInfo, formatProfileSummary } from "@/lib/quote-profile"
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
-
 export async function POST(req: Request) {
   const { messages, customerProfile } = await req.json()
 
@@ -49,54 +44,23 @@ export async function POST(req: Request) {
         },
       })
     } else {
-      // Use OpenAI for real responses
+      // Use AI SDK's streamText for better streaming support
       const systemPrompt = generateSystemPrompt(customerProfile, messages)
-      
-      // Prepare messages for OpenAI
-      const openAIMessages = [
-        { role: "system" as const, content: systemPrompt },
-        ...messages.map((msg: any) => ({
-          role: msg.role as "user" | "assistant",
-          content: msg.content
-        }))
-      ]
 
-      // Create streaming response from OpenAI
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4-turbo-preview",
-        messages: openAIMessages,
-        stream: true,
+      const result = await streamText({
+        model: openai('gpt-4-turbo-preview'),
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...messages.map((msg: any) => ({
+            role: msg.role as 'user' | 'assistant',
+            content: msg.content,
+          })),
+        ],
         temperature: 0.7,
-        max_tokens: 2000,
+        maxTokens: 2000,
       })
 
-      // Convert OpenAI stream to ReadableStream
-      const stream = new ReadableStream({
-        async start(controller) {
-          const encoder = new TextEncoder()
-          
-          try {
-            for await (const chunk of completion) {
-              const content = chunk.choices[0]?.delta?.content || ""
-              if (content) {
-                controller.enqueue(encoder.encode(content))
-              }
-            }
-          } catch (error) {
-            console.error("[v0] OpenAI streaming error:", error)
-            controller.error(error)
-          } finally {
-            controller.close()
-          }
-        },
-      })
-
-      return new Response(stream, {
-        headers: {
-          "Content-Type": "text/plain",
-          "Cache-Control": "no-cache",
-        },
-      })
+      return result.toAIStreamResponse()
     }
   } catch (error) {
     console.error("[v0] API Error:", error)

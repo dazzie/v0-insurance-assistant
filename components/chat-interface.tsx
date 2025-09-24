@@ -197,6 +197,7 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
 *This is your personal insurance coach - I'm here to guide you every step of the way toward optimal coverage.*`
   }
 
+
   return (
     <div className="space-y-4">
       {/* Quote Profile Display - Only for Auto Insurance */}

@@ -66,6 +66,79 @@ git push -u origin week-2  # Push to week-2 branch
 3. **No Repeated Questions**: Tracks collected information to avoid redundancy
 4. **Profile Integration**: Auto-fills from customer profile when applicable
 
+### Enhanced Data Gathering with Quote Path Selection
+
+#### 1. Quote Path Choice (MANDATORY for all insurance types)
+After providing initial specific options, ALWAYS offer quote path selection:
+```
+"Would you like:
+A) Quick quote (5 minutes) - Basic information for rough estimate  
+B) Detailed quote (10-15 minutes) - Comprehensive info for accurate pricing"
+```
+
+#### 2. Quick Quote Path (Minimum Information)
+**Purpose**: Fast estimates with basic information
+- **Auto**: Driver count → Vehicle count → ZIP → Vehicle year/make/model → Driver ages
+- **Home**: Property type → ZIP code → Home value → Year built → Coverage amount desired
+- **Life**: Coverage amount desired → Health status → Smoking status → Term vs whole life preference
+- **Renters**: ZIP code → Personal property value → Liability coverage desired → Previous claims
+- **Pet**: Pet type/breed → Age → Coverage level desired → Pre-existing conditions
+
+#### 3. Detailed Quote Path (Comprehensive Information)
+**Purpose**: Accurate pricing with full information gathering
+- **Auto**: All minimum fields PLUS years licensed, marital status, driving record, annual mileage, vehicle use, current coverage
+- **Home**: All minimum fields PLUS construction details, safety features, claims history, additional coverage needs, mortgage information
+- **Life**: All minimum fields PLUS detailed health questions, lifestyle factors, beneficiary information, existing coverage, financial details
+- **Renters**: All minimum fields PLUS detailed inventory, additional living expenses, specific coverage needs
+- **Pet**: All minimum fields PLUS detailed health history, vet information, specific conditions to cover
+
+#### 4. Prompt-Type Flow Examples
+```
+Auto Insurance:
+Question: "How many drivers?"
+Prompts: ["Just me", "2 drivers", "3 drivers", "4+ drivers"]
+
+Question: "What year is your vehicle?"  
+Prompts: ["2020-2024", "2015-2019", "2010-2014", "2005-2009", "Older than 2005"]
+
+Question: "Your driving record?"
+Prompts: ["Clean record", "1 minor violation", "1 major violation", "Multiple violations"]
+
+Home Insurance:
+Question: "What's your home's construction type?"
+Prompts: ["Brick", "Wood frame", "Stucco", "Concrete", "Other"]
+
+Question: "Home security features?"
+Prompts: ["Security system", "Smoke detectors only", "No security features", "Multiple features"]
+
+Life Insurance:
+Question: "How would you describe your health?"
+Prompts: ["Excellent", "Good", "Fair", "Poor", "Prefer not to say"]
+
+Question: "Do you smoke?"
+Prompts: ["Never smoked", "Former smoker (quit 2+ years)", "Current smoker", "Occasional smoker"]
+```
+
+#### 5. Path Management & Progression
+- **Track selected path**: Quick vs Detailed
+- **Adjust collection depth**: Based on chosen path
+- **Provide progress indicators**: "Step 2 of 5" for quick, "Step 4 of 12" for detailed
+- **Allow path switching**: "Would you like to upgrade to detailed quote for better accuracy?"
+- **Use guided prompts**: Provide clickable options for faster completion
+
+#### 6. Quote Accuracy & Disclaimers
+**Quick Quote Results:**
+- Provide estimate ranges (e.g., "$800-1,200/year")
+- Include accuracy disclaimer: "This is a rough estimate based on basic information"
+- Offer upgrade option: "Get a detailed quote for more accurate pricing"
+- Show what additional information would improve accuracy
+
+**Detailed Quote Results:**
+- Provide specific estimates with carrier comparisons
+- Include confidence level: "Based on comprehensive information provided"
+- Offer carrier conversation toolkit
+- Provide next steps for actual policy purchase
+
 ### Data Validation Rules
 - **Confidence Threshold**: 75% confidence required for prompt suggestions
 - **Universal Rule - ALL Insurance Types**: NEVER end initial responses with vague questions
@@ -151,15 +224,38 @@ When implementing any insurance type, ensure initial responses follow this MANDA
 2. **Never ask vague questions** like "What would you like to explore?"
 3. **Always end with**: "I can help you:" followed by 2-3 numbered, specific actions
 4. **Make options relevant** to the insurance type and user's profile (age, location, etc.)
+5. **ALWAYS offer quote path choice** after initial options: Quick vs Detailed quote
 
-**Template**: "I can help you: 1) [Specific action] 2) [Specific action] 3) [Specific action]"
+**Enhanced Template**: 
+```
+"I can help you: 1) [Specific action] 2) [Specific action] 3) [Specific action]
+
+Would you like:
+A) Quick quote (5 minutes) - Basic information for rough estimate
+B) Detailed quote (10-15 minutes) - Comprehensive info for accurate pricing"
+```
+
+### Data Gathering Implementation Rules
+1. **Quote Path Selection**: MANDATORY for all insurance types after initial options
+2. **Prompt-Driven Collection**: Use specific prompts for each question to speed up data entry
+3. **Progress Tracking**: Show users their progress through the collection process
+4. **Path Switching**: Allow users to upgrade from quick to detailed quotes
+5. **Guided Prompts**: Provide clickable options instead of free-form text when possible
 
 ### Adding New Insurance Types
 1. Extend `information-tracker.ts` with new extraction patterns
 2. Update `quote-profile.ts` with new profile structure
 3. Add specific prompts in `suggested-prompts.ts`
-4. Update system prompt in `/app/api/chat/route.ts` with specific numbered options for the new type
-5. **Add specific "I can help you" options** for the new insurance type following the examples above
+4. Update system prompt in `/app/api/chat/route.ts` with:
+   - Specific numbered options for the new type
+   - Quick quote path requirements (minimum fields)
+   - Detailed quote path requirements (comprehensive fields)
+   - Prompt-type flows with clickable options
+5. **Define data collection paths**:
+   - Quick path: 3-5 essential fields for basic estimate
+   - Detailed path: 8-15 fields for accurate pricing
+6. **Create prompt examples** for each question with 3-4 clickable options
+7. **Add progress tracking** indicators for both paths
 
 ### Modifying Information Collection
 1. Update required/optional fields in `quote-profile.ts`

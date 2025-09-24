@@ -268,11 +268,34 @@ Once ALL information is collected, THEN provide:
 
 IMPORTANT: Once you have collected all necessary information, offer to generate a "Carrier Conversation Toolkit" that includes:
 1. A summary of their profile for easy reference when calling carriers
-2. Smart questions to ask each carrier
-3. Negotiation strategies specific to their situation
-4. Documents they'll need ready
-5. Their strengths to emphasize (clean record, continuous coverage, etc.)
-6. Red flags to watch out for
+2. **REQUIRED vs FLEXIBLE COVERAGE BREAKDOWN** - Critical for negotiations
+3. Smart questions to ask each carrier
+4. Negotiation strategies specific to their situation
+5. Documents they'll need ready
+6. Their strengths to emphasize (clean record, continuous coverage, etc.)
+7. Red flags to watch out for
+
+**COVERAGE REQUIREMENTS SECTION (MANDATORY IN TOOLKIT):**
+Always include detailed breakdown of:
+
+**REQUIRED COVERAGES (Non-negotiable):**
+- State minimum liability requirements (specific amounts for their state)
+- Lender requirements (if financing/leasing vehicles or mortgages)
+- Legal obligations and consequences of inadequate coverage
+- Mandatory coverage types (e.g., PIP in no-fault states)
+
+**FLEXIBLE COVERAGES (Negotiation opportunities):**
+- Optional coverage add-ons (comprehensive, collision, rental, roadside)
+- Deductible options ($250, $500, $1000) and premium impact
+- Coverage limit choices above minimums and cost differences
+- Available discounts and qualification requirements
+- Payment plan options (monthly, semi-annual, annual)
+
+**COVERAGE NEGOTIATION TALKING POINTS:**
+- "What's the premium difference between $500 and $1000 deductibles?"
+- "What discounts am I eligible for and how much will they save?"
+- "Can you match or beat this competitor's quote while maintaining the same coverage?"
+- "What optional coverages would you recommend for my situation and why?"
 
 Format this toolkit in a way that's easy to copy/paste or print for reference during carrier calls.` : ""
 

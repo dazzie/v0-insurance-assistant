@@ -136,8 +136,48 @@ Prompts: ["Never smoked", "Former smoker (quit 2+ years)", "Current smoker", "Oc
 **Detailed Quote Results:**
 - Provide specific estimates with carrier comparisons
 - Include confidence level: "Based on comprehensive information provided"
-- Offer carrier conversation toolkit
+- Offer enhanced carrier conversation toolkit with coverage requirements breakdown
 - Provide next steps for actual policy purchase
+
+#### Enhanced Carrier Conversation Toolkit
+The toolkit now includes comprehensive coverage analysis:
+
+**REQUIRED COVERAGES SECTION (Non-negotiable):**
+- State minimum liability requirements with specific dollar amounts
+- Lender requirements for financed/leased vehicles or mortgaged properties
+- Legal obligations and consequences of inadequate coverage
+- Mandatory state-specific coverage (PIP in no-fault states, uninsured motorist, etc.)
+
+**FLEXIBLE COVERAGES SECTION (Negotiation opportunities):**
+- Optional coverage add-ons: comprehensive, collision, rental, roadside assistance
+- Deductible options: $250/$500/$1000 with premium impact analysis
+- Coverage limit choices above minimums and associated cost differences
+- Available discounts and qualification requirements
+- Payment plan options and any associated fees
+
+**COVERAGE NEGOTIATION SCRIPTS:**
+- "What's the premium difference between $500 and $1000 deductibles?"
+- "What discounts am I eligible for and how much will they save me?"
+- "Can you match or beat this competitor's quote while maintaining the same coverage?"
+- "What optional coverages would you recommend for my specific situation and why?"
+- "Are there any coverage gaps in my current policy that I should address?"
+
+**INSURANCE-SPECIFIC COVERAGE EXAMPLES:**
+
+*Auto Insurance:*
+- **REQUIRED**: State liability minimums (e.g., CA: 15/30/5), lender comprehensive/collision
+- **FLEXIBLE**: Higher liability limits, lower deductibles, rental coverage, roadside assistance
+- **NEGOTIABLE**: Deductible amounts, coverage limits, multi-policy discounts
+
+*Home Insurance:*
+- **REQUIRED**: Mortgage lender dwelling coverage, basic liability
+- **FLEXIBLE**: Personal property limits, additional living expenses, umbrella policy
+- **NEGOTIABLE**: Deductible levels, replacement cost vs. actual cash value, bundling discounts
+
+*Life Insurance:*
+- **REQUIRED**: Employer/lender requirements (if applicable)
+- **FLEXIBLE**: Term vs. whole life, coverage amount, riders (disability, accidental death)
+- **NEGOTIABLE**: Premium payment frequency, policy conversion options, health exam requirements
 
 ### Data Validation Rules
 - **Confidence Threshold**: 75% confidence required for prompt suggestions

@@ -3,17 +3,74 @@
 ## Project Overview
 Comprehensive AI-powered insurance assistant built with Next.js, TypeScript, and OpenAI GPT-4. The app transforms insurance shopping by providing personalized coaching, local agent connections, and professional carrier negotiation tools through conversational AI.
 
-**Current Status**: Week 2 Development - Enhanced with local agent outreach system, comprehensive carrier toolkit, and support for all major insurance types (Auto, Home, Life, Renters, Pet).
+**Current Status**: Week 2 Development - Enhanced with local agent outreach system, comprehensive carrier toolkit, support for all major insurance types (Auto, Home, Life, Renters, Pet), and upgraded to Vercel AI SDK with useChat for improved streaming performance.
 
 ## Tech Stack
 - **Framework**: Next.js 14.2.33 with TypeScript (recently updated for security)
 - **UI Components**: Radix UI + shadcn/ui components
 - **Styling**: Tailwind CSS with custom theme
-- **AI Integration**: OpenAI GPT-4 Turbo (streaming support)
+- **AI Integration**: Vercel AI SDK with OpenAI GPT-4 Turbo (streaming support)
+- **Streaming**: useChat hook for real-time chat responses
 - **State Management**: React hooks and context
 - **Form Handling**: react-hook-form with Zod validation
 - **Deployment**: Vercel (auto-deploy from main branch)
 - **Development**: Currently on `week-2` branch for new features
+
+## Critical Rules for useChat Implementation
+
+### **NEVER EVER DO THIS:**
+- ❌ `sendMessage("string")` - This DOES NOT work and causes runtime errors
+- ❌ Accessing `message.content` directly - Messages use `parts` array structure
+- ❌ Passing plain strings to sendMessage
+- ❌ Manual stream handling when useChat is available
+
+### **ALWAYS DO THIS:**
+- ✅ `sendMessage({ text: "message content" })` - Only UIMessage-compatible objects work
+- ✅ Access message content via `message.parts` array
+- ✅ Read AI SDK docs before implementing any useChat functionality
+- ✅ Use `handleSubmit`, `handleInputChange`, `input`, `messages`, `isLoading` from useChat
+- ✅ Let useChat handle streaming automatically
+
+### **Implementation Pattern:**
+```typescript
+// Correct useChat implementation
+const {
+  messages,
+  input,
+  handleInputChange,
+  handleSubmit,
+  isLoading,
+  setInput,
+} = useChat({
+  api: '/api/chat',
+  body: { customerProfile },
+  initialMessages: [{ id: '1', role: 'assistant', content: greeting }],
+  onError: (error) => console.error('[Chat Error]:', error),
+})
+
+// Correct API route with AI SDK
+import { openai } from '@ai-sdk/openai'
+import { streamText } from 'ai'
+
+const result = await streamText({
+  model: openai('gpt-4-turbo-preview'),
+  messages: [...],
+  temperature: 0.7,
+  maxTokens: 2000,
+})
+
+return result.toAIStreamResponse()
+```
+
+### **Required Dependencies:**
+```bash
+npm install ai @ai-sdk/openai
+```
+
+### **Message Structure:**
+- useChat messages have: `{ id, role, content }`
+- No `createdAt` field - handle timestamps manually if needed
+- Content is plain string, not parts array in our implementation
 
 ## Key Commands
 ```bash
@@ -1589,8 +1646,43 @@ export function AgentOutreachSection({
 - **Regular Updates**: Keep agent information current
 - **Performance Tracking**: Monitor response rates and customer feedback
 
+## Recent Updates (Week 2 - Latest)
+
+### 🚀 **Streaming Chat Implementation (Latest)**
+- **Upgraded to Vercel AI SDK**: Replaced manual OpenAI streaming with `useChat` hook
+- **Improved Performance**: Better streaming performance and error handling
+- **Cleaner Architecture**: Simplified chat logic with built-in state management
+- **Dependencies Added**: `ai` and `@ai-sdk/openai` packages
+- **API Route Simplified**: Using `streamText()` and `result.toAIStreamResponse()`
+
+### 🤝 **Local Agent Outreach System**
+- Agent discovery and ranking by location and specialization
+- Professional email composition with user profile integration
+- Direct contact integration (call, email, send introduction)
+- Agent profile analysis and reputation scoring
+
+### 📋 **Enhanced Carrier Toolkit**
+- Required vs. flexible coverage breakdown
+- Professional negotiation scripts and talking points
+- Insurance-specific examples (Auto, Home, Life)
+- State-specific requirements and mandatory coverage details
+
+### 🎯 **Enhanced AI Rules & Data Collection**
+- Minimum quote requirements (5 mandatory fields)
+- Targeted initial responses with actionable options
+- Comprehensive coverage types support
+- Specific next steps instead of vague questions
+
+### 🔧 **Technical Improvements**
+- Next.js updated to 14.2.33 (security fixes)
+- UI text wrapping fixes for chat bubbles
+- Deployment fixes (pnpm/npm lockfile conflicts resolved)
+- Branch strategy: `week-2` for new development
+
 ## Debug Tips
 - Check browser console for API errors
 - Verify `.env.local` has valid OpenAI key
 - Use `USE_MOCK_RESPONSES=true` for testing without API
 - Check Next.js terminal output for server-side errors
+- **Streaming Issues**: Verify AI SDK dependencies are installed correctly
+- **useChat Errors**: Check message structure and API route implementation

@@ -1,21 +1,24 @@
-# Insurance Assistant - Project Context for Claude Code
+# Personal Insurance Coverage Coach - Project Context for Claude Code
 
 ## Project Overview
-AI-powered insurance coaching and quote comparison assistant built with Next.js, TypeScript, and OpenAI GPT-4. The app helps users navigate insurance quotes through natural conversation, with an initial focus on auto insurance.
+Comprehensive AI-powered insurance assistant built with Next.js, TypeScript, and OpenAI GPT-4. The app transforms insurance shopping by providing personalized coaching, local agent connections, and professional carrier negotiation tools through conversational AI.
+
+**Current Status**: Week 2 Development - Enhanced with local agent outreach system, comprehensive carrier toolkit, and support for all major insurance types (Auto, Home, Life, Renters, Pet).
 
 ## Tech Stack
-- **Framework**: Next.js 14.2.16 with TypeScript
+- **Framework**: Next.js 14.2.33 with TypeScript (recently updated for security)
 - **UI Components**: Radix UI + shadcn/ui components
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS with custom theme
 - **AI Integration**: OpenAI GPT-4 Turbo (streaming support)
 - **State Management**: React hooks and context
 - **Form Handling**: react-hook-form with Zod validation
-- **Deployment**: Vercel
+- **Deployment**: Vercel (auto-deploy from main branch)
+- **Development**: Currently on `week-2` branch for new features
 
 ## Key Commands
 ```bash
 # Development
-npm run dev          # Start development server on localhost:3000
+npm run dev          # Start development server on localhost:3000 (or :3001 if port busy)
 
 # Quality checks (run these before committing)
 npm run lint         # Run ESLint

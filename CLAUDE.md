@@ -1,0 +1,165 @@
+# Insurance Assistant - Project Context for Claude Code
+
+## Project Overview
+AI-powered insurance coaching and quote comparison assistant built with Next.js, TypeScript, and OpenAI GPT-4. The app helps users navigate insurance quotes through natural conversation, with an initial focus on auto insurance.
+
+## Tech Stack
+- **Framework**: Next.js 14.2.16 with TypeScript
+- **UI Components**: Radix UI + shadcn/ui components
+- **Styling**: Tailwind CSS
+- **AI Integration**: OpenAI GPT-4 Turbo (streaming support)
+- **State Management**: React hooks and context
+- **Form Handling**: react-hook-form with Zod validation
+- **Deployment**: Vercel
+
+## Key Commands
+```bash
+# Development
+npm run dev          # Start development server on localhost:3000
+
+# Quality checks (run these before committing)
+npm run lint         # Run ESLint
+npm run build        # Build for production (also type-checks)
+
+# Production
+npm start            # Run production build
+
+# Testing
+node test-openai.js  # Test OpenAI connection
+```
+
+## Project Structure
+```
+/app
+  /api/chat         # OpenAI integration endpoint
+  layout.tsx        # Root layout with theme provider
+  page.tsx          # Main app page
+
+/components
+  chat-interface.tsx         # Main chat UI component
+  quote-profile-display.tsx  # Progress tracking display
+  suggested-prompts.tsx      # Dynamic prompt buttons
+  /ui                       # Reusable UI components (shadcn)
+
+/lib
+  carrier-conversation-helper.ts  # Generates carrier prep toolkit
+  carrier-database.ts            # Insurance carrier information
+  information-tracker.ts         # Extracts data from messages
+  insurance-needs-analysis.ts    # Analyzes insurance needs
+  prompt-validator.ts            # Validates prompt-question matches
+  quote-profile.ts              # Manages quote profile data
+  suggested-prompts.ts          # Generates context-aware prompts
+  utils.ts                      # Utility functions
+```
+
+## Core Business Logic
+
+### Information Collection Flow
+1. **Progressive Gathering**: One question at a time approach
+2. **Smart Extraction**: Natural language understanding to extract structured data
+3. **No Repeated Questions**: Tracks collected information to avoid redundancy
+4. **Profile Integration**: Auto-fills from customer profile when applicable
+
+### Data Validation Rules
+- **Confidence Threshold**: 75% confidence required for prompt suggestions
+- **Required vs Optional**: Prioritizes required fields before optional
+- **Collection Order**: Drivers → Vehicles → Coverage → Optional details
+
+### Quote Profile States
+- **0-40%**: Gathering basic information
+- **40-70%**: Core details collected
+- **70-90%**: Most required fields complete
+- **90-100%**: Ready for accurate quotes
+
+## Coding Conventions
+
+### TypeScript Patterns
+- Use type definitions from existing files (e.g., `QuoteProfile`, `InformationTracker`)
+- Prefer interfaces over types for object shapes
+- Use enums for fixed sets of values
+- Strict null checks enabled
+
+### Component Patterns
+- Functional components with TypeScript
+- Use existing UI components from `/components/ui`
+- Props interfaces defined above components
+- Consistent use of `cn()` utility for className merging
+
+### File Naming
+- Components: PascalCase (e.g., `ChatInterface.tsx`)
+- Utilities/lib: kebab-case (e.g., `information-tracker.ts`)
+- API routes: lowercase folders
+
+### State Management
+- React hooks for local state
+- Context for theme/global state
+- No external state management libraries
+
+## Environment Variables
+```env
+OPENAI_API_KEY=<required>      # OpenAI API key for GPT-4
+USE_MOCK_RESPONSES=false       # Set to true for testing without API
+```
+
+## Testing Approach
+- Manual testing via development server
+- OpenAI connection test: `node test-openai.js`
+- Type checking: `npm run build`
+- Linting: `npm run lint`
+
+## Important Implementation Details
+
+### OpenAI Integration
+- Streaming enabled for real-time responses
+- System prompts define assistant personality
+- Fallback to mock responses if API unavailable
+- Context maintains full conversation history
+
+### Information Extraction
+- Uses regex patterns and keyword matching
+- Handles various input formats (e.g., "2020 Toyota Camry", "Tesla Model 3")
+- Confidence scoring for data quality
+- Automatic normalization (lowercase makes, proper case models)
+
+### Prompt Validation
+- Validates prompts match current question context
+- Falls back to no prompts if uncertain
+- Prevents showing incorrect options
+- Dynamic adaptation based on collected data
+
+## Common Tasks
+
+### Adding New Insurance Types
+1. Extend `information-tracker.ts` with new extraction patterns
+2. Update `quote-profile.ts` with new profile structure
+3. Add specific prompts in `suggested-prompts.ts`
+4. Update system prompt in `/app/api/chat/route.ts`
+
+### Modifying Information Collection
+1. Update required/optional fields in `quote-profile.ts`
+2. Adjust collection order in `information-tracker.ts`
+3. Update validation rules in `prompt-validator.ts`
+4. Test extraction patterns thoroughly
+
+### UI Component Updates
+1. Use existing Radix UI components from `/components/ui`
+2. Follow established patterns in `chat-interface.tsx`
+3. Maintain consistent styling with Tailwind classes
+4. Test responsive behavior
+
+## Deployment Notes
+- Auto-deploys to Vercel on push to main branch
+- Environment variables set in Vercel dashboard
+- Build checks must pass for successful deployment
+- Preview deployments for pull requests
+
+## Current Focus Areas
+- **Primary**: Auto insurance (fully implemented)
+- **Future**: Home, Life, Health insurance modules
+- **Active Development**: Improving prompt accuracy and information extraction
+
+## Debug Tips
+- Check browser console for API errors
+- Verify `.env.local` has valid OpenAI key
+- Use `USE_MOCK_RESPONSES=true` for testing without API
+- Check Next.js terminal output for server-side errors

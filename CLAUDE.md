@@ -26,6 +26,12 @@ npm start            # Run production build
 
 # Testing
 node test-openai.js  # Test OpenAI connection
+
+# Git workflow (currently on week-2 branch)
+git status           # Check current changes
+git add .            # Stage changes
+git commit -m "..."  # Commit with message
+git push -u origin week-2  # Push to week-2 branch
 ```
 
 ## Project Structure
@@ -62,8 +68,14 @@ node test-openai.js  # Test OpenAI connection
 
 ### Data Validation Rules
 - **Confidence Threshold**: 75% confidence required for prompt suggestions
-- **Required vs Optional**: Prioritizes required fields before optional
-- **Collection Order**: Drivers → Vehicles → Coverage → Optional details
+- **Minimum Quote Requirements**: Exactly 5 mandatory fields must be collected:
+  1. Number of drivers on policy
+  2. Number of vehicles to insure  
+  3. Primary ZIP code
+  4. Age of each driver (auto-filled from profile for single driver)
+  5. Vehicle details (year, make, model for each vehicle)
+- **Required vs Optional**: NO quotes provided until all 5 mandatory fields collected
+- **Collection Order**: Drivers → Vehicles → ZIP → Ages → Vehicle Details → Optional enhancements
 
 ### Quote Profile States
 - **0-40%**: Gathering basic information
@@ -153,10 +165,30 @@ USE_MOCK_RESPONSES=false       # Set to true for testing without API
 - Build checks must pass for successful deployment
 - Preview deployments for pull requests
 
+## Recent Updates (Week 2)
+
+### Quote Requirements Enhancement
+Updated system rules with strict minimum requirements for auto insurance quotes:
+- **5 Mandatory Fields**: Driver count, vehicle count, ZIP code, driver ages, vehicle details (year/make/model)
+- **No quotes until ALL 5 collected**: Prevents premature estimates
+- **Enhanced accuracy fields**: Years licensed, marital status, driving record, mileage
+- **Clear checkpoint system**: ✅ checklist approach in system prompts
+
+### UI/UX Improvements
+- **Fixed chat bubble overflow**: Replaced semi-transparent backgrounds with solid white
+- **Better text containment**: Proper text wrapping within chat bubbles
+- **Improved readability**: Enhanced contrast and visual hierarchy
+- **Responsive design**: Better mobile experience for insurance customers
+
+### Development Workflow
+- **Branch Strategy**: Using `week-2` branch for new development
+- **Git Workflow**: Clean commits with descriptive messages
+- **Testing**: Continuous verification of app functionality
+
 ## Current Focus Areas
-- **Primary**: Auto insurance (fully implemented)
-- **Future**: Home, Life, Health insurance modules
-- **Active Development**: Improving prompt accuracy and information extraction
+- **Primary**: Auto insurance (fully implemented with enhanced rules)
+- **Future**: Home, Life, Health insurance modules  
+- **Active Development**: Quote accuracy optimization and user experience refinement
 
 ## Debug Tips
 - Check browser console for API errors

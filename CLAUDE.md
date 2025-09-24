@@ -173,6 +173,10 @@ Updated system rules with strict minimum requirements for auto insurance quotes:
 - **No quotes until ALL 5 collected**: Prevents premature estimates
 - **Enhanced accuracy fields**: Years licensed, marital status, driving record, mileage
 - **Clear checkpoint system**: ✅ checklist approach in system prompts
+- **TARGETED COLLECTION**: Prioritize getting required info ASAP with direct, concise questions
+  - Skip lengthy introductions during data collection
+  - Ask direct questions: "How many drivers?" not "To provide accurate quotes..."
+  - Save coaching/educational content for AFTER all required info is gathered
 
 ### UI/UX Improvements
 - **Fixed chat bubble overflow**: Replaced semi-transparent backgrounds with solid white

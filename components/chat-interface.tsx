@@ -197,6 +197,7 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
 *This is your personal insurance coach - I'm here to guide you every step of the way toward optimal coverage.*`
   }
 
+
   return (
     <div className="space-y-4">
       {/* Quote Profile Display - Only for Auto Insurance */}
@@ -221,7 +222,7 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
                 )}
                 <div
                   className={`max-w-[85%] rounded-lg px-4 py-3 ${
-                    message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted/50 border border-border"
+                    message.role === "user" ? "bg-primary text-primary-foreground" : "bg-white border border-border shadow-sm text-foreground"
                   }`}
                 >
                   {message.role === "assistant" ? (

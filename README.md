@@ -1,16 +1,24 @@
-# Insurance Assistant
+# Personal Insurance Coverage Coach
 
-*AI-powered insurance coaching and quote comparison assistant*
+*AI-powered insurance coaching, quote comparison, and local agent connection assistant*
 
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/dazzie-7787s-projects/v0-insurance-assistant)
 [![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/4bZyCFmRYm9)
 
 ## Overview
 
-An intelligent insurance assistant that helps users navigate insurance quotes through natural conversation. The initial focus is on **auto insurance**, with comprehensive quote gathering and carrier negotiation preparation. Unlike traditional quote forms, this app provides personalized coaching, educational insights, and prepares users for successful carrier negotiations.
+A comprehensive insurance assistant that transforms how users approach insurance shopping. Unlike traditional quote forms, this app provides **personalized coaching**, **educational insights**, **carrier negotiation preparation**, and **local agent connections** through natural conversation.
 
-**Current Focus**: Auto Insurance (fully implemented)  
-**Future Expansion**: Home, Life, Health insurance modules
+**Current Coverage**: Auto, Home, Life, Renters, Pet Insurance (all types supported)  
+**Latest Enhancements**: Local agent outreach system, enhanced carrier toolkit with coverage requirements, rating engine architecture
+
+## ✨ What Makes This Different
+
+- **🎯 Personal Coach**: Not just quotes - comprehensive insurance guidance
+- **🤝 Local Agent Connection**: Find and connect with top-rated local agents
+- **💼 Professional Toolkit**: Carrier conversation scripts and negotiation strategies
+- **📊 Coverage Analysis**: Required vs. flexible coverage breakdown
+- **🔄 Complete Journey**: From education to quotes to agent relationships
 
 ## Key Features
 
@@ -41,14 +49,28 @@ An intelligent insurance assistant that helps users navigate insurance quotes th
 - **No wrong options** - Validates prompts match questions before displaying
 - **Automatic cleanup** - Hides prompts for already-collected information
 
-### 📋 Carrier Conversation Toolkit
+### 📋 Enhanced Carrier Conversation Toolkit
 Generated after information collection, includes:
 - **Profile summary** - All information formatted for easy reference
+- **REQUIRED vs FLEXIBLE Coverage Breakdown** - Critical negotiation guide
 - **Smart questions** - What to ask each carrier
 - **Negotiation strategies** - Scripts for better rates
 - **Document checklist** - What you'll need ready
 - **Strengths to emphasize** - Your rate-lowering advantages
 - **Red flags** - Warning signs to watch for
+
+### 🤝 Local Agent Outreach System
+Connect with top-rated local insurance professionals:
+- **Agent Discovery** - Find agents by location and specialization
+- **Reputation Ranking** - Scored by ratings, experience, and response time
+- **Professional Email Composition** - Personalized introduction emails
+- **Agent Profile Analysis** - Why each agent is recommended
+- **Direct Contact Options** - Call, email, or send introduction immediately
+
+### 🏗️ Future Enhancements
+- **Rating Engine** - Real-time premium calculations with carrier algorithms
+- **Carrier API Integration** - Automated quote requests to carrier APIs
+- **Advanced Analytics** - Market trends and pricing insights
 
 ## Setup
 
@@ -82,9 +104,10 @@ Generated after information collection, includes:
    ```bash
    npm run dev
    ```
+   *Note: If port 3000 is in use, Next.js will automatically use port 3001*
 
 5. **Access the app**
-   Open `http://localhost:3000`
+   Open `http://localhost:3000` (or `http://localhost:3001` if port 3000 is busy)
 
 ## How It Works
 
@@ -172,29 +195,31 @@ Generated after information collection, includes:
   annualMileage: 10000
 ```
 
-## Key Improvements
+## Recent Major Updates (Week 2)
 
-### Recent Updates
+### 🎯 Enhanced AI Rules & Data Collection
+1. **Minimum Quote Requirements** - Clear 5-field mandatory collection
+2. **Targeted Initial Responses** - Direct, actionable numbered options
+3. **Specific Next Steps** - No more vague questions, always provide concrete choices
+4. **Comprehensive Coverage Types** - Auto, Home, Life, Renters, Pet insurance support
 
-1. **Fixed prompt-question mismatches**
-   - Years licensed now shows correct options
-   - Vehicle year shows years, not ages
-   - Model prompts adapt to selected make
+### 🤝 Local Agent Outreach System  
+1. **Agent Discovery** - Find top-rated local agents by location and specialization
+2. **Professional Email Generation** - Personalized introduction emails with user specifics
+3. **Reputation Scoring** - Rank agents by ratings, experience, and response time
+4. **Direct Contact Integration** - Call, email, or send introduction immediately
 
-2. **Enhanced collection order**
-   - Drivers → Vehicles → Coverage
-   - Required fields before optional
-   - Logical progression
+### 📋 Enhanced Carrier Toolkit
+1. **Coverage Requirements Analysis** - Required vs. flexible coverage breakdown
+2. **Negotiation Scripts** - Professional conversation starters and questions
+3. **Insurance-Specific Examples** - Tailored for Auto, Home, Life insurance
+4. **State-Specific Requirements** - Minimum liability and mandatory coverage details
 
-3. **Confidence-based prompting**
-   - No prompts when uncertain
-   - Validation before display
-   - Better than wrong suggestions
-
-4. **Profile age integration**
-   - Single drivers use profile age
-   - No redundant age questions
-   - Automatic field population
+### 🔧 Technical Improvements
+1. **UI Text Wrapping** - Fixed chat bubble overflow issues
+2. **Security Updates** - Next.js updated to 14.2.33 (critical vulnerabilities resolved)
+3. **Deployment Fixes** - Resolved pnpm/npm lockfile conflicts
+4. **Branch Strategy** - Using `week-2` branch for new development
 
 ## Best Practices
 
@@ -238,6 +263,11 @@ npm start
 The app auto-deploys to Vercel on push to main branch.
 
 **Live URL**: [https://vercel.com/dazzie-7787s-projects/v0-insurance-assistant](https://vercel.com/dazzie-7787s-projects/v0-insurance-assistant)
+
+### Development Workflow
+- **Main Branch**: Production-ready code
+- **Week-2 Branch**: Current development branch for new features
+- **Local Development**: Runs on `localhost:3000` (or `:3001` if port busy)
 
 ## Contributing
 

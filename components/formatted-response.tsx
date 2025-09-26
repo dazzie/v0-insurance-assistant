@@ -66,7 +66,7 @@ export function FormattedResponse({ content }: FormattedResponseProps) {
         const parsedText = parseInlineFormatting(bulletText)
         elements.push(
           <div key={`bullet-${currentIndex++}`} className="flex items-start gap-2 mb-1 text-sm leading-relaxed">
-            <span className="text-muted-foreground mt-1">•</span>
+            <span className="text-muted-foreground mt-1 flex-shrink-0">•</span>
             <span>{parsedText}</span>
           </div>,
         )

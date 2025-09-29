@@ -33,6 +33,9 @@ A comprehensive insurance assistant that transforms how users approach insurance
 - **Smart information extraction** - Recognizes details from natural language
 - **No repeated questions** - Tracks what's collected, never asks twice
 - **Customer profile integration** - Uses provided age/location automatically
+- **Step-by-step with options** - Every question includes numbered choices for easy response
+- **Instant premium estimates** - Shows monthly costs immediately after basic info collected
+- **Memory persistence** - Never forgets information mentioned in conversation
 
 ### 📊 Quote Profile Management
 - **Real-time progress tracking** - Visual progress bar (0-100% complete)
@@ -43,11 +46,12 @@ A comprehensive insurance assistant that transforms how users approach insurance
   - ⚪ Gray - Optional field missing
 - **Completeness scoring** - Know exactly when ready for quotes
 
-### 💡 Dynamic Suggested Prompts
-- **Context-aware suggestions** - Prompts match the current question exactly
-- **Confidence-based validation** - Only shows prompts when 75%+ confident
-- **No wrong options** - Validates prompts match questions before displaying
-- **Automatic cleanup** - Hides prompts for already-collected information
+### 💡 Enhanced User Experience
+- **Predefined answer options** - Every question includes numbered choices (1, 2, 3, etc.)
+- **Instant premium estimates** - Shows "$X-Y/month" immediately after basic info
+- **Smart memory** - Remembers everything, never asks twice
+- **Progress summaries** - "I have: X, Y, Z. Now I need: A"
+- **Coverage tier comparison** - Shows minimum vs standard vs full coverage costs
 
 ### 📋 Enhanced Carrier Conversation Toolkit
 Generated after information collection, includes:
@@ -126,34 +130,52 @@ Connect with top-rated local insurance professionals:
 
 1. **Initial Setup**
    - User provides age and location
-   - Selects "auto" insurance need
-   - System uses profile for single drivers
+   - Selects insurance type (auto, home, life)
+   - System uses saved profile data automatically
 
-2. **Progressive Gathering**
+2. **Step-by-Step Collection with Options**
    ```
-   Required Information (collected first):
-   - Number of drivers/vehicles
-   - ZIP code  
-   - Vehicle year, make, model
-   - Driver ages (auto-filled for single driver)
-   
-   Optional Information (improves quotes):
-   - Years licensed
-   - Marital status
-   - Driving record
-   - Annual mileage
-   - Primary use
+   Example Auto Insurance Flow:
+
+   Q: "How many drivers will be on this policy?"
+   1) Just me
+   2) 2 drivers
+   3) 3 drivers
+   4) 4+ drivers
+
+   Q: "What's your marital status?"
+   1) Single
+   2) Married
+   3) Divorced
+   4) Widowed
+
+   Q: "Annual mileage for this vehicle?"
+   1) Under 7,500 (low mileage discount)
+   2) 7,500-12,000 (average)
+   3) 12,000-15,000
+   4) Over 15,000
    ```
 
-3. **Smart Validation**
-   - Prompts validated against current question
-   - 75% confidence threshold required
-   - Falls back to no prompts if uncertain
+3. **Smart Memory & Validation**
+   - Never asks for information already provided
+   - Remembers details mentioned in passing
+   - Acknowledges what's already known
+   - Shows progress: "I have: X, Y, Z. Now I need: A"
 
-4. **Quote Generation**
-   - Only after all required fields collected
-   - Plus 2-3 optional fields for accuracy
-   - Comprehensive analysis with carrier recommendations
+4. **Instant Premium Estimates**
+   ```
+   After basic info collected:
+
+   ESTIMATED PREMIUM RANGE: $1,200-1,800/year ($100-150/month)
+   - State minimum coverage: ~$75/month
+   - Standard coverage: ~$125/month
+   - Full coverage: ~$175/month
+
+   Top carriers for your profile:
+   - GEICO: $95-120/month
+   - State Farm: $105-130/month
+   - Progressive: $100-125/month
+   ```
 
 ### Technical Architecture
 
@@ -190,21 +212,93 @@ Connect with top-rated local insurance professionals:
 - `components/suggested-prompts.tsx` - Dynamic prompt buttons
 - `app/api/chat/route.ts` - OpenAI integration & prompting
 
-### Information Extraction Examples
+### Information Extraction Examples (Enhanced Real-Time)
 
 ```javascript
-"I have a 2020 Toyota Camry" → 
-  year: 2020, make: toyota, model: Camry
+// Basic Information
+"I'm 35 years old" →
+  age: 35 (✓ SAVED PERMANENTLY)
 
-"Just me driving" → 
-  numberOfDrivers: 1, age: [from profile]
+"My ZIP is 94105" →
+  zipCode: 94105 (✓ SAVED)
 
-"Tesla Model 3" → 
-  make: tesla, model: Model 3
+// Vehicle Information
+"I have a 2020 Toyota Camry" →
+  vehicles: [{year: 2020, make: "Toyota", model: "Camry"}] (✓ SAVED)
 
-"About 10,000 miles per year" → 
-  annualMileage: 10000
+// Driver Information
+"Just me driving" →
+  driversCount: 1, age: [from saved profile]
+
+"I'm married with 2 drivers" →
+  maritalStatus: "married", driversCount: 2 (✓ SAVED)
+
+// Home Insurance
+"I own a single family home worth $400k" →
+  homeType: "single-family", homeValue: "400000", homeOwnership: "own" (✓ SAVED)
+
+// Life Insurance
+"I need $500k coverage, non-smoker" →
+  coverageAmount: "500000", smoker: false (✓ SAVED)
+
+// Contact Information
+"Call me at 415-555-1234" →
+  phone: "415-555-1234" (✓ SAVED)
+
+"My email is john@example.com" →
+  email: "john@example.com" (✓ SAVED)
 ```
+
+### Real-Time Profile Data Storage
+
+The system automatically saves the following information as it's mentioned:
+
+**Personal Information:**
+- Name, age, email, phone
+- Marital status, gender
+- Occupation
+
+**Location Data:**
+- City, state, ZIP code
+- Full address
+
+**Auto Insurance:**
+- Number of drivers and vehicles
+- Vehicle details (year, make, model, mileage)
+- Driver details (age, violations, accidents)
+
+**Home Insurance:**
+- Home type and value
+- Year built, square footage
+- Ownership status
+
+**Life Insurance:**
+- Coverage amount desired
+- Health status, smoker status
+- Insurance type preference
+
+## Recent Major Updates (Week 2 - Latest)
+
+### 🔄 Real-Time Profile Updates (NEW)
+1. **Automatic Data Capture** - Extracts information from conversation in real-time
+2. **Persistent Storage** - Profile saves after every message to localStorage
+3. **Smart Recognition** - Detects age, vehicles, marital status, ZIP codes automatically
+4. **Never Forgets** - Information mentioned once is saved forever
+5. **Visual Confirmation** - Shows saved data with checkmarks (✓ SAVED)
+
+### 💰 Premium Estimates & Monthly Costs
+1. **Auto Insurance** - Shows state minimum, standard, and full coverage monthly costs
+2. **Home Insurance** - Displays basic, standard, and premium coverage monthly rates
+3. **Life Insurance** - Provides term (20yr, 30yr) and whole life monthly premiums
+4. **Instant Estimates** - Premium ranges shown immediately after basic data collection
+5. **Carrier-Specific** - Lists top carriers with their estimated monthly costs
+
+### 🎯 Step-by-Step Needs Analysis
+1. **One Question at a Time** - Never overwhelming users with multiple questions
+2. **Numbered Options** - Every question includes choices (1, 2, 3, etc.) for quick response
+3. **Smart Memory** - Never asks for information already provided or mentioned
+4. **Progress Tracking** - Shows what's collected and what's still needed
+5. **Milestone Summaries** - Provides summary with estimates at key collection points
 
 ## Recent Major Updates (Week 2)
 

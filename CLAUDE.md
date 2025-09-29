@@ -245,6 +245,95 @@ The toolkit now includes comprehensive coverage analysis:
 - **FLEXIBLE**: Term vs. whole life, coverage amount, riders (disability, accidental death)
 - **NEGOTIABLE**: Premium payment frequency, policy conversion options, health exam requirements
 
+### Real-Time Profile Technical Implementation
+
+#### Enhanced Extraction Patterns in `extractProfileFromConversation()`:
+```typescript
+// Age extraction patterns
+/\b(\d{1,2})\s*(?:years?\s*old|yo)\b/i
+/(?:age|I'm|I am)\s*(\d{1,2})\b/i
+
+// Vehicle detection with year validation
+const vehicleMatch = content.match(/(\d{4})\s+([A-Za-z]+)\s+([A-Za-z0-9\-]+)/i)
+if (year > 1990 && year <= new Date().getFullYear() + 1) {
+  // Valid vehicle year, save it
+}
+
+// Marital status keywords
+if (contentLower.includes('married')) maritalStatus = 'married'
+if (contentLower.includes('single')) maritalStatus = 'single'
+
+// Phone number patterns
+/\b(\d{3}[-.]?\d{3}[-.]?\d{4})\b/
+
+// Home value extraction
+/\$?([\d,]+)k|\$?([\d,]+),?000/i
+// "$400k" or "$400,000" → "400000"
+```
+
+#### Profile Persistence Flow:
+1. User sends message
+2. `extractProfileFromConversation()` scans ALL messages
+3. Extracts new information using regex patterns
+4. Merges with existing profile from localStorage
+5. Saves updated profile immediately
+6. Profile available in system prompt for next response
+7. UI updates via custom event listeners
+
+### Implementation Details for Latest Features
+
+#### Step-by-Step Collection Order (Auto Insurance):
+```typescript
+// CHECK existing data first, then ask ONE at a time
+1. CHECK: Do we know driver count? If NO:
+   "How many drivers will be on this policy?
+   1) Just me  2) 2 drivers  3) 3 drivers  4) 4+ drivers"
+
+2. CHECK: Do we know vehicle count? If NO:
+   "How many vehicles do you need to insure?
+   1) 1 vehicle  2) 2 vehicles  3) 3 vehicles  4) 4+ vehicles"
+
+3. CHECK: Do we have ZIP from profile? If NO:
+   "What's your ZIP code? (5 digits)"
+
+4. For each vehicle - CHECK what we already know:
+   - If user mentioned "my 2020 Honda Civic", skip all vehicle questions
+   - If partial info, only ask missing parts
+```
+
+#### Home Insurance Collection:
+```typescript
+1. "What type of home do you have?
+   1) Single family home  2) Townhouse/Condo  3) Mobile home  4) Other"
+
+2. "What's your estimated home value?
+   1) Under $200k  2) $200k-$400k  3) $400k-$600k  4) $600k-$1M  5) Over $1M"
+
+// After basics, provide estimate:
+"Based on your $[VALUE] home in [LOCATION]:
+- Basic coverage: $[X]/month
+- Standard coverage: $[Y]/month
+- Premium coverage: $[Z]/month"
+```
+
+#### Life Insurance Collection:
+```typescript
+1. "What type of life insurance are you interested in?
+   1) Term life (temporary, affordable)
+   2) Whole life (permanent, cash value)
+   3) Not sure - need guidance
+   4) Want to compare both"
+
+2. "How much coverage are you thinking about?
+   1) $100k-$250k  2) $250k-$500k  3) $500k-$1M  4) Over $1M  5) Need help calculating"
+
+// After basics, provide estimate:
+"For $[COVERAGE] coverage at age [AGE]:
+- 20-year term: ~$[X]/month
+- 30-year term: ~$[Y]/month
+- Whole life: ~$[Z]/month"
+```
+
 ### Data Validation Rules
 - **Confidence Threshold**: 75% confidence required for prompt suggestions
 - **Universal Rule - ALL Insurance Types**: NEVER end initial responses with vague questions
@@ -1661,6 +1750,154 @@ export function AgentOutreachSection({
 - **Review Authenticity**: Verify rating sources and review legitimacy
 - **Regular Updates**: Keep agent information current
 - **Performance Tracking**: Monitor response rates and customer feedback
+
+## Recent Updates (Week 2 - Latest Enhanced)
+
+### 🔄 **Real-Time Profile Updates (NEWEST)**
+Complete real-time profile management system that captures and saves data automatically:
+
+#### Implementation in `/lib/customer-profile.ts`:
+```typescript
+// Enhanced CustomerProfile interface with insurance-specific fields
+export interface CustomerProfile {
+  // Auto Insurance Specific
+  vehicles?: Array<{
+    year?: number
+    make?: string
+    model?: string
+    vin?: string
+    primaryUse?: string
+    annualMileage?: number
+  }>
+  drivers?: Array<{
+    age?: number
+    name?: string
+    yearsLicensed?: number
+    violations?: boolean
+    accidents?: boolean
+  }>
+
+  // Home Insurance Specific
+  homeType?: 'single-family' | 'townhouse' | 'condo' | 'mobile' | 'other'
+  homeValue?: string
+  yearBuilt?: number
+
+  // Life Insurance Specific
+  lifeInsuranceType?: 'term' | 'whole' | 'universal' | 'not-sure'
+  coverageAmount?: string
+  healthStatus?: 'excellent' | 'good' | 'fair' | 'poor'
+  smoker?: boolean
+}
+```
+
+#### Smart Data Extraction Patterns:
+```typescript
+// Extract vehicle information automatically
+"I have a 2020 Honda Civic" →
+  vehicles: [{year: 2020, make: "Honda", model: "Civic"}]
+
+// Extract marital status
+"I'm married" → maritalStatus: "married"
+
+// Extract driver count
+"just me" → driversCount: 1
+
+// Extract home value
+"$400k home" → homeValue: "400000"
+```
+
+#### Real-Time Saving in `/app/api/chat/route.ts`:
+```typescript
+// Extract and save profile after EVERY message
+const extractedProfile = extractProfileFromConversation(messages)
+if (Object.keys(extractedProfile).length > 0) {
+  const currentProfile = profileManager.loadProfile() || {}
+  const updatedProfile = { ...currentProfile, ...extractedProfile }
+  profileManager.saveProfile(updatedProfile)
+  console.log("[v0] Profile updated in real-time:", updatedProfile)
+}
+```
+
+#### System Prompt Integration:
+Profile data is shown in system prompt with visual confirmation:
+```
+**CUSTOMER PROFILE (NEVER ASK AGAIN):**
+- Age: 35 (✓ SAVED - USE THIS for single driver)
+- ZIP Code: 94105 (✓ SAVED)
+- Marital Status: married (✓ SAVED)
+- Vehicles: 2020 Honda Civic (✓ SAVED)
+- Drivers Count: 2 (✓ SAVED)
+```
+
+### 💰 **Premium Estimates & Monthly Costs (NEW)**
+Implemented comprehensive premium estimation system with monthly payment breakdowns:
+
+#### Auto Insurance Premium Ranges
+- Clean record, single driver: $800-1,500/year ($67-125/month)
+- Average driver: $1,200-2,000/year ($100-167/month)
+- Young driver (under 25): $2,000-4,000/year ($167-333/month)
+- Always shows three tiers:
+  - State minimum: ~$X/month
+  - Standard coverage: ~$Y/month
+  - Full coverage: ~$Z/month
+
+#### Home Insurance Premium Ranges
+- $100-300k home: $600-1,200/year ($50-100/month)
+- $300-500k home: $1,200-2,000/year ($100-167/month)
+- $500k+ home: $2,000-4,000/year ($167-333/month)
+- Shows basic, standard, and premium coverage levels
+
+#### Life Insurance Premium Ranges
+- Term life (age 30-40, $500k): $25-50/month
+- Term life (age 40-50, $500k): $50-150/month
+- Term life (age 50-60, $500k): $150-400/month
+- Displays 20-year term, 30-year term, and whole life options
+
+### 🎯 **Step-by-Step Needs Analysis (NEW)**
+Complete overhaul of data collection process:
+
+#### Key Implementation Changes in `/app/api/chat/route.ts`:
+1. **One Question at a Time Rule**: Ask ONE specific question, wait for answer
+2. **Always Provide Options**: Every question includes numbered choices
+3. **Memory Persistence**: Never ask for information already provided
+4. **Progress Tracking**: Show what's collected and what's needed
+5. **Instant Estimates**: Provide premium ranges immediately after basic collection
+
+#### Example Implementation:
+```typescript
+// Question with options format
+"How many drivers will be on this policy?
+1) Just me
+2) 2 drivers
+3) 3 drivers
+4) 4+ drivers"
+
+// After minimum data collected
+"ESTIMATED PREMIUM RANGE: $1,200-1,800/year ($100-150/month)
+- State minimum coverage: ~$75/month
+- Standard coverage: ~$125/month
+- Full coverage: ~$175/month"
+```
+
+### 🧠 **Smart Memory System (NEW)**
+Enhanced information tracking to prevent duplicate questions:
+
+#### Memory Rules Added:
+- Check Customer Profile for saved data before EVERY question
+- Check Quote Profile for collected information
+- Scan previous messages for any mentioned details
+- If information exists anywhere, skip to next needed item
+- Acknowledge previously provided information
+
+#### Implementation in System Prompt:
+```typescript
+**INFORMATION PERSISTENCE RULES:**
+- ALL information from previous messages is remembered
+- Profile data persists across entire conversation
+- If user provides info once, it's saved forever
+- NEVER repeat questions about saved information
+- Always acknowledge what you already know
+```
 
 ## Recent Updates (Week 2 - Latest)
 

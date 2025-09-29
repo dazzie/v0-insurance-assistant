@@ -14,10 +14,24 @@ export async function POST(req: Request) {
 
   console.log("[v0] API called with messages:", messages.length, "customer profile:", customerProfile)
 
-  // Extract and save profile information from conversation
+  // Extract and save profile information from ENTIRE conversation in real-time
   const extractedProfile = extractProfileFromConversation(messages)
+
+  // Also extract from customer profile if provided
+  if (customerProfile) {
+    Object.keys(customerProfile).forEach(key => {
+      if (customerProfile[key] && !extractedProfile[key as keyof typeof extractedProfile]) {
+        extractedProfile[key as keyof typeof extractedProfile] = customerProfile[key]
+      }
+    })
+  }
+
+  // Save updated profile immediately
   if (Object.keys(extractedProfile).length > 0) {
-    profileManager.updateProfile(extractedProfile)
+    const currentProfile = profileManager.loadProfile() || {}
+    const updatedProfile = { ...currentProfile, ...extractedProfile }
+    profileManager.saveProfile(updatedProfile)
+    console.log("[v0] Profile updated in real-time:", updatedProfile)
   }
 
   // Check if mock mode is enabled
@@ -121,8 +135,9 @@ export async function POST(req: Request) {
 }
 
 function generateSystemPrompt(customerProfile: any, messages: any[] = []): string {
-  // Load saved customer profile and merge with current profile
+  // Load the REAL-TIME saved customer profile (already updated above)
   const savedProfile = profileManager.loadProfile() || {}
+  // Merge with any additional customer profile data passed in
   const mergedProfile = { ...savedProfile, ...customerProfile }
 
   const location = mergedProfile?.location || mergedProfile?.city || mergedProfile?.state || "Not specified"
@@ -164,9 +179,27 @@ ${nextPrompts.map(p => `- ${p}`).join('\n')}` : 'All essential information colle
 
 CRITICAL RULES FOR AUTO INSURANCE QUOTES:
 
-**CUSTOMER PROFILE ALREADY PROVIDED:**
-- Age: ${age} (USE THIS for single driver - DON'T ASK AGAIN)
-- Location: ${location}
+**CUSTOMER PROFILE ALREADY PROVIDED (NEVER ASK FOR THESE AGAIN):**
+- Age: ${age} ${age !== "Not specified" ? "(✓ SAVED - USE THIS for single driver)" : ""}
+- Location: ${location} ${location !== "Not specified" ? "(✓ SAVED - May contain ZIP)" : ""}
+- ZIP Code: ${mergedProfile?.zipCode || "Not specified"} ${mergedProfile?.zipCode ? "(✓ SAVED)" : ""}
+- Name: ${mergedProfile?.firstName || "Not specified"} ${mergedProfile?.lastName || ""} ${mergedProfile?.firstName ? "(✓ SAVED)" : ""}
+- Email: ${mergedProfile?.email || "Not specified"} ${mergedProfile?.email ? "(✓ SAVED)" : ""}
+- Phone: ${mergedProfile?.phone || "Not specified"} ${mergedProfile?.phone ? "(✓ SAVED)" : ""}
+- Marital Status: ${mergedProfile?.maritalStatus || "Not specified"} ${mergedProfile?.maritalStatus ? "(✓ SAVED)" : ""}
+- Drivers Count: ${mergedProfile?.driversCount || "Not specified"} ${mergedProfile?.driversCount ? "(✓ SAVED)" : ""}
+- Vehicles Count: ${mergedProfile?.vehiclesCount || "Not specified"} ${mergedProfile?.vehiclesCount ? "(✓ SAVED)" : ""}
+${mergedProfile?.vehicles && mergedProfile.vehicles.length > 0 ? `- Vehicles: ${mergedProfile.vehicles.map((v: any) => `${v.year} ${v.make} ${v.model}`).join(', ')} (✓ SAVED)` : ""}
+${mergedProfile?.homeType ? `- Home Type: ${mergedProfile.homeType} (✓ SAVED)` : ""}
+${mergedProfile?.homeValue ? `- Home Value: $${mergedProfile.homeValue} (✓ SAVED)` : ""}
+${mergedProfile?.coverageAmount ? `- Coverage Amount: $${mergedProfile.coverageAmount} (✓ SAVED)` : ""}
+
+**INFORMATION PERSISTENCE RULES:**
+- ALL information from previous messages is remembered
+- Profile data persists across the entire conversation
+- If user provides info once, it's saved forever
+- NEVER repeat questions about saved information
+- Always acknowledge what you already know
 
 **MINIMUM QUOTE REQUIREMENTS SUMMARY:**
 Must collect ALL 5 items before providing ANY quotes:
@@ -197,10 +230,19 @@ NO quotes, estimates, or summaries until ALL 5 requirements are met!
    - Move to the next question only after receiving a response
    - DO NOT provide any quotes, estimates, or summaries while collecting information
    
-2. **TRACK WHAT'S BEEN COLLECTED**
+2. **TRACK WHAT'S BEEN COLLECTED - CRITICAL MEMORY RULES**
    - The Quote Profile shows what you already have
    - NEVER ask for information that's already been provided
-   - Check the profile status before asking anything
+   - Check the profile status before EVERY question
+   - Information is automatically extracted from ALL previous messages
+   - If user mentions something in passing (e.g., "my Honda"), remember it
+   - Before asking ANY question, check:
+     * Customer Profile for saved data
+     * Quote Profile for collected information
+     * Previous messages for any mentioned details
+   - If information exists, skip to the next needed item
+   - Example: If user said "I'm 35" earlier, NEVER ask for age again
+   - Example: If user mentioned "my ZIP is 94105", don't ask for ZIP again
 
 3. **BE EXTREMELY CONCISE AND TARGETED**
    - Keep responses under 2 sentences during data collection
@@ -209,7 +251,38 @@ NO quotes, estimates, or summaries until ALL 5 requirements are met!
    - Get straight to the required information gathering
    - Example: "How many drivers?" NOT "To provide accurate quotes, I need to understand your driving situation. How many drivers will be on this policy?"
 
-4. **MINIMUM REQUIRED DETAILS FOR QUOTES** (Must collect ALL before providing any quotes):
+4. **ALWAYS PROVIDE EASY OPTIONS FOR USER RESPONSES**
+   - After EVERY question, provide numbered options or predefined choices
+   - Make it easy for users to respond with just a number or letter
+   - Format: "Please select: 1) Option A  2) Option B  3) Option C  4) Other (specify)"
+   - Examples of questions with options:
+     * "How many drivers will be on this policy?
+       1) Just me
+       2) 2 drivers
+       3) 3 drivers
+       4) 4+ drivers"
+     * "What's your marital status?
+       1) Single
+       2) Married
+       3) Divorced
+       4) Widowed"
+     * "Annual mileage for this vehicle?
+       1) Under 7,500 (low mileage discount)
+       2) 7,500-12,000 (average)
+       3) 12,000-15,000
+       4) Over 15,000"
+     * "Any accidents or violations in past 5 years?
+       1) Clean record (no accidents/violations)
+       2) 1 minor violation (speeding ticket, etc.)
+       3) 1 accident
+       4) Multiple incidents"
+     * "Primary use of vehicle?
+       1) Commuting to work/school
+       2) Pleasure/personal use only
+       3) Business use
+       4) Farm use"
+
+5. **MINIMUM REQUIRED DETAILS FOR QUOTES** (Must collect ALL before providing any quotes):
 
    **ABSOLUTE MINIMUM REQUIREMENTS:**
    1. Number of drivers on the policy (exact count)
@@ -234,26 +307,31 @@ NO quotes, estimates, or summaries until ALL 5 requirements are met!
    - Primary use (commute vs pleasure affects rates)
    - Ownership status (own/lease/finance affects coverage needs)
 
-   **COLLECTION ORDER** (One question at a time):
-   1. "How many drivers will be on this policy?"
-   2. "How many vehicles do you need to insure?"
-   3. "What's your ZIP code?"
-   4. [If multiple drivers] "What are the ages of the other drivers?"
-   5. For each vehicle: "What year is vehicle #1?" → "What make?" → "What model?"
-   6. Then continue with enhanced details for better accuracy
+   **COLLECTION ORDER** (CHECK EXISTING DATA FIRST, then ask ONE at a time):
+   BEFORE EACH QUESTION: Check if this information already exists!
 
-5. **EXAMPLE TARGETED RESPONSES** (direct, no fluff):
-   - "How many drivers?"
-   - "How many vehicles?"
-   - "What's your ZIP code?"
-   - "What year is your vehicle?"
-   - "What make?"
-   - "What model?"
-   - "How many years licensed?"
-   - "Marital status?"
-   - "Any violations or accidents in past 5 years?"
-   - "Annual mileage?"
-   
+   1. CHECK: Do we know driver count? If NO, then ask:
+      "How many drivers will be on this policy?
+      1) Just me  2) 2 drivers  3) 3 drivers  4) 4+ drivers"
+
+   2. CHECK: Do we know vehicle count? If NO, then ask:
+      "How many vehicles do you need to insure?
+      1) 1 vehicle  2) 2 vehicles  3) 3 vehicles  4) 4+ vehicles"
+
+   3. CHECK: Do we have ZIP code from profile? If NO, then ask:
+      "What's your ZIP code? (5 digits)"
+
+   4. CHECK: Do we have ages? For single driver, use profile age. If multiple drivers and missing ages:
+      "What are the ages of the other drivers? (comma-separated)"
+
+   5. For each vehicle - CHECK what we already know:
+      - If user mentioned "my 2020 Honda Civic", we have ALL vehicle info - skip questions
+      - If partial info (e.g., "my Honda"), only ask for missing parts:
+        * Year unknown: "What year is your Honda?"
+        * Model unknown: "What model Honda? (e.g., Civic, Accord, CR-V)"
+
+   6. Then continue with enhanced details (but check first!)
+
 6. **QUOTE ELIGIBILITY CHECKPOINT**:
    
    **BEFORE PROVIDING ANY QUOTES, VERIFY YOU HAVE:**
@@ -272,11 +350,66 @@ NO quotes, estimates, or summaries until ALL 5 requirements are met!
    
    **NEVER provide quotes with incomplete minimum requirements!**
 
+7. **PROVIDE SUMMARY AFTER KEY MILESTONES**:
+   - Start EACH response during collection with what you know:
+     "I have: [list what's collected]. Now I need: [next item]"
+
+   - After collecting MINIMUM requirements (5 items), provide a brief summary WITH ESTIMATES:
+     "Great! Here's what I have so far:
+     ✓ Drivers: [X]
+     ✓ Vehicles: [X]
+     ✓ Location: [ZIP]
+     ✓ Ages: [list]
+     ✓ Vehicles: [year/make/model list]
+
+     **ESTIMATED PREMIUM RANGE:** $[LOW]-[HIGH]/year ($[X]-[Y]/month)
+     - State minimum coverage: ~$[X]/month
+     - Standard coverage: ~$[Y]/month
+     - Full coverage: ~$[Z]/month
+
+     Would you like to:
+     1) Get detailed quotes with these estimates
+     2) Continue for more accurate pricing (can save 10-20%)"
+
+   - After collecting ENHANCED details, provide complete summary before quotes
+
+   - ALWAYS acknowledge previously provided information:
+     * "I see you're 35 years old..."
+     * "Since you mentioned your Honda Civic..."
+     * "Using your ZIP code 94105..."
+
 Once ALL information is collected, THEN provide:
-- Estimated premium ranges based on their profile
+- Complete summary of collected information
+- **ESTIMATED PREMIUM RANGES WITH MONTHLY COSTS:**
+  * "Your estimated premium range: $[LOW]-$[HIGH] per year ($[X]-$[Y] per month)"
+  * Show ranges for different coverage levels (minimum, standard, full)
+  * Break down by carrier when possible
 - Specific carrier recommendations with reasoning
 - Coverage recommendations based on their situation
 - Money-saving opportunities specific to their profile
+- Offer to generate detailed Carrier Conversation Toolkit
+
+**AUTO INSURANCE PREMIUM ESTIMATES (after collecting info):**
+- Clean record, single driver: $800-1,500/year ($67-125/month)
+- Average driver: $1,200-2,000/year ($100-167/month)
+- Young driver (under 25): $2,000-4,000/year ($167-333/month)
+- Multiple vehicles/drivers: Add 70-90% per additional
+- High-risk factors: 2-3x standard rates
+ALWAYS show: "State minimum: $X/month | Standard coverage: $Y/month | Full coverage: $Z/month"
+
+**HOME INSURANCE PREMIUM ESTIMATES (after collecting info):**
+- $100-300k home value: $600-1,200/year ($50-100/month)
+- $300-500k home value: $1,200-2,000/year ($100-167/month)
+- $500k+ home value: $2,000-4,000/year ($167-333/month)
+- Adjust for location risk factors (±30%)
+ALWAYS show monthly payment options
+
+**LIFE INSURANCE PREMIUM ESTIMATES (after collecting info):**
+- Term life (age 30-40, $500k): $25-50/month
+- Term life (age 40-50, $500k): $50-150/month
+- Term life (age 50-60, $500k): $150-400/month
+- Whole life typically 10-15x term rates
+ALWAYS show: "20-year term: $X/month | 30-year term: $Y/month | Whole life: $Z/month"
 
 IMPORTANT: Once you have collected all necessary information, offer to generate a "Carrier Conversation Toolkit" that includes:
 1. A summary of their profile for easy reference when calling carriers
@@ -311,6 +444,81 @@ Always include detailed breakdown of:
 
 Format this toolkit in a way that's easy to copy/paste or print for reference during carrier calls.` : ""
 
+  const homeInsurancePrompt = needs.includes("home") ? `
+
+**HOME INSURANCE NEEDS ANALYSIS:**
+
+**STEP-BY-STEP DATA COLLECTION (with options):**
+1. "What type of home do you have?
+   1) Single family home
+   2) Townhouse/Condo
+   3) Mobile/Manufactured home
+   4) Other"
+
+2. "What's your estimated home value?
+   1) Under $200k
+   2) $200k-$400k
+   3) $400k-$600k
+   4) $600k-$1M
+   5) Over $1M"
+
+3. "When was your home built?
+   1) Less than 10 years ago
+   2) 10-25 years ago
+   3) 25-50 years ago
+   4) Over 50 years ago"
+
+4. "What's your ZIP code?" (for location-based risks)
+
+**AFTER COLLECTING BASICS, PROVIDE ESTIMATE:**
+"Based on your $[VALUE] home in [LOCATION]:
+- Basic coverage: $[X]/month ($[Y]/year)
+- Standard coverage: $[X]/month ($[Y]/year)
+- Premium coverage: $[X]/month ($[Y]/year)
+
+Top carriers for your area: [List 3-4 with estimated monthly costs]"
+` : ""
+
+  const lifeInsurancePrompt = needs.includes("life") ? `
+
+**LIFE INSURANCE NEEDS ANALYSIS:**
+
+**STEP-BY-STEP DATA COLLECTION (with options):**
+1. "What type of life insurance are you interested in?
+   1) Term life (temporary, affordable)
+   2) Whole life (permanent, cash value)
+   3) Not sure - need guidance
+   4) Want to compare both"
+
+2. "How much coverage are you thinking about?
+   1) $100k-$250k
+   2) $250k-$500k
+   3) $500k-$1M
+   4) Over $1M
+   5) Need help calculating"
+
+3. "What's your primary goal?
+   1) Income replacement for family
+   2) Mortgage/debt payoff
+   3) Children's education
+   4) Estate planning
+   5) All of the above"
+
+4. "General health status?
+   1) Excellent (no medications, non-smoker)
+   2) Good (minor conditions, controlled)
+   3) Fair (some health issues)
+   4) Prefer not to say"
+
+**AFTER COLLECTING BASICS, PROVIDE ESTIMATE:**
+"For $[COVERAGE] coverage at age [AGE]:
+- 20-year term: ~$[X]/month
+- 30-year term: ~$[Y]/month
+- Whole life: ~$[Z]/month
+
+Top carriers for your profile: [List 3-4 with monthly costs]"
+` : ""
+
   return `You are an expert insurance coverage coach helping a customer optimize their insurance portfolio.${quoteProfileInfo} 
 You provide personalized guidance that's educational, empowering, and focused on helping them make informed decisions.
 
@@ -328,6 +536,8 @@ Top Carriers in their area:
 ${carrierInfo}
 ${stateMinimums}
 ${needsAnalysisPrompt}
+${homeInsurancePrompt}
+${lifeInsurancePrompt}
 
 Your role is to:
 1. Conduct thorough needs analysis for accurate quote estimates
@@ -341,14 +551,19 @@ Key guidelines:
 - Be conversational but professional
 - **PROVIDE HELPFUL OPTIONS AFTER INITIAL GREETING**: When customer profile shows specific insurance needs (${needs.join(", ")}), offer 2-3 actionable options immediately after introduction
 - Progressively gather information needed for accurate quotes
+- **ALWAYS PROVIDE PREMIUM ESTIMATES**: After collecting basic info, ALWAYS show estimated monthly costs
+  * Auto: Show state minimum, standard, and full coverage monthly costs
+  * Home: Show basic, standard, and premium coverage monthly costs
+  * Life: Show term (20yr, 30yr) and whole life monthly costs
 - Explain how each factor affects their insurance rates
 - Focus on education and empowerment
-- Provide specific, actionable advice
+- Provide specific, actionable advice with DOLLAR AMOUNTS
 - Use the carrier information to make relevant recommendations
 - Help them understand the "why" behind insurance decisions
 - Offer negotiation tips and insider knowledge
 - Structure responses with clear sections using markdown headers
 - Include specific next steps they can take
+- **FORMAT ALL PREMIUMS AS**: "$X-Y/month" or "$X-Y/year ($A-B/month)"
 
 **MANDATORY FORMAT FOR INITIAL RESPONSES WHEN INSURANCE TYPE IS KNOWN:**
 - Acknowledge their specific insurance need immediately

@@ -1,0 +1,171 @@
+{
+  "dataset": "insurance-troubleshooting",
+  "version": "1.0",
+  "entries": [
+    {
+      "id": "rate-increase-unexpected",
+      "category": "troubleshooting",
+      "title": "Why Did My Rate Go Up With No Accidents or Tickets?",
+      "content": "Unexpected rate increases have multiple causes beyond your driving record. Common reasons: 1) State rate filings - insurers adjust base rates for inflation, claims trends, catastrophes affecting entire state. 2) Credit score changes - even small drops affect rates, check credit report for errors, new debt impacts scores. 3) Claims in your ZIP code - neighbors' claims affect area rates, theft increases, weather events raise comprehensive. 4) Age milestone - some increases at 70+, young drivers aging into higher bracket. 5) Loss of discounts - good student expired, multi-policy removed, loyalty discount capped. 6) Underwriting review - insurer discovers unreported drivers, tickets finally showing up, claims from other policies. Solutions: Shop around immediately, ask insurer for specific reasons, check for errors in reports, consider raising deductibles to offset. Timeline: Rate changes usually at renewal, mid-term increases rare except major changes. Example: Rate increased 20% ($200) - $50 state increase, $75 credit drop, $75 area claims.",
+      "metadata": {
+        "tags": ["rate-increase", "troubleshooting", "premium-changes", "solutions", "common-problems"],
+        "complexity": "intermediate",
+        "audience": "affected-customers"
+      }
+    },
+    {
+      "id": "claim-denied-resolution",
+      "category": "troubleshooting",
+      "title": "My Claim Was Denied - What Are My Options?",
+      "content": "Claim denials require systematic response. First steps: 1) Get denial in writing with specific policy language cited. 2) Review your policy carefully - understand exact coverage terms. 3) Gather all documentation - photos, receipts, witness statements. Common denial reasons: Coverage excluded (flood, earthquake), policy lapsed, failure to cooperate, misrepresentation on application, wear and tear not covered. Appeal process: Write formal appeal letter within deadline (usually 60-180 days), include new evidence or clarification, request supervisor review, cite policy language supporting coverage. Escalation options: State insurance department complaint (powerful tool), public adjuster for property claims (10-15% fee), insurance attorney for large claims, appraisal clause if dispute over value. Bad faith indicators: Unreasonable delays, inadequate investigation, lowball offers, ignoring evidence. Success strategies: Document everything, remain professional, understand policy thoroughly, get expert opinions. Example: Water damage denied as 'gradual' - proved sudden pipe burst with plumber statement, overturned on appeal.",
+      "metadata": {
+        "tags": ["claim-denial", "appeals", "dispute-resolution", "consumer-rights", "bad-faith"],
+        "complexity": "advanced",
+        "audience": "claim-disputes"
+      }
+    },
+    {
+      "id": "coverage-gap-discovered",
+      "category": "troubleshooting",
+      "title": "Discovered Coverage Gap After Incident - Solutions",
+      "content": "Finding coverage gaps after loss is devastating but manageable. Common gaps: No flood insurance during flood, underinsured for replacement cost, excluded drivers or vehicles, business use not covered, valuable items over sub-limits. Immediate actions: Document everything anyway for taxes/assistance, check all possible coverage sources, review other policies for overlap, investigate government disaster aid. Alternative coverage sources: Homeowners may cover auto contents, credit cards offer some protections, umbrella might provide excess, health insurance for injuries. Negotiation strategies: Appeal to insurer goodwill for long-term customers, partial coverage arguments, errors and omissions if agent failed to advise, regulatory complaints if misled. Future prevention: Annual coverage reviews essential, understand all exclusions, photographic home inventory, ask 'what if' scenarios. Special situations: Named storm deductibles, earth movement exclusions, home business limitations, mysterious disappearance. Recovery options: FEMA aid for declared disasters, SBA disaster loans, charitable organizations, crowdfunding increasingly common. Example: Home business equipment stolen, homeowners limit $2,500, actual loss $15,000 - filed under business credit card coverage for $5,000, tax deduction for remainder.",
+      "metadata": {
+        "tags": ["coverage-gaps", "underinsured", "exclusions", "disaster-recovery", "prevention"],
+        "complexity": "advanced",
+        "audience": "gap-victims"
+      }
+    },
+    {
+      "id": "policy-comparison-guide",
+      "category": "comparison-criteria",
+      "title": "Complete Policy Comparison Checklist",
+      "content": "Comparing policies requires systematic evaluation beyond price. Coverage comparison: Liability limits (state minimum vs recommended), deductibles for each coverage type, included vs optional coverages, exclusions list critical. Financial factors: Total annual premium, payment options and fees, cancellation penalties, rate guarantee period. Company evaluation: AM Best rating (A- minimum), complaint ratio from state department, claims satisfaction scores, local agent vs direct. Coverage details often missed: Rental reimbursement daily/total limits, OEM vs aftermarket parts, diminishing deductibles, new car replacement terms. Discount verification: All applicable discounts applied, future discount eligibility, discount conditions/requirements. Service factors: 24/7 claims hotline, mobile app functionality, local approved repair shops, claims process reputation. Hidden differences: Named insured vs listed drivers, permissive use coverage, out-of-state coverage, mechanical breakdown inclusion. Red flags: Extremely low quotes (coverage gaps likely), non-admitted insurers, excessive fees, poor complaint history. Documentation needed: Current declarations page, claims history, driving records, vehicle information. Comparison tools: Spreadsheet with side-by-side, weight factors by importance. Example: Policy A cheaper by $200 but $500 higher deductible, lower limits, poor service = Policy B better value.",
+      "metadata": {
+        "tags": ["policy-comparison", "shopping-guide", "evaluation-criteria", "coverage-analysis", "decision-making"],
+        "complexity": "intermediate",
+        "audience": "insurance-shoppers"
+      }
+    },
+    {
+      "id": "insurance-red-flags",
+      "category": "red-flags",
+      "title": "Insurance Red Flags and Scams to Avoid",
+      "content": "Recognizing insurance red flags prevents costly mistakes. Carrier red flags: Not licensed in your state (verify with department), AM Best rating below B+, excessive complaints, no physical address, pressure to pay in full immediately. Quote red flags: Prices 50%+ below others (coverage missing), fees exceeding 20% of premium, requiring payment before seeing policy, no written documentation, expires in hours. Agent red flags: Won't provide license number, works from home exclusively, asks for cash only, can't explain coverage clearly, pushes single carrier hard. Policy red flags: Exclusions excessive or unusual, sub-limits unreasonably low, cancellation restrictions severe, no grace period for payment. Claims red flags: Adjuster demands up-front payment, contractor requires assignment of benefits, medical providers push litigation, repair shop won't provide itemized estimate. Common scams: Ghost brokers selling fake coverage, identity theft through quotes, staged accidents after purchase, contractors creating damage. Verification steps: Check state insurance website, verify agent license, read BBB reviews, get everything in writing. Protection: Never pay cash, document all interactions, trust instincts, report suspicious activity. Example: Quote 60% below others, cash only, pressure to buy today = scam, reported to state.",
+      "metadata": {
+        "tags": ["red-flags", "scams", "fraud-prevention", "warning-signs", "consumer-protection"],
+        "complexity": "intermediate",
+        "audience": "all-consumers"
+      }
+    },
+    {
+      "id": "non-renewal-cancellation",
+      "category": "troubleshooting",
+      "title": "Policy Non-Renewed or Cancelled - Emergency Steps",
+      "content": "Non-renewal or cancellation requires immediate action to avoid gaps. Understand difference: Cancellation during policy term (serious), non-renewal at term end (more common), notice requirements vary by state (30-120 days). Common reasons: Too many claims (2-3 in 3 years), non-payment of premium, material misrepresentation, license suspension, underwriting changes. Immediate actions: Don't panic or stop paying, start shopping immediately, ask for specific reasons in writing, check for errors in reasoning. Shopping challenges: Must disclose non-renewal, rates will be higher, some carriers won't write, may need non-standard market. Options available: State FAIR plan for property, assigned risk for auto, surplus lines carriers, regional carriers more flexible. Dispute process: Appeal to insurer first, state insurance complaint, prove errors in facts, negotiate conditions (higher deductible). Prevention strategies: Limit small claims, maintain good credit, update information promptly, work with agent advocate. Timeline critical: Gap in coverage devastating, even one day affects future rates, some states prohibit driving without insurance. Example: Non-renewed for 3 claims - found regional carrier, higher deductible, 30% higher rate but maintained continuous coverage.",
+      "metadata": {
+        "tags": ["non-renewal", "cancellation", "emergency-coverage", "fair-plan", "continuous-coverage"],
+        "complexity": "advanced",
+        "audience": "crisis-situations"
+      }
+    },
+    {
+      "id": "underwriting-problems",
+      "category": "troubleshooting",
+      "title": "Failed Underwriting or Application Issues",
+      "content": "Underwriting problems can derail insurance applications. Common issues: Unreported household members, undisclosed tickets/claims, incorrect information, credit problems, property conditions. Discovery timing: Some found immediately, others after policy issued, can result in rescission, rate changes or cancellation. Information sources insurers use: MVR (motor vehicle records), CLUE (claims history), credit reports, prior insurance verification, social media increasingly. Household member issues: All licensed drivers must be listed or excluded, college students away, roommates with access to vehicles, elderly parents living with you. Material misrepresentation consequences: Policy void from inception, claims denied, possible fraud charges, difficulty getting insurance. Solutions: Correct errors immediately, provide documentation, explain circumstances, consider exclusions for problem drivers. Inspection failures: Property insurance may require inspection, common fails: roof, electrical, plumbing, attractive nuisances. High-risk solutions: State pools available, excess and surplus lines, work with specialized agent, correct issues then reapply. Best practices: Full disclosure always, update changes promptly, keep documentation, work with agent. Example: Forgot son's speeding ticket, discovered month 2, premium increased $500, fortunate not cancelled.",
+      "metadata": {
+        "tags": ["underwriting", "application-issues", "misrepresentation", "household-members", "inspection"],
+        "complexity": "intermediate",
+        "audience": "applicants"
+      }
+    },
+    {
+      "id": "payment-problems",
+      "category": "troubleshooting",
+      "title": "Payment Issues and Lapse Prevention",
+      "content": "Payment problems are leading cause of coverage lapses. Grace periods: Usually 10-30 days depending on state, payment must be received not mailed, cancellation notice sent before end. Reinstatement options: Within grace period - just pay, after cancellation - may need new application, gap in coverage affects rates, some states require SR-22 after lapse. NSF consequences: Returned check fees $25-50, policy may cancel immediately, future payments require certified funds, affects payment plan eligibility. Payment plan issues: Monthly costs more than annual, missed payment cancels entire policy, changing plans mid-term difficult, auto-pay recommended but monitor. Billing errors: Double charges common during switches, prorated refunds complex, escrow payment timing issues. Hardship options: Some insurers offer extensions, payment plans for large bills, reduced coverage temporarily, state hardship programs rare. Technology solutions: Auto-pay prevents most issues, calendar reminders crucial, mobile apps for payments, multiple payment methods. Lapse consequences: Legal penalties for driving uninsured, SR-22 requirement possible, future rates 20-50% higher, claim during lapse devastating. Prevention: Emergency fund for insurance, prioritize insurance payments, communicate with insurer early. Example: Lost job, called insurer, arranged 60-day extension with partial payment, avoided lapse.",
+      "metadata": {
+        "tags": ["payment-problems", "lapse-prevention", "grace-period", "reinstatement", "financial-hardship"],
+        "complexity": "intermediate",
+        "audience": "payment-struggles"
+      }
+    },
+    {
+      "id": "claims-process-delays",
+      "category": "troubleshooting",
+      "title": "Claims Taking Too Long - Acceleration Strategies",
+      "content": "Slow claims processing frustrates policyholders but can be addressed. Normal timelines: First contact 24-48 hours, adjuster assignment 3-5 days, inspection 7-10 days, settlement 30-45 days routine claims. Red flags for delays: No adjuster contact in 5 days, requests for same information repeatedly, no timeline provided, vague responses. Common delay causes: High volume (catastrophes), complex claims, investigation needed, missing documentation, dispute over coverage. Acceleration tactics: Call supervisor if no progress, daily follow-ups acceptable, email creates paper trail, copy agent on communications. Documentation critical: Photo/video everything, keep all receipts, maintain claim diary, record all conversations. Escalation path: Adjuster → supervisor → claims manager → executive complaint → state insurance department. State regulations: Most states have prompt payment laws, interest penalties for delays, bad faith claims possible. Additional resources: Public adjusters for property claims, attorneys for injury claims, state department mediation. Catastrophe considerations: Expect delays after disasters, emergency payments available, document temporary repairs. Example: Home claim stalled 60 days, filed state complaint, resolved in 2 weeks with interest penalty.",
+      "metadata": {
+        "tags": ["claims-delays", "acceleration", "escalation", "prompt-payment", "catastrophe"],
+        "complexity": "intermediate",
+        "audience": "claim-filers"
+      }
+    },
+    {
+      "id": "switching-insurers-problems",
+      "category": "troubleshooting",
+      "title": "Problems When Switching Insurance Companies",
+      "content": "Switching insurers can encounter unexpected complications. Timing critical: Never cancel until new policy active, overlap better than gap, effective dates must align perfectly. Common mistakes: Cancelling too early creates gap, forgetting to cancel old policy, not getting refund confirmation, losing continuous coverage. Documentation needed: Current declarations page, loss history letter, no-loss letter sometimes, prior insurance verification. Refund issues: Prorated refund due, cancellation fees may apply, paid-in-full vs financed different, refund check 2-4 weeks. Mortgage/loan complications: Lienholder notification required, escrow account adjustments, force-placed insurance risk, timing with escrow analysis. Mid-term switches: Short-rate cancellation penalty, lost discounts on old policy, new policy might cost more than quoted. Coverage differences: New policy might not match exactly, waiting periods for some coverages, different deductibles/limits. Agent relationships: Notify old agent professionally, they may counteroffer, new agent should help transition. Avoiding problems: Read new policy carefully, confirm coverages match needs, keep old cards until confirmed. Example: Switched mid-term, forgot mortgage notification, force-placed insurance added, took 3 months to resolve escrow.",
+      "metadata": {
+        "tags": ["switching-insurers", "transition-problems", "cancellation", "refunds", "timing"],
+        "complexity": "intermediate",
+        "audience": "insurance-switchers"
+      }
+    },
+    {
+      "id": "multi-policy-coordination",
+      "category": "troubleshooting",
+      "title": "Coordinating Multiple Policies and Coverage Overlaps",
+      "content": "Multiple policies require careful coordination to avoid gaps and overlaps. Common overlaps: Auto medical payments vs health insurance, homeowners liability vs umbrella, travel insurance vs credit card coverage, multiple life policies. Coordination of benefits: Primary vs secondary coverage rules, health insurance COB complex, auto medical payments first, then health insurance. Duplicate coverage waste: Roadside assistance through auto and AAA, rental car coverage overlap, identity theft through multiple sources, extended warranties redundant. Bundle complications: Cancelling one affects others, multi-policy discounts lost, claims affect all policies, renewal dates different. Household coordination: Spouses with separate policies, adult children on parents' policies, roommate coverage issues, divorced parent complications. Business/personal split: Home business needing separation, personal auto for business use, professional liability gaps, equipment coverage overlaps. Claim scenarios: Which policy to file under, deductible considerations, rate impact analysis, subrogation between insurers. Optimization strategies: Annual review all policies, spreadsheet tracking coverage, consolidate where beneficial, eliminate redundancies. Documentation: Keep all policies accessible, understand coverage triggers, maintain coverage flowchart. Example: Had three sources of roadside assistance, two identity theft coverages, eliminated duplicates saving $400/year.",
+      "metadata": {
+        "tags": ["multi-policy", "coordination", "overlaps", "bundling", "optimization"],
+        "complexity": "advanced",
+        "audience": "multi-policy-holders"
+      }
+    },
+    {
+      "id": "high-risk-driver-solutions",
+      "category": "troubleshooting",
+      "title": "High-Risk Driver - Finding and Affording Coverage",
+      "content": "High-risk drivers face limited options but coverage exists. High-risk factors: DUI/DWI (worst), multiple accidents, license suspension, insurance lapses, young driver with incidents. Non-standard market: Progressive, The General, Infinity specialize, rates 50-200% higher than standard, limited coverage options. State assigned risk: Every state has program, guaranteed acceptance, rates capped but high, minimal coverage only. SR-22 requirements: Not insurance but filing proof, costs $25-50 to file, required 3-5 years typically, any lapse restarts clock. Cost management: Minimum coverage initially, higher deductibles essential, pay in full if possible, no physical damage coverage. Improvement timeline: Most violations 3 years impact, DUI 5-10 years depending, accidents 3-5 years, continuous coverage helps. Shopping strategies: Work with high-risk specialist agent, compare 5+ quotes, consider regional carriers, check daily for better rates. Alternative transportation: During worst rate period, consider selling vehicle, rideshare might be cheaper, public transportation temporary. Recovery path: Maintain continuous coverage crucial, no new incidents, improve credit simultaneously, defensive driving courses. Example: After DUI, paid $4,500/year for minimum coverage, after 3 years down to $2,500, year 5 qualified for standard market at $1,500.",
+      "metadata": {
+        "tags": ["high-risk", "dui", "sr-22", "non-standard", "assigned-risk"],
+        "complexity": "advanced",
+        "audience": "high-risk-drivers"
+      }
+    },
+    {
+      "id": "insurance-score-improvement",
+      "category": "troubleshooting",
+      "title": "Improving Your Insurance Score for Better Rates",
+      "content": "Insurance scores significantly impact rates but are improvable. Insurance score factors: Payment history (40%), outstanding debt (30%), credit history length (15%), pursuit of new credit (10%), credit mix (5%). Different from FICO: Weighs insurance-relevant factors more, prior insurance history included, claims history weighted, inquiries less impactful. Checking your score: Not directly available to consumers, LexisNexis C.L.U.E. report shows claims, credit report indicates factors, some insurers share tier. Quick improvements: Pay down credit cards below 30%, dispute any errors on reports, don't close old accounts, avoid new credit applications. Insurance-specific improvements: Maintain continuous coverage, no gaps ever, avoid small claims, pay premiums on time, keep coverage limits consistent. Timeline for impact: Credit improvements show in 3-6 months, insurance scores update at renewal, shopping shows immediate benefit. State restrictions: California, Hawaii, Massachusetts ban credit, Maryland for homeowners only, rates structured differently. Alternative options: Some insurers offer non-credit scoring, telematics programs ignore credit, group insurance through employer. Long-term strategy: Build emergency fund to prevent gaps, maintain stable address, bundle policies with one insurer. Example: Improved credit from 620 to 720, insurance score went from poor to good, saved $600/year on auto.",
+      "metadata": {
+        "tags": ["insurance-score", "credit-improvement", "rate-factors", "score-building", "state-laws"],
+        "complexity": "intermediate",
+        "audience": "score-improvement"
+      }
+    },
+    {
+      "id": "disaster-preparedness",
+      "category": "troubleshooting",
+      "title": "Natural Disaster Insurance Preparedness",
+      "content": "Disaster preparedness prevents insurance nightmares. Before disaster season: Review all coverages and limits, understand deductibles especially percentage-based, photograph/video everything, scan important documents to cloud. Coverage gaps common: Flood requires separate policy (30-day wait), earthquake not covered standard, sewer backup often excluded, additional living expenses limits. Documentation crucial: Pre-disaster photos essential, inventory with receipts, structural details documented, improvement records maintained. Evacuation planning: Know your coverage for additional living expenses, keep receipts for everything, understand time limits, pet boarding covered? During disaster: Safety first always, prevent further damage if safe, document damage immediately, contact insurer ASAP. Claims surge issues: Adjusters overwhelmed, delays expected, emergency repairs allowed, keep all receipts. Contractor scams: Verify licenses and insurance, never sign over benefits, get multiple estimates, beware door-to-door. Recovery resources: FEMA for declared disasters (not insurance replacement), SBA loans available, local disaster relief, contractor verification sites. Annual preparation: Update inventory yearly, review coverage before season, maintain supplies kit, know your adjuster. Example: Hurricane approaching, reviewed policy, found flood gap, too late to add, documented everything, claim smooth for wind damage but flood uncovered cost $30,000.",
+      "metadata": {
+        "tags": ["disaster-prep", "natural-disasters", "documentation", "coverage-gaps", "emergency-planning"],
+        "complexity": "advanced",
+        "audience": "disaster-zones"
+      }
+    },
+    {
+      "id": "elderly-parent-insurance",
+      "category": "troubleshooting",
+      "title": "Managing Elderly Parents' Insurance Issues",
+      "content": "Helping elderly parents with insurance requires delicate balance. Common challenges: Cognitive decline affecting decisions, fixed income pressures, over-insurance in some areas, under-insurance in others, scam vulnerability. Auto concerns: When to stop driving discussions, rising rates after 70, multiple minor accidents, state retesting requirements. Coordination needs: Power of attorney for insurance matters, HIPAA authorizations for health, beneficiary updates crucial, trusted contact designations. Scam prevention: Medicare scams prevalent, door-to-door sales suspicious, identity theft protection important, family monitoring helpful. Coverage evaluation: Life insurance may be unnecessary, long-term care critical window closing, Medicare supplement confusion, home insurance for aging property. Simplification strategies: Consolidate with one carrier, automatic payments essential, reduce vehicles if possible, eliminate redundant coverage. Technology challenges: Online portals difficult, paper statements important, phone preferred over email, family access needed. Legal considerations: Capacity for contracts, guardian implications, trust ownership options, Medicaid planning impacts. Cost management: Senior discounts available, defensive driving courses, AARP membership benefits, state programs possible. Example: 82-year-old mother, 3 fender-benders in year, family intervention, voluntarily stopped driving, sold car, saved $2,000/year, used savings for transportation.",
+      "metadata": {
+        "tags": ["elderly-parents", "senior-issues", "family-help", "scam-prevention", "simplification"],
+        "complexity": "advanced",
+        "audience": "adult-children"
+      }
+    }
+  ]
+}

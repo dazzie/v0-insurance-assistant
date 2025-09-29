@@ -75,9 +75,10 @@ Connect with top-rated local insurance professionals:
 ## Setup
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 - OpenAI API key (for AI responses)
+- Vectorize.io account (for RAG features)
 
 ### Installation
 
@@ -91,8 +92,18 @@ Connect with top-rated local insurance professionals:
 2. **Configure environment**
    Create `.env.local`:
    ```env
+   # OpenAI Configuration
    OPENAI_API_KEY=your-actual-api-key-here
    USE_MOCK_RESPONSES=false
+
+   # Vectorize.io Configuration (for RAG)
+   VECTORIZE_IO_API_KEY=your-vectorize-token
+   VECTORIZE_IO_ORG_ID=your-org-id
+   VECTORIZE_IO_PIPELINE_ID=your-pipeline-id
+   TOKEN=your-vectorize-token  # Alternative env var name
+
+   # RAG System
+   ENABLE_RAG=true
    ```
 
 3. **Test OpenAI connection**
@@ -220,6 +231,8 @@ Connect with top-rated local insurance professionals:
 2. **Security Updates** - Next.js updated to 14.2.33 (critical vulnerabilities resolved)
 3. **Deployment Fixes** - Resolved pnpm/npm lockfile conflicts
 4. **Branch Strategy** - Using `week-2` branch for new development
+5. **Customer Profile System** - Persistent profile storage with localStorage
+6. **RAG Integration** - Vectorize.io integration for knowledge retrieval
 
 ## Best Practices
 
@@ -268,6 +281,61 @@ The app auto-deploys to Vercel on push to main branch.
 - **Main Branch**: Production-ready code
 - **Week-2 Branch**: Current development branch for new features
 - **Local Development**: Runs on `localhost:3000` (or `:3001` if port busy)
+
+## RAG System & Vectorize.io Integration
+
+### Overview
+The assistant uses Retrieval-Augmented Generation (RAG) with Vectorize.io for enhanced knowledge retrieval, providing more accurate and contextual insurance information.
+
+### Vectorize.io Data Sets
+The following datasets are available in `/data/vectorize-upload/` for upload to your Vectorize pipeline:
+
+#### Core Knowledge Base (6 files)
+1. **insurance-coverage-explanations.json** (23KB) - 20 detailed coverage type explanations
+2. **insurance-terminology-glossary.json** (23KB) - 20 essential insurance terms
+3. **state-insurance-requirements.json** (26KB) - State-by-state requirements for 20 major states
+4. **insurance-discounts-guide.json** (29KB) - 20 discount types with qualification criteria
+5. **insurance-faqs.json** (28KB) - 20 comprehensive Q&As
+6. **negotiation-strategies.json** (30KB) - 20 negotiation tactics and scripts
+
+#### Carrier & Market Intelligence (4 files)
+7. **insurance-carrier-profiles.json** - 15 major carrier detailed profiles
+8. **carrier-coverage-options.json** - 15 carrier-specific coverage options and features
+9. **preferred-agents-directory.json** - 20 agent selection and evaluation guides
+10. **insurance-claim-process.json** - 15 step-by-step claim process guides
+
+#### Customer Guidance & Optimization (4 files)
+11. **customer-scenarios-lifecycles.json** - 15 life events, age-based, and occupation scenarios
+12. **risk-factors-pricing.json** - 15 pricing factors and regional market data
+13. **insurance-troubleshooting.json** - 15 problem-solving guides and red flags
+14. **insurance-money-saving-tips.json** - 15 comprehensive savings strategies
+
+**Total: 14 files, 235+ entries, 356KB of structured insurance knowledge**
+
+### Setting Up Vectorize.io
+1. Create account at [platform.vectorize.io](https://platform.vectorize.io)
+2. Create a new pipeline with:
+   - Extractor: Vectorize Built-in
+   - Chunker: Vectorize Built-in
+   - Embedder: OpenAI v3 small (1536 dimensions)
+3. Upload JSON files through the admin UI
+4. Copy your credentials to `.env.local`
+5. The pipeline will automatically chunk and vectorize content
+
+### Customer Profile Management
+The app includes a comprehensive customer profile system:
+- **Persistent Storage**: Profiles saved to localStorage
+- **Auto-extraction**: Profile data extracted from conversations
+- **Profile Completeness**: Visual indicator showing profile completion percentage
+- **Import/Export**: JSON import/export functionality
+- **Profile Integration**: Automatically enriches chat context
+
+### Profile Fields
+- Personal: Name, email, phone, age, gender
+- Location: Address, city, state, ZIP code
+- Insurance: Type, current insurer, premium
+- Demographics: Marital status, home ownership, occupation
+- Additional: Credit range, driver/vehicle counts
 
 ## Contributing
 

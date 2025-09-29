@@ -1,0 +1,171 @@
+{
+  "dataset": "insurance-carrier-profiles",
+  "version": "1.0",
+  "entries": [
+    {
+      "id": "geico-profile",
+      "category": "carrier-profiles",
+      "title": "GEICO - Government Employees Insurance Company",
+      "content": "GEICO, founded in 1936, is the second-largest auto insurer in the US with about 14% market share. Known for direct-to-consumer sales model and competitive pricing through online and phone channels. Strengths include strong digital platform, 24/7 customer service, and extensive advertising presence. Offers auto, motorcycle, RV, boat, homeowners, renters, condo, flood, and umbrella insurance. Financial strength rated A++ by A.M. Best. Famous for 15-minute quote process and gecko mascot. Best for tech-savvy customers comfortable with self-service. May offer lower rates for government employees, military members, and those with excellent credit. Mobile app highly rated for claims filing and policy management.",
+      "metadata": {
+        "tags": ["geico", "auto-insurance", "direct-sales", "online-quotes", "military-discounts"],
+        "complexity": "intermediate",
+        "audience": "insurance-shoppers"
+      }
+    },
+    {
+      "id": "state-farm-profile",
+      "category": "carrier-profiles",
+      "title": "State Farm - The Largest Auto Insurer",
+      "content": "State Farm is the largest auto and home insurer in the US with approximately 16% market share. Founded in 1922, operates through exclusive agent network with over 19,000 agents nationwide. Known for personalized service and strong local presence. Offers comprehensive insurance portfolio including auto, home, life, health, business, and financial services. Financial strength rated A++ by A.M. Best. Strengths include extensive agent network, bundling discounts, and Drive Safe & Save telematics program. Best for customers who value face-to-face interaction and long-term relationships with local agents. Often competitive for families and homeowners who bundle multiple policies. Claims satisfaction consistently ranks above industry average.",
+      "metadata": {
+        "tags": ["state-farm", "largest-insurer", "local-agents", "bundling", "comprehensive-coverage"],
+        "complexity": "basic",
+        "audience": "all-customers"
+      }
+    },
+    {
+      "id": "progressive-profile",
+      "category": "carrier-profiles",
+      "title": "Progressive - Innovation Leader in Auto Insurance",
+      "content": "Progressive, founded in 1937, is the third-largest auto insurer with innovative pricing and technology. Pioneer of usage-based insurance with Snapshot program that can save up to 30% based on driving behavior. Known for Name Your Price tool and comparison shopping features that show competitor rates. Offers auto, motorcycle, boat, RV, commercial auto, homeowners, and renters insurance. Financial strength rated A+ by A.M. Best. Strengths include flexible payment options, extensive coverage customization, and strong online tools. Best for high-risk drivers, those with less-than-perfect credit, and customers who want maximum control over coverage options. Particularly competitive for motorcycle and commercial auto insurance.",
+      "metadata": {
+        "tags": ["progressive", "usage-based", "snapshot", "high-risk", "technology-leader"],
+        "complexity": "intermediate",
+        "audience": "tech-savvy-drivers"
+      }
+    },
+    {
+      "id": "allstate-profile",
+      "category": "carrier-profiles",
+      "title": "Allstate - You're In Good Hands",
+      "content": "Allstate is the fourth-largest auto insurer in the US, founded in 1931 as part of Sears. Operates through exclusive agent network with approximately 10,000 agents. Known for comprehensive coverage options and innovative programs like Drivewise telematics and Claim RateGuard. Offers auto, home, life, motorcycle, boat, business, and identity protection insurance. Financial strength rated A+ by A.M. Best. Strengths include accident forgiveness, safe driving bonus, new car replacement, and extensive optional coverages. Best for customers seeking comprehensive protection with numerous add-ons and those who value local agent relationships. Particularly strong in catastrophe-prone areas with specialized coverage options.",
+      "metadata": {
+        "tags": ["allstate", "agent-network", "drivewise", "accident-forgiveness", "comprehensive"],
+        "complexity": "intermediate",
+        "audience": "coverage-focused"
+      }
+    },
+    {
+      "id": "usaa-profile",
+      "category": "carrier-profiles",
+      "title": "USAA - Exclusively for Military Families",
+      "content": "USAA serves only active military, veterans, and their eligible family members. Consistently ranks highest in customer satisfaction and claims handling. Founded in 1922 by Army officers, now serves over 13 million members. Offers auto, home, life, banking, investment, and retirement products. Financial strength rated A++ by A.M. Best. Known for exceptional customer service, deployment-friendly policies, and understanding of military lifestyle. Strengths include accident forgiveness after 5 years, free towing, and overseas coverage. Best rates typically for military members with excellent credit and driving records. Claims process highly streamlined with photo estimate option. No local agents but superior phone and digital service.",
+      "metadata": {
+        "tags": ["usaa", "military", "veterans", "exclusive", "highest-satisfaction"],
+        "complexity": "basic",
+        "audience": "military-families"
+      }
+    },
+    {
+      "id": "liberty-mutual-profile",
+      "category": "carrier-profiles",
+      "title": "Liberty Mutual - Customized Coverage Options",
+      "content": "Liberty Mutual, founded in 1912, is the sixth-largest auto insurer in the US. Known for customizable coverage and RightTrack telematics program offering up to 30% discount. Operates through both agents and direct channels. Offers auto, home, renters, life, and umbrella insurance. Financial strength rated A by A.M. Best. Unique features include better car replacement, accident forgiveness, and teacher/educator discounts. Strong in bundling discounts and new customer promotions. Best for customers who want flexibility in coverage options and payment plans. Particularly competitive in urban areas and for young professionals. Mobile app includes roadside assistance and claims features.",
+      "metadata": {
+        "tags": ["liberty-mutual", "customizable", "righttrack", "teacher-discount", "urban-friendly"],
+        "complexity": "intermediate",
+        "audience": "flexible-coverage-seekers"
+      }
+    },
+    {
+      "id": "farmers-profile",
+      "category": "carrier-profiles",
+      "title": "Farmers Insurance - We Know From Experience",
+      "content": "Farmers Insurance Group, founded in 1928, operates through exclusive agent network with over 10,000 agents. Known for comprehensive coverage options and specialized policies for unique situations. Offers auto, home, life, business, motorcycle, recreational vehicle, and financial services. Financial strength rated A by A.M. Best. Strengths include rideshare coverage, custom equipment coverage, and new vehicle replacement. Signal app provides telematics discounts up to 30%. Best for customers with unique coverage needs, classic car owners, and small business owners. Strong in western United States. Known for educational approach through Farmers University training for agents.",
+      "metadata": {
+        "tags": ["farmers", "specialized-coverage", "rideshare", "signal-app", "western-states"],
+        "complexity": "intermediate",
+        "audience": "unique-needs"
+      }
+    },
+    {
+      "id": "nationwide-profile",
+      "category": "carrier-profiles",
+      "title": "Nationwide - On Your Side",
+      "content": "Nationwide, founded in 1926 as Farm Bureau Mutual, serves over 4 million auto policies. Operates through both independent and exclusive agents. Known for SmartRide usage-based program and vanishing deductible feature. Offers auto, home, life, pet, business, and farm insurance. Financial strength rated A+ by A.M. Best. Unique features include accident forgiveness, better roof replacement, and Brand New Belongings. Strong affinity group discounts through employers and associations. Best for bundling multiple policies and those seeking loyalty rewards. Particularly competitive for farm and rural properties. On Your Side review provides annual coverage assessment.",
+      "metadata": {
+        "tags": ["nationwide", "smartride", "vanishing-deductible", "farm-insurance", "affinity-groups"],
+        "complexity": "intermediate",
+        "audience": "rural-suburban"
+      }
+    },
+    {
+      "id": "travelers-profile",
+      "category": "carrier-profiles",
+      "title": "Travelers - 160+ Years of Protection",
+      "content": "Travelers, founded in 1853, is one of the oldest and largest insurers in the US. Operates primarily through independent agents with strong commercial lines presence. Offers auto, home, business, and specialty insurance. Financial strength rated A++ by A.M. Best. Known for IntelliDrive telematics program offering up to 30% discount. Unique features include premier new car replacement, accident forgiveness, and responsible driver plan. Strong in hybrid/electric vehicle coverage and green home discounts. Best for established drivers with excellent credit and those seeking stable, long-term carrier relationships. Particularly competitive for professionals and high-value homes.",
+      "metadata": {
+        "tags": ["travelers", "intellidrive", "independent-agents", "green-coverage", "established-carrier"],
+        "complexity": "intermediate",
+        "audience": "professionals"
+      }
+    },
+    {
+      "id": "metlife-auto-profile",
+      "category": "carrier-profiles",
+      "title": "MetLife Auto & Home - Group Benefits Specialist",
+      "content": "MetLife Auto & Home specializes in group auto and home insurance through employers and affinity groups. Founded as a division of Metropolitan Life Insurance Company. Offers auto, home, renters, condo, and recreational vehicle insurance. Financial strength rated A by A.M. Best. Known for group discounts ranging from 5% to 20% through employer partnerships. Unique features include diminishing deductible and claim forgiveness. Best for employees of participating companies and members of affiliated organizations. Strong in multi-policy discounts and payment flexibility. Customer service includes dedicated employer group specialists.",
+      "metadata": {
+        "tags": ["metlife", "group-insurance", "employer-benefits", "affinity-discounts", "corporate"],
+        "complexity": "basic",
+        "audience": "employed-professionals"
+      }
+    },
+    {
+      "id": "american-family-profile",
+      "category": "carrier-profiles",
+      "title": "American Family Insurance - Dream Protection",
+      "content": "American Family Insurance, founded in 1927, operates primarily in 19 states through exclusive agent network. Known for KnowYourDrive telematics program and bundling opportunities. Offers auto, home, life, business, farm, and ranch insurance. Financial strength rated A by A.M. Best. Unique features include diminishing deductible, accident forgiveness, and teen safe driver program. Strong focus on dreams and aspirations messaging. Best for midwest customers seeking personal agent relationships and comprehensive bundling. Particularly competitive for families and first-time insurance buyers. DreamBank provides free community resources and coaching.",
+      "metadata": {
+        "tags": ["american-family", "knowyourdrive", "midwest-focused", "teen-driver", "dream-protection"],
+        "complexity": "basic",
+        "audience": "midwest-families"
+      }
+    },
+    {
+      "id": "erie-insurance-profile",
+      "category": "carrier-profiles",
+      "title": "Erie Insurance - Above All in Service",
+      "content": "Erie Insurance, founded in 1925, operates in 12 states and D.C. through independent agents. Consistently ranks highest in customer satisfaction for both auto and home insurance. Known for Rate Lock feature guaranteeing rate won't increase due to first accident or violation. Financial strength rated A+ by A.M. Best. Unique features include free pet injury coverage, diminishing deductible, and Erie Rate Lock. Best for customers in coverage areas seeking superior service and claims handling. Particularly strong in multi-policy discounts and loyalty benefits. Limited geographic availability but exceptional value where offered.",
+      "metadata": {
+        "tags": ["erie", "rate-lock", "highest-satisfaction", "pet-coverage", "regional-leader"],
+        "complexity": "intermediate",
+        "audience": "service-focused"
+      }
+    },
+    {
+      "id": "auto-owners-profile",
+      "category": "carrier-profiles",
+      "title": "Auto-Owners Insurance - The No Problem People",
+      "content": "Auto-Owners Insurance, founded in 1916, operates in 26 states through independent agents only. Consistently receives highest marks for claims satisfaction and financial stability. Offers auto, home, life, and business insurance. Financial strength rated A++ by A.M. Best. Known for Life Home Car Plus discount combining all three for maximum savings. No online quotes or direct sales - exclusively through local independent agents. Best for customers seeking personalized service and long-term stability. Particularly competitive for safe drivers with excellent credit and multiple policies. Limited marketing presence but strong word-of-mouth reputation.",
+      "metadata": {
+        "tags": ["auto-owners", "independent-only", "no-problem", "life-home-car", "word-of-mouth"],
+        "complexity": "basic",
+        "audience": "relationship-seekers"
+      }
+    },
+    {
+      "id": "the-hartford-profile",
+      "category": "carrier-profiles",
+      "title": "The Hartford - AARP Auto Insurance Program",
+      "content": "The Hartford, founded in 1810, is one of America's oldest insurers. Exclusive auto and home insurance provider for AARP members age 50+. Known for RecoverCare benefit providing transportation and home assistance after accidents. Offers auto, home, and small business insurance. Financial strength rated A+ by A.M. Best. Unique features include lifetime renewability, new car replacement, and disappearing deductible. Best for mature drivers seeking specialized benefits and AARP members. Particularly strong in accident forgiveness and first accident forgiveness. Dedicated support line for senior drivers.",
+      "metadata": {
+        "tags": ["hartford", "aarp", "senior-drivers", "recovercare", "lifetime-renewal"],
+        "complexity": "intermediate",
+        "audience": "mature-drivers"
+      }
+    },
+    {
+      "id": "chubb-personal-profile",
+      "category": "carrier-profiles",
+      "title": "Chubb - High Net Worth Insurance Specialist",
+      "content": "Chubb specializes in high-value auto, home, and valuables insurance for affluent individuals. Known for agreed value coverage and exceptional claims service. Offers auto, home, yacht, aviation, and collections insurance. Financial strength rated A++ by A.M. Best. Unique features include original parts guarantee for luxury vehicles, worldwide coverage, and cash settlement option. Best for high net worth individuals with luxury vehicles, multiple homes, and valuable collections. Claims service includes single deductible for catastrophes and lifetime repair guarantee. Minimum coverage requirements typically start at $1 million for homeowners.",
+      "metadata": {
+        "tags": ["chubb", "luxury", "high-net-worth", "agreed-value", "worldwide-coverage"],
+        "complexity": "advanced",
+        "audience": "affluent-individuals"
+      }
+    }
+  ]
+}

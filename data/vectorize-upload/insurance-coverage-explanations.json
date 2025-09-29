@@ -1,0 +1,226 @@
+{
+  "dataset": "insurance-coverage-explanations",
+  "version": "1.0",
+  "entries": [
+    {
+      "id": "liability-coverage",
+      "category": "auto-insurance",
+      "title": "Liability Coverage Explained",
+      "content": "Liability coverage is mandatory in most states and protects you when you're at fault in an accident. It has two components: Bodily Injury Liability covers medical expenses, lost wages, and pain and suffering for others injured in an accident you cause. Property Damage Liability covers damage to other people's vehicles and property. For example, if you rear-end another car, liability coverage pays for their medical bills and car repairs, but not your own damages. Minimum limits vary by state, but experts recommend higher limits like 100/300/100 ($100k per person, $300k per accident for bodily injury, $100k for property damage) to protect your assets.",
+      "metadata": {
+        "tags": ["liability", "auto-insurance", "bodily-injury", "property-damage", "mandatory-coverage"],
+        "complexity": "basic",
+        "audience": "all-drivers"
+      }
+    },
+    {
+      "id": "comprehensive-coverage",
+      "category": "auto-insurance",
+      "title": "Comprehensive Coverage: Protection Beyond Collisions",
+      "content": "Comprehensive coverage protects your vehicle from non-collision damages often called 'acts of God' or theft. This includes weather damage (hail, flooding, hurricanes), fire, vandalism, theft, falling objects (tree branches), and animal strikes. For example, if a deer runs into your car or your vehicle is stolen from a parking lot, comprehensive coverage pays for repairs or replacement minus your deductible. It's especially valuable for newer vehicles or in areas prone to severe weather. The coverage pays actual cash value (current market value) of your vehicle, not what you originally paid. Consider your vehicle's value and local risk factors when deciding on comprehensive coverage.",
+      "metadata": {
+        "tags": ["comprehensive", "auto-insurance", "theft", "weather-damage", "vandalism"],
+        "complexity": "intermediate",
+        "audience": "vehicle-owners"
+      }
+    },
+    {
+      "id": "collision-coverage",
+      "category": "auto-insurance",
+      "title": "Collision Coverage: When Accidents Happen",
+      "content": "Collision coverage pays for damage to your vehicle when you collide with another car, object, or if your car rolls over, regardless of who's at fault. This includes hitting a tree, guardrail, pole, or another vehicle. For instance, if you slide on ice and hit a fence, collision coverage pays for your car's repairs minus your deductible. Unlike liability coverage, this protects YOUR vehicle. It's typically required if you have a car loan or lease. The coverage amount is limited to your vehicle's actual cash value. Choose your deductible carefully - higher deductibles mean lower premiums but more out-of-pocket costs when filing a claim.",
+      "metadata": {
+        "tags": ["collision", "auto-insurance", "vehicle-damage", "deductible", "required-coverage"],
+        "complexity": "basic",
+        "audience": "all-drivers"
+      }
+    },
+    {
+      "id": "uninsured-motorist-coverage",
+      "category": "auto-insurance",
+      "title": "Uninsured/Underinsured Motorist Coverage",
+      "content": "Uninsured Motorist (UM) and Underinsured Motorist (UIM) coverage protects you when the at-fault driver has no insurance or insufficient coverage to pay for your damages. About 13% of drivers are uninsured nationally, with rates much higher in some states. UM covers medical expenses, lost wages, and pain and suffering when an uninsured driver hits you. UIM kicks in when the at-fault driver's limits are too low to cover your damages. For example, if an uninsured driver causes $50,000 in medical bills, your UM coverage pays those costs. Some states require this coverage, and it's highly recommended everywhere as it protects against one of the biggest gaps in auto insurance.",
+      "metadata": {
+        "tags": ["uninsured-motorist", "underinsured-motorist", "gap-coverage", "medical-expenses", "protection"],
+        "complexity": "intermediate",
+        "audience": "all-drivers"
+      }
+    },
+    {
+      "id": "personal-injury-protection",
+      "category": "auto-insurance",
+      "title": "Personal Injury Protection (PIP) - No-Fault Coverage",
+      "content": "Personal Injury Protection (PIP) is required in no-fault states and provides immediate medical coverage regardless of who caused the accident. PIP typically covers medical expenses, lost wages (usually 60-80% of income), essential services (help with household tasks you can't perform), and sometimes rehabilitation costs. Unlike medical payments coverage, PIP is more comprehensive and includes wage replacement. For example, if you're injured in an accident, PIP immediately covers your hospital bills and replaces lost income while you recover, without waiting to determine fault. Coverage limits vary by state, from $8,000 in Kansas to unlimited in Michigan. PIP reduces lawsuits by providing immediate benefits.",
+      "metadata": {
+        "tags": ["PIP", "personal-injury-protection", "no-fault", "medical-coverage", "wage-replacement"],
+        "complexity": "intermediate",
+        "audience": "no-fault-state-residents"
+      }
+    },
+    {
+      "id": "medical-payments-coverage",
+      "category": "auto-insurance",
+      "title": "Medical Payments Coverage (MedPay)",
+      "content": "Medical Payments coverage (MedPay) pays for medical expenses resulting from auto accidents, regardless of fault. It covers you, your passengers, and your family members if injured while riding in any vehicle or as pedestrians/cyclists. MedPay is typically available in $1,000 to $10,000 amounts and works alongside your health insurance, often covering deductibles and copays your health insurance doesn't cover. For example, if you're injured in an accident and have $2,000 in emergency room costs with a $500 health insurance deductible, MedPay can cover the deductible and any remaining costs up to your limit. It's relatively inexpensive and provides valuable protection for immediate medical expenses.",
+      "metadata": {
+        "tags": ["medical-payments", "medpay", "medical-expenses", "passengers", "no-fault-coverage"],
+        "complexity": "basic",
+        "audience": "all-drivers"
+      }
+    },
+    {
+      "id": "gap-insurance",
+      "category": "auto-insurance",
+      "title": "GAP Insurance: Bridging the Value Gap",
+      "content": "Guaranteed Asset Protection (GAP) insurance covers the difference between what you owe on your car loan/lease and your vehicle's actual cash value if it's totaled or stolen. New cars depreciate rapidly - up to 20% when driven off the lot and 60% in the first five years. If you owe $25,000 on a car loan but the car is only worth $20,000 when totaled, GAP insurance pays the $5,000 difference. This coverage is crucial if you: made a small down payment, chose a long loan term, bought a vehicle that depreciates quickly, or rolled negative equity from a previous loan into your new loan. GAP insurance is typically much cheaper when purchased through your auto insurer rather than the dealership.",
+      "metadata": {
+        "tags": ["gap-insurance", "loan-protection", "depreciation", "total-loss", "negative-equity"],
+        "complexity": "intermediate",
+        "audience": "financed-vehicle-owners"
+      }
+    },
+    {
+      "id": "homeowners-dwelling-coverage",
+      "category": "home-insurance",
+      "title": "Dwelling Coverage: Protecting Your Home's Structure",
+      "content": "Dwelling coverage (Coverage A) is the foundation of homeowners insurance, protecting your home's physical structure including walls, roof, floors, built-in appliances, and attached structures like garages. This coverage should equal your home's replacement cost, not its market value or what you paid for it. Replacement cost is typically 20-30% higher than market value due to debris removal, labor costs, and building code upgrades. For example, if your home is worth $300,000 but would cost $380,000 to rebuild, you need $380,000 in dwelling coverage. Consider guaranteed replacement cost coverage, which pays to rebuild even if costs exceed your policy limit due to inflation or local disasters affecting material and labor costs.",
+      "metadata": {
+        "tags": ["dwelling-coverage", "home-insurance", "replacement-cost", "structure-protection", "coverage-a"],
+        "complexity": "intermediate",
+        "audience": "homeowners"
+      }
+    },
+    {
+      "id": "personal-property-coverage",
+      "category": "home-insurance",
+      "title": "Personal Property Coverage: Protecting Your Belongings",
+      "content": "Personal property coverage (Coverage C) protects your belongings inside your home and often extends to items temporarily away from home. Standard policies typically provide coverage equal to 50-70% of your dwelling coverage. This includes furniture, clothing, electronics, appliances, and personal items. Coverage can be actual cash value (depreciated value) or replacement cost (new item cost). For example, if your 3-year-old TV is stolen, actual cash value pays what it's worth today (maybe $400), while replacement cost pays for a comparable new TV (perhaps $800). Consider increasing limits for valuable items like jewelry, art, or collectibles, which often have sub-limits of $1,000-$2,500. Document your belongings with photos and receipts for easier claim processing.",
+      "metadata": {
+        "tags": ["personal-property", "home-insurance", "belongings", "replacement-cost", "coverage-c"],
+        "complexity": "basic",
+        "audience": "homeowners-renters"
+      }
+    },
+    {
+      "id": "liability-coverage-home",
+      "category": "home-insurance",
+      "title": "Home Liability Coverage: Protection Beyond Property",
+      "content": "Home liability coverage (Coverage E) protects you if someone is injured on your property or if you accidentally cause injury or property damage to others. This includes medical expenses, legal fees, and damages if you're sued. Common scenarios include a delivery person slipping on your icy steps, your dog biting a neighbor, or accidentally damaging someone else's property. Coverage typically starts at $100,000 but experts recommend at least $300,000-$500,000, or $1 million if you have significant assets. The coverage also includes legal defense costs, which don't count against your policy limits. Consider umbrella insurance for additional liability protection beyond your homeowners policy limits, especially if you have a pool, trampoline, or other attractive nuisances.",
+      "metadata": {
+        "tags": ["liability-coverage", "home-insurance", "personal-liability", "legal-protection", "coverage-e"],
+        "complexity": "intermediate",
+        "audience": "homeowners"
+      }
+    },
+    {
+      "id": "additional-living-expenses",
+      "category": "home-insurance",
+      "title": "Additional Living Expenses: Temporary Housing Coverage",
+      "content": "Additional Living Expenses (ALE) or Coverage D pays for temporary housing and extra costs when your home is uninhabitable due to a covered loss. This includes hotel bills, restaurant meals (above normal food costs), storage fees, and other necessary expenses while your home is being repaired or rebuilt. For example, if a fire damages your kitchen and you must live in a hotel for two months, ALE covers the hotel costs and the extra expense of eating out versus cooking at home. Coverage is typically 10-30% of your dwelling coverage and has time limits (12-24 months). Keep receipts for all expenses and understand that ALE covers the difference between your normal living expenses and temporary living costs, not your total temporary expenses.",
+      "metadata": {
+        "tags": ["additional-living-expenses", "temporary-housing", "home-insurance", "coverage-d", "displacement"],
+        "complexity": "intermediate",
+        "audience": "homeowners"
+      }
+    },
+    {
+      "id": "term-life-insurance",
+      "category": "life-insurance",
+      "title": "Term Life Insurance: Affordable Temporary Protection",
+      "content": "Term life insurance provides coverage for a specific period (10, 20, or 30 years) at fixed premiums, then expires. It's the most affordable life insurance option, making it ideal for temporary needs like paying off a mortgage or supporting children until they're financially independent. For example, a healthy 35-year-old might pay $30-50 monthly for $500,000 in 20-year term coverage. Premiums increase dramatically if you renew after the term ends, so choose your term length carefully. Term insurance has no cash value - you're paying for pure insurance protection. It's best for people who need substantial coverage at low cost during their highest-risk years when they have dependents and debts but limited assets.",
+      "metadata": {
+        "tags": ["term-life-insurance", "temporary-coverage", "affordable-protection", "fixed-premiums", "pure-insurance"],
+        "complexity": "basic",
+        "audience": "young-families"
+      }
+    },
+    {
+      "id": "whole-life-insurance",
+      "category": "life-insurance",
+      "title": "Whole Life Insurance: Permanent Protection with Cash Value",
+      "content": "Whole life insurance provides permanent coverage with level premiums and builds cash value that grows tax-deferred. The policy combines life insurance protection with a savings component that earns conservative returns (typically 2-4% annually). Premiums are much higher than term insurance but remain level for life. For example, the same 35-year-old might pay $400-600 monthly for $500,000 in whole life coverage. You can borrow against the cash value or use it to pay premiums in later years. Whole life is suitable for estate planning, final expense coverage, or for those who want forced savings with insurance protection. However, the investment component typically underperforms other investment options, making it less attractive purely as an investment vehicle.",
+      "metadata": {
+        "tags": ["whole-life-insurance", "permanent-coverage", "cash-value", "level-premiums", "investment-component"],
+        "complexity": "advanced",
+        "audience": "high-income-individuals"
+      }
+    },
+    {
+      "id": "disability-insurance",
+      "category": "disability-insurance",
+      "title": "Disability Insurance: Protecting Your Income",
+      "content": "Disability insurance replaces a portion of your income if you become unable to work due to illness or injury. Short-term disability typically covers 3-12 months at 60-70% of your salary, while long-term disability can provide benefits until retirement age. The probability of becoming disabled for 90+ days before age 65 is about 25%, making this coverage crucial for most workers. Own-occupation policies pay benefits if you can't perform your specific job, while any-occupation policies only pay if you can't work in any job suited to your education and experience. For example, if a surgeon develops hand tremors and can't operate but could teach, own-occupation coverage would pay benefits while any-occupation might not. Group coverage through employers is often limited, making individual coverage important for comprehensive protection.",
+      "metadata": {
+        "tags": ["disability-insurance", "income-protection", "short-term-disability", "long-term-disability", "own-occupation"],
+        "complexity": "intermediate",
+        "audience": "working-professionals"
+      }
+    },
+    {
+      "id": "umbrella-insurance",
+      "category": "umbrella-insurance",
+      "title": "Umbrella Insurance: Extra Liability Protection",
+      "content": "Umbrella insurance provides additional liability coverage beyond your auto and homeowners policies, typically in $1-5 million increments. It kicks in when your underlying policy limits are exhausted and covers gaps not covered by other policies. For example, if you cause a serious accident resulting in $800,000 in damages but only have $300,000 in auto liability coverage, umbrella insurance covers the remaining $500,000. Umbrella policies also cover incidents like libel, slander, false imprisonment, or invasion of privacy. The cost is relatively low - often $200-400 annually for $1 million in coverage - because it's excess coverage. Most insurers require minimum underlying coverage (like $250,000/$500,000 auto liability) before selling umbrella coverage. It's especially important for high-net-worth individuals or those with increased liability exposure.",
+      "metadata": {
+        "tags": ["umbrella-insurance", "excess-liability", "high-limits", "asset-protection", "additional-coverage"],
+        "complexity": "intermediate",
+        "audience": "high-net-worth-individuals"
+      }
+    },
+    {
+      "id": "flood-insurance",
+      "category": "specialty-insurance",
+      "title": "Flood Insurance: Essential Protection Not Covered by Homeowners",
+      "content": "Flood insurance is a separate policy that covers damage from rising water, which is excluded from standard homeowners insurance. It's available through the National Flood Insurance Program (NFIP) or private insurers. NFIP policies cover up to $250,000 for dwelling and $100,000 for personal property. There's typically a 30-day waiting period before coverage begins, so don't wait for flood warnings to purchase. About 25% of flood claims come from moderate-to-low-risk areas, and just one inch of flood water can cause $25,000+ in damage. For example, Hurricane Harvey caused billions in flood damage, much of it outside designated flood zones. Consider flood insurance even if you're not in a high-risk area, especially if you have a mortgage (lenders may require it) or if your area has experienced flooding before.",
+      "metadata": {
+        "tags": ["flood-insurance", "rising-water", "NFIP", "separate-policy", "waiting-period"],
+        "complexity": "intermediate",
+        "audience": "property-owners"
+      }
+    },
+    {
+      "id": "renters-insurance",
+      "category": "renters-insurance",
+      "title": "Renters Insurance: Protection for Tenants",
+      "content": "Renters insurance protects your personal belongings and provides liability coverage when you rent your home. Your landlord's insurance only covers the building structure, not your possessions or liability. Renters insurance typically costs $15-30 monthly and covers personal property (furniture, electronics, clothing), liability protection if someone is injured in your rental, and additional living expenses if your rental becomes uninhabitable. For example, if a fire destroys your apartment and all your belongings, renters insurance replaces your possessions and pays for temporary housing. It also covers theft of your belongings anywhere in the world. Many policies include coverage for identity theft and credit monitoring. Some landlords require renters insurance, and it's always a smart financial protection for tenants.",
+      "metadata": {
+        "tags": ["renters-insurance", "personal-property", "tenant-protection", "liability-coverage", "affordable"],
+        "complexity": "basic",
+        "audience": "renters"
+      }
+    },
+    {
+      "id": "workers-compensation",
+      "category": "workers-compensation",
+      "title": "Workers' Compensation: Workplace Injury Protection",
+      "content": "Workers' compensation is state-mandated insurance that provides medical care and wage replacement for employees injured on the job, regardless of fault. It covers medical expenses, rehabilitation costs, and typically 60-70% of lost wages during recovery. In exchange for guaranteed benefits, employees generally cannot sue their employers for workplace injuries. For example, if a construction worker falls from scaffolding, workers' comp pays for surgery, physical therapy, and partial wage replacement during recovery. Coverage varies by state but generally includes occupational diseases, repetitive stress injuries, and accidents during work hours. Independent contractors typically aren't covered unless they purchase their own coverage. The system protects both employees (guaranteed benefits) and employers (lawsuit protection) while encouraging workplace safety.",
+      "metadata": {
+        "tags": ["workers-compensation", "workplace-injury", "medical-coverage", "wage-replacement", "state-mandated"],
+        "complexity": "intermediate",
+        "audience": "employees-employers"
+      }
+    },
+    {
+      "id": "business-liability-insurance",
+      "category": "business-insurance",
+      "title": "Business Liability Insurance: Protecting Commercial Enterprises",
+      "content": "Business liability insurance protects companies from claims of bodily injury, property damage, and personal/advertising injury caused by business operations. General liability covers slip-and-fall accidents on business premises, damage caused by products or services, and claims of libel or slander in advertising. Professional liability (errors and omissions) covers claims related to professional services and advice. For example, if a customer slips in your store and breaks their leg, general liability covers medical expenses and legal costs. If you're a consultant and your advice costs a client money, professional liability covers the resulting lawsuit. Product liability protects manufacturers and sellers if their products cause injury. Business liability is essential for protecting business assets and is often required by contracts, leases, and licensing boards.",
+      "metadata": {
+        "tags": ["business-liability", "general-liability", "professional-liability", "commercial-insurance", "business-protection"],
+        "complexity": "advanced",
+        "audience": "business-owners"
+      }
+    },
+    {
+      "id": "cyber-liability-insurance",
+      "category": "cyber-insurance",
+      "title": "Cyber Liability Insurance: Digital Age Protection",
+      "content": "Cyber liability insurance covers costs associated with data breaches, cyberattacks, and technology failures. First-party coverage includes data recovery, business interruption, cyber extortion payments, and notification costs. Third-party coverage protects against lawsuits from customers whose data was compromised. For example, if hackers steal customer credit card information from your e-commerce site, cyber insurance covers notification costs, credit monitoring for affected customers, legal fees, and regulatory fines. Coverage may include forensic investigation, public relations expenses, and regulatory defense costs. With the average data breach costing $4.45 million in 2023, this coverage is increasingly essential for businesses of all sizes. Many policies also cover social engineering fraud, where employees are tricked into transferring money through fake email requests.",
+      "metadata": {
+        "tags": ["cyber-liability", "data-breach", "cyberattack", "business-interruption", "digital-protection"],
+        "complexity": "advanced",
+        "audience": "business-owners"
+      }
+    }
+  ]
+}

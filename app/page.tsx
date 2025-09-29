@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CustomerProfileForm } from "@/components/customer-profile-form"
 import { ChatInterface } from "@/components/chat-interface"
+import { CustomerProfileCard } from "@/components/customer-profile-card"
 
 export interface CustomerProfile {
   location: string
@@ -49,43 +50,16 @@ export default function InsuranceAssistant() {
         {currentView === "profile" && <CustomerProfileForm onSubmit={handleProfileSubmit} />}
 
         {currentView === "chat" && (
-          <div className="space-y-6">
-            {/* Profile Summary */}
-            <Card>
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">Your Coverage Profile</CardTitle>
-                  <Button variant="outline" size="sm" onClick={handleEditProfile}>
-                    Update Profile
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <span className="text-muted-foreground">Location:</span>
-                    <Badge variant="secondary">{customerProfile?.location}</Badge>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-muted-foreground">Age:</span>
-                    <Badge variant="secondary">{customerProfile?.age}</Badge>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-muted-foreground">Coverage Goals:</span>
-                    <div className="flex gap-1">
-                      {customerProfile?.needs.map((need) => (
-                        <Badge key={need} variant="outline">
-                          {need}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Customer Profile Card - Left side on desktop */}
+            <div className="lg:col-span-1">
+              <CustomerProfileCard />
+            </div>
 
-            {/* Chat Interface */}
-            <ChatInterface customerProfile={customerProfile!} />
+            {/* Chat Interface - Right side on desktop */}
+            <div className="lg:col-span-2">
+              <ChatInterface customerProfile={customerProfile!} />
+            </div>
           </div>
         )}
       </main>

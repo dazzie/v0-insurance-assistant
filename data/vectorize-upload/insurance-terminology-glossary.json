@@ -1,0 +1,226 @@
+{
+  "dataset": "insurance-terminology-glossary",
+  "version": "1.0",
+  "entries": [
+    {
+      "id": "deductible",
+      "category": "basic-terms",
+      "title": "Deductible",
+      "content": "A deductible is the amount you pay out-of-pocket before your insurance coverage kicks in. For example, with a $500 auto collision deductible, if you have $3,000 in repair costs, you pay the first $500 and insurance pays the remaining $2,500. Higher deductibles typically mean lower premiums because you're taking on more financial responsibility. Common deductible amounts range from $250 to $2,000. Some coverages like liability don't have deductibles, while others like comprehensive and collision always do. In health insurance, deductibles reset annually, but in property insurance, you pay the deductible per claim. Choose your deductible based on what you can afford to pay in case of a claim.",
+      "metadata": {
+        "tags": ["deductible", "out-of-pocket", "cost-sharing", "claims", "premium-impact"],
+        "complexity": "basic",
+        "audience": "all-insurance-users"
+      }
+    },
+    {
+      "id": "premium",
+      "category": "basic-terms",
+      "title": "Premium",
+      "content": "An insurance premium is the amount you pay for your insurance coverage, typically monthly, quarterly, or annually. Premiums are calculated based on risk factors like your age, driving record, credit score, location, and coverage amounts. For example, a 25-year-old driver with a clean record might pay $1,200 annually for auto insurance, while a 40-year-old with the same coverage might pay $900. Premiums can change at renewal based on claims history, changes in risk factors, or overall market conditions. Paying annually often provides a discount compared to monthly payments. The premium is separate from deductibles and represents the cost of having insurance protection, regardless of whether you file claims.",
+      "metadata": {
+        "tags": ["premium", "insurance-cost", "payment", "risk-factors", "pricing"],
+        "complexity": "basic",
+        "audience": "all-insurance-users"
+      }
+    },
+    {
+      "id": "underwriting",
+      "category": "insurance-process",
+      "title": "Underwriting",
+      "content": "Underwriting is the process insurance companies use to evaluate risk and determine whether to provide coverage and at what price. Underwriters review your application, medical records (for life/health insurance), driving record (for auto), credit report, and other relevant information to assess the likelihood you'll file claims. For example, when applying for life insurance, underwriters might require a medical exam, review your health history, and check if you participate in risky activities like skydiving. The underwriting process can take days to weeks depending on the complexity. Automated underwriting uses algorithms for quick decisions on simple cases, while complex cases require human review. The result is either approval, denial, or approval with modified terms or pricing.",
+      "metadata": {
+        "tags": ["underwriting", "risk-assessment", "application-process", "approval", "pricing-determination"],
+        "complexity": "intermediate",
+        "audience": "insurance-applicants"
+      }
+    },
+    {
+      "id": "actuary",
+      "category": "insurance-professionals",
+      "title": "Actuary",
+      "content": "An actuary is a professional who uses mathematics, statistics, and financial theory to assess risk and uncertainty for insurance companies. Actuaries analyze data to predict the likelihood and cost of future events like accidents, illnesses, or natural disasters. They're responsible for setting insurance rates, ensuring companies have adequate reserves to pay claims, and developing new insurance products. For example, auto insurance actuaries study traffic accident data, vehicle safety ratings, and demographic information to determine how much different drivers should pay for coverage. Actuaries must pass rigorous exams and typically hold professional certifications. Their work is crucial for keeping insurance companies financially stable while ensuring fair pricing for consumers.",
+      "metadata": {
+        "tags": ["actuary", "risk-analysis", "statistics", "rate-setting", "insurance-professional"],
+        "complexity": "advanced",
+        "audience": "insurance-industry"
+      }
+    },
+    {
+      "id": "rider-endorsement",
+      "category": "policy-modifications",
+      "title": "Rider/Endorsement",
+      "content": "A rider (also called an endorsement) is an addition or modification to an insurance policy that changes the coverage, terms, or conditions. Riders can add coverage for specific items, increase limits, or exclude certain risks. For example, a jewelry rider on homeowners insurance provides higher coverage limits for expensive jewelry that exceeds standard policy limits. Common riders include scheduled personal property (specific valuable items), umbrella coverage additions, and exclusions for certain activities. In life insurance, riders might add accidental death benefits or waiver of premium if you become disabled. Riders typically cost extra but allow customization of coverage to meet specific needs. They become part of your policy contract and must be clearly understood before adding them.",
+      "metadata": {
+        "tags": ["rider", "endorsement", "policy-modification", "additional-coverage", "customization"],
+        "complexity": "intermediate",
+        "audience": "policy-holders"
+      }
+    },
+    {
+      "id": "claims-adjuster",
+      "category": "claims-process",
+      "title": "Claims Adjuster",
+      "content": "A claims adjuster is a professional who investigates insurance claims to determine coverage and settlement amounts. Adjusters can work for insurance companies (staff adjusters), as independent contractors (independent adjusters), or represent policyholders (public adjusters). They inspect damage, interview involved parties, review police reports, and apply policy terms to determine what the insurance company should pay. For example, after a house fire, an adjuster visits the property, documents damage, estimates repair costs, and determines coverage based on the policy terms. Good adjusters are fair, thorough, and communicate clearly with policyholders. If you disagree with an adjuster's determination, you can request a second opinion, hire a public adjuster, or invoke your policy's dispute resolution process.",
+      "metadata": {
+        "tags": ["claims-adjuster", "claim-investigation", "settlement", "damage-assessment", "dispute-resolution"],
+        "complexity": "intermediate",
+        "audience": "claim-filers"
+      }
+    },
+    {
+      "id": "actual-cash-value",
+      "category": "valuation-terms",
+      "title": "Actual Cash Value (ACV)",
+      "content": "Actual Cash Value (ACV) is the current worth of your property at the time of loss, calculated as replacement cost minus depreciation. Insurance companies use ACV to settle claims for older items that have lost value over time. For example, if your 5-year-old laptop originally cost $1,000 but similar new laptops now cost $800, and your laptop has depreciated 60%, the ACV would be $320 ($800 - 60% depreciation). ACV settlements are typically lower than replacement cost settlements because they account for wear, tear, and obsolescence. This is common in auto insurance and basic homeowners policies. Understanding whether your policy pays ACV or replacement cost is crucial for determining adequate coverage levels and expected claim payouts.",
+      "metadata": {
+        "tags": ["actual-cash-value", "ACV", "depreciation", "replacement-cost", "claim-settlement"],
+        "complexity": "intermediate",
+        "audience": "policy-holders"
+      }
+    },
+    {
+      "id": "replacement-cost",
+      "category": "valuation-terms",
+      "title": "Replacement Cost",
+      "content": "Replacement cost is the amount needed to replace damaged property with new property of similar kind and quality, without deducting for depreciation. This coverage type provides more comprehensive protection than actual cash value because you receive enough money to buy new items rather than used equivalents. For example, if your 10-year-old roof is damaged by hail, replacement cost coverage pays for a brand new roof, while ACV coverage would subtract depreciation and might only cover 50% of replacement costs. Replacement cost coverage typically costs 10-20% more than ACV coverage but provides significantly better protection. Most experts recommend replacement cost coverage for both dwelling and personal property coverage when financially feasible.",
+      "metadata": {
+        "tags": ["replacement-cost", "new-for-old", "depreciation", "coverage-upgrade", "comprehensive-protection"],
+        "complexity": "intermediate",
+        "audience": "policy-holders"
+      }
+    },
+    {
+      "id": "liability-limits",
+      "category": "coverage-limits",
+      "title": "Liability Limits",
+      "content": "Liability limits represent the maximum amount your insurance will pay for covered liability claims. Auto liability limits are typically expressed as three numbers like 100/300/100, meaning $100,000 per person for bodily injury, $300,000 per accident for bodily injury, and $100,000 per accident for property damage. For example, if you cause an accident injuring three people with medical bills of $80,000, $150,000, and $200,000, insurance would pay $80,000, $100,000 (the per-person limit), and $100,000 respectively, leaving you responsible for $200,000 out-of-pocket. Higher limits cost more but provide crucial asset protection. Experts recommend liability limits at least equal to your net worth, with many suggesting $500,000-$1,000,000 minimum coverage given today's medical and legal costs.",
+      "metadata": {
+        "tags": ["liability-limits", "coverage-amounts", "asset-protection", "per-person-limits", "per-accident-limits"],
+        "complexity": "intermediate",
+        "audience": "liability-insurance-holders"
+      }
+    },
+    {
+      "id": "exclusions",
+      "category": "policy-terms",
+      "title": "Exclusions",
+      "content": "Exclusions are specific conditions, circumstances, or types of losses that an insurance policy does not cover. Every insurance policy contains exclusions to define the boundaries of coverage and control costs. Common homeowners exclusions include floods, earthquakes, war, nuclear hazards, and intentional damage. Auto insurance typically excludes racing, commercial use, and damage from driving under the influence. For example, if your basement floods from a burst pipe, it's covered, but if it floods from rising river water, it's excluded unless you have separate flood insurance. Reading and understanding exclusions is crucial because they represent gaps in your coverage that might require additional policies or riders. Exclusions are clearly listed in your policy documents and should be reviewed carefully.",
+      "metadata": {
+        "tags": ["exclusions", "coverage-gaps", "policy-limitations", "uncovered-perils", "additional-coverage-needed"],
+        "complexity": "intermediate",
+        "audience": "policy-holders"
+      }
+    },
+    {
+      "id": "declarations-page",
+      "category": "policy-documents",
+      "title": "Declarations Page",
+      "content": "The declarations page (or 'dec page') is a summary document that outlines the key details of your insurance policy including coverage types, limits, deductibles, premium costs, and policy period. It's typically the first page of your policy and provides a quick overview of your coverage. For example, an auto insurance dec page shows your liability limits (250/500/100), comprehensive deductible ($500), collision deductible ($1,000), and annual premium ($1,200). The dec page also lists covered vehicles, drivers, and the policy effective dates. This document is essential for understanding your coverage at a glance and is often required when registering vehicles, getting license plates, or proving insurance coverage. Keep your current dec page easily accessible in your vehicle and home.",
+      "metadata": {
+        "tags": ["declarations-page", "policy-summary", "coverage-overview", "policy-details", "proof-of-insurance"],
+        "complexity": "basic",
+        "audience": "policy-holders"
+      }
+    },
+    {
+      "id": "peril",
+      "category": "risk-terms",
+      "title": "Peril",
+      "content": "A peril is a specific risk or cause of loss covered by an insurance policy, such as fire, theft, windstorm, or collision. Insurance policies either cover named perils (specifically listed risks) or all risks except those specifically excluded. For example, a basic homeowners policy might cover named perils like fire, lightning, windstorm, hail, theft, and vandalism. An 'all risks' or 'open perils' policy covers any cause of loss except those specifically excluded, providing broader protection. Understanding which perils your policy covers helps you identify coverage gaps. For instance, if your policy covers windstorm but excludes flood, you'd be covered for wind damage but not water damage from the same storm. Review your policy's covered perils to ensure adequate protection for risks in your area.",
+      "metadata": {
+        "tags": ["peril", "covered-risks", "named-perils", "all-risks", "cause-of-loss"],
+        "complexity": "intermediate",
+        "audience": "policy-holders"
+      }
+    },
+    {
+      "id": "subrogation",
+      "category": "claims-process",
+      "title": "Subrogation",
+      "content": "Subrogation is the insurance company's right to pursue recovery from the party responsible for your loss after paying your claim. Essentially, your insurance company steps into your shoes to seek reimbursement from the at-fault party or their insurance. For example, if another driver hits your car and your insurance pays for repairs under your collision coverage, your insurer can then seek reimbursement from the at-fault driver's insurance company. If successful, you may get your deductible back. Subrogation helps keep insurance costs down by ensuring responsible parties ultimately pay for damages they cause. You typically must cooperate with subrogation efforts, including providing statements and documents. Some policies include 'waiver of subrogation' clauses, which prevent the insurer from pursuing recovery against specific parties.",
+      "metadata": {
+        "tags": ["subrogation", "recovery", "at-fault-party", "reimbursement", "deductible-recovery"],
+        "complexity": "advanced",
+        "audience": "claim-participants"
+      }
+    },
+    {
+      "id": "coordination-of-benefits",
+      "category": "multiple-coverage",
+      "title": "Coordination of Benefits",
+      "content": "Coordination of benefits occurs when you have coverage under multiple insurance policies for the same loss. Insurance companies coordinate to determine which policy pays first (primary) and which pays second (secondary), preventing you from collecting more than 100% of your actual losses. For example, if you're injured in an auto accident and have both auto medical payments coverage and health insurance, the policies coordinate to cover your medical bills without duplication of benefits. The primary insurer pays first up to its limits, then the secondary insurer covers remaining eligible expenses up to its limits. Common coordination situations include spouse's employer health plans, auto accidents involving medical coverage, and workers' compensation with health insurance. Understanding coordination helps you maximize benefits while complying with policy terms.",
+      "metadata": {
+        "tags": ["coordination-of-benefits", "multiple-coverage", "primary-secondary", "duplicate-coverage", "benefit-maximization"],
+        "complexity": "advanced",
+        "audience": "multiple-policy-holders"
+      }
+    },
+    {
+      "id": "bad-faith",
+      "category": "legal-terms",
+      "title": "Bad Faith",
+      "content": "Bad faith refers to an insurance company's unreasonable denial, delay, or underpayment of a valid claim, or failure to properly investigate a claim. Insurance companies have a legal duty to act in good faith and deal fairly with policyholders. Examples of bad faith include denying a claim without reasonable investigation, delaying payment unreasonably, misrepresenting policy terms, or offering settlements far below what a claim is worth. For instance, if an insurer denies a clearly covered water damage claim without sending an adjuster to inspect the damage, this could constitute bad faith. Remedies for bad faith can include payment of the original claim plus penalties, attorney fees, and punitive damages. Each state has different bad faith laws and remedies. If you suspect bad faith, document all communications and consider consulting an attorney.",
+      "metadata": {
+        "tags": ["bad-faith", "claim-denial", "unreasonable-delay", "legal-remedy", "punitive-damages"],
+        "complexity": "advanced",
+        "audience": "claim-disputes"
+      }
+    },
+    {
+      "id": "reservation-of-rights",
+      "category": "legal-terms",
+      "title": "Reservation of Rights",
+      "content": "A reservation of rights letter is sent by an insurance company when they're investigating a claim but want to preserve their right to deny coverage later if they discover the claim isn't covered. This allows the insurer to continue investigating and potentially defending you while keeping their options open. For example, if you're sued and there's a question about whether the incident occurred during the policy period, your insurer might send a reservation of rights letter, then investigate and defend the lawsuit while reserving the right to withdraw coverage if they determine the incident occurred outside the policy period. This protects both parties - you get immediate defense while the coverage question is resolved, and the insurer doesn't waive their right to deny coverage. If you receive such a letter, consider consulting an attorney to understand your rights.",
+      "metadata": {
+        "tags": ["reservation-of-rights", "coverage-investigation", "claim-defense", "coverage-dispute", "legal-protection"],
+        "complexity": "advanced",
+        "audience": "lawsuit-defendants"
+      }
+    },
+    {
+      "id": "salvage",
+      "category": "claims-settlement",
+      "title": "Salvage",
+      "content": "Salvage refers to damaged property that retains some value after a total loss claim. When an insurance company pays a total loss claim, they typically take ownership of the salvage and sell it to recover some of their payout. For example, if your car is totaled in an accident and the insurance company pays you $20,000, they take ownership of the damaged vehicle and might sell it to a salvage yard for $3,000, effectively reducing their net loss to $17,000. In some cases, you can buy back the salvage from your insurance company if you want to keep the damaged property. Salvage values are deducted from claim settlements in actual cash value policies. Understanding salvage rights is important when deciding whether to accept a total loss settlement or repair damaged property.",
+      "metadata": {
+        "tags": ["salvage", "total-loss", "recovery-value", "buyback-option", "claim-settlement"],
+        "complexity": "intermediate",
+        "audience": "total-loss-claimants"
+      }
+    },
+    {
+      "id": "loss-ratio",
+      "category": "industry-metrics",
+      "title": "Loss Ratio",
+      "content": "Loss ratio is a key insurance industry metric that measures the percentage of premiums paid out in claims. It's calculated by dividing total claims paid by total premiums collected. For example, if an insurance company collects $100 million in premiums and pays $70 million in claims, their loss ratio is 70%. A loss ratio below 100% means the company collected more in premiums than they paid in claims, while above 100% means they paid more in claims than they collected. Loss ratios help insurers determine if their pricing is adequate and influence future rate changes. Combined with expense ratios (operating costs), loss ratios indicate an insurer's profitability. Consumers can research insurers' loss ratios to understand their financial stability and claims-paying practices.",
+      "metadata": {
+        "tags": ["loss-ratio", "industry-metric", "profitability", "rate-adequacy", "financial-analysis"],
+        "complexity": "advanced",
+        "audience": "industry-analysts"
+      }
+    },
+    {
+      "id": "grace-period",
+      "category": "policy-administration",
+      "title": "Grace Period",
+      "content": "A grace period is a specified time after a premium due date during which coverage continues even though the premium payment is late. Grace periods vary by insurance type and state regulations but typically range from 10-31 days. For example, if your auto insurance premium is due on the 15th and you have a 10-day grace period, your coverage continues until the 25th even if you haven't paid. However, if you have an accident during the grace period and still haven't paid, the claim might be denied. Life insurance often has longer grace periods (30-31 days) and different rules. Some policies require reinstatement procedures if payment isn't made during the grace period. Understanding your grace period helps avoid coverage lapses, but it's always best to pay premiums on time to ensure uninterrupted protection.",
+      "metadata": {
+        "tags": ["grace-period", "late-payment", "coverage-continuation", "policy-lapse", "premium-payment"],
+        "complexity": "basic",
+        "audience": "policy-holders"
+      }
+    },
+    {
+      "id": "moral-hazard",
+      "category": "risk-concepts",
+      "title": "Moral Hazard",
+      "content": "Moral hazard occurs when having insurance changes your behavior in ways that increase the likelihood or severity of losses. The concept suggests that people may take greater risks or be less careful when they know they're protected by insurance. For example, someone with comprehensive auto coverage might be less diligent about parking in safe areas, or a business owner with fire insurance might be less careful about fire prevention. Insurance companies address moral hazard through various methods including deductibles (ensuring you have skin in the game), policy exclusions for intentional acts, and risk assessment during underwriting. Understanding moral hazard helps explain why insurance companies use deductibles and why premiums might increase after claims, even for non-fault incidents. It's an important concept in insurance economics and risk management.",
+      "metadata": {
+        "tags": ["moral-hazard", "behavioral-risk", "risk-taking", "insurance-economics", "risk-management"],
+        "complexity": "advanced",
+        "audience": "risk-managers"
+      }
+    }
+  ]
+}

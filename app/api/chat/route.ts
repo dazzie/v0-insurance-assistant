@@ -2,6 +2,7 @@ import OpenAI from "openai"
 import { getCarriersByState, getTopCarriers, searchCarriers, type InsuranceCarrier } from "@/lib/carrier-database"
 import { AUTO_INSURANCE_QUESTIONS, STATE_MINIMUM_COVERAGE } from "@/lib/insurance-needs-analysis"
 import { buildQuoteProfile, getPromptsForMissingInfo, formatProfileSummary } from "@/lib/quote-profile"
+import { profileManager, extractProfileFromConversation } from "@/lib/customer-profile"
 
 // Initialize OpenAI client
 const openai = new OpenAI({
@@ -12,6 +13,12 @@ export async function POST(req: Request) {
   const { messages, customerProfile } = await req.json()
 
   console.log("[v0] API called with messages:", messages.length, "customer profile:", customerProfile)
+
+  // Extract and save profile information from conversation
+  const extractedProfile = extractProfileFromConversation(messages)
+  if (Object.keys(extractedProfile).length > 0) {
+    profileManager.updateProfile(extractedProfile)
+  }
 
   // Check if mock mode is enabled
   const useMock = process.env.USE_MOCK_RESPONSES === 'true' || !process.env.OPENAI_API_KEY
@@ -114,9 +121,14 @@ export async function POST(req: Request) {
 }
 
 function generateSystemPrompt(customerProfile: any, messages: any[] = []): string {
-  const location = customerProfile?.location || "Not specified"
-  const age = customerProfile?.age || "Not specified"
-  const needs = customerProfile?.needs || []
+  // Load saved customer profile and merge with current profile
+  const savedProfile = profileManager.loadProfile() || {}
+  const mergedProfile = { ...savedProfile, ...customerProfile }
+
+  const location = mergedProfile?.location || mergedProfile?.city || mergedProfile?.state || "Not specified"
+  const age = mergedProfile?.age || "Not specified"
+  const needs = mergedProfile?.needs ||
+    (mergedProfile?.insuranceType ? [mergedProfile.insuranceType] : [])
   
   const state = extractStateFromLocation(location)
   const relevantCarriers = state ? getCarriersByState(state) : getTopCarriers(6)
@@ -306,6 +318,11 @@ Customer Profile:
 - Location: ${location}
 - Age: ${age}
 - Insurance Needs: ${needs.join(", ") || "To be determined"}
+${mergedProfile?.firstName ? `- Name: ${mergedProfile.firstName} ${mergedProfile.lastName || ''}` : ''}
+${mergedProfile?.email ? `- Email: ${mergedProfile.email}` : ''}
+${mergedProfile?.phone ? `- Phone: ${mergedProfile.phone}` : ''}
+${mergedProfile?.maritalStatus ? `- Marital Status: ${mergedProfile.maritalStatus}` : ''}
+${mergedProfile?.homeOwnership ? `- Home Ownership: ${mergedProfile.homeOwnership}` : ''}
 
 Top Carriers in their area:
 ${carrierInfo}

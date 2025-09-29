@@ -10,6 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { FormattedResponse } from "@/components/formatted-response"
 import { SuggestedPrompts } from "@/components/suggested-prompts"
 import { QuoteProfileDisplay } from "@/components/quote-profile-display"
+import { QuoteInformationGatherer } from "@/components/quote-information-gatherer"
 import { buildQuoteProfile } from "@/lib/quote-profile"
 import type { CustomerProfile } from "@/app/page"
 
@@ -46,6 +47,8 @@ Think of me as your trusted advisor who will help you navigate coverage options,
   ])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [showInformationGatherer, setShowInformationGatherer] = useState(false)
+  const [gatheredInformation, setGatheredInformation] = useState<any>(null)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   
   // Build quote profile from messages for auto insurance
@@ -63,6 +66,95 @@ Think of me as your trusted advisor who will help you navigate coverage options,
 
   const handlePromptClick = (promptText: string) => {
     setInput(promptText)
+  }
+
+  const handleStartInformationGathering = () => {
+    setShowInformationGatherer(true)
+  }
+
+  const handleInformationComplete = (information: any) => {
+    setGatheredInformation(information)
+    setShowInformationGatherer(false)
+    
+    // Create a message with the gathered information
+    const informationMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: `I've provided the following information: ${JSON.stringify(information, null, 2)}`,
+      createdAt: new Date(),
+    }
+    
+    setMessages(prev => [...prev, informationMessage])
+    
+    // Send to API for processing
+    handleSubmitWithInformation(information)
+  }
+
+  const handleInformationCancel = () => {
+    setShowInformationGatherer(false)
+  }
+
+  const handleSubmitWithInformation = async (information: any) => {
+    setIsLoading(true)
+    
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [...messages, {
+            role: "user",
+            content: `I've provided detailed information: ${JSON.stringify(information)}`
+          }].map((msg) => ({
+            role: msg.role,
+            content: msg.content,
+          })),
+          customerProfile: { ...customerProfile, ...information },
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`)
+      }
+
+      const reader = response.body?.getReader()
+      const decoder = new TextDecoder()
+      let assistantContent = ""
+
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: "",
+        createdAt: new Date(),
+      }
+      setMessages((prev) => [...prev, assistantMessage])
+
+      if (reader) {
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+
+            const chunk = decoder.decode(value, { stream: true })
+            assistantContent += chunk
+
+            if (assistantContent.trim()) {
+              setMessages((prev) =>
+                prev.map((msg) => (msg.id === assistantMessage.id ? { ...msg, content: assistantContent } : msg)),
+              )
+            }
+          }
+        } finally {
+          reader.releaseLock()
+        }
+      }
+    } catch (error) {
+      console.error("[v0] Chat error:", error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -198,6 +290,19 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
   }
 
 
+  // Show information gatherer if needed
+  if (showInformationGatherer) {
+    return (
+      <div className="space-y-4">
+        <QuoteInformationGatherer
+          insuranceType={customerProfile.needs[0] || 'auto'}
+          onComplete={handleInformationComplete}
+          onCancel={handleInformationCancel}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-4">
       {/* Quote Profile Display - Only for Auto Insurance */}
@@ -239,7 +344,7 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
                 </div>
                 {message.role === "user" && (
                   <div className="flex items-center justify-center w-8 h-8 bg-secondary rounded-full flex-shrink-0">
-                    <span className="text-secondary-foreground text-xs font-bold">U</span>
+                    <span className="text-secondary-foreground text-xs font-bold">👤</span>
                   </div>
                 )}
               </div>
@@ -272,6 +377,7 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
           messages={messages}
           customerProfile={customerProfile}
           onPromptClick={handlePromptClick}
+          onStartInformationGathering={handleStartInformationGathering}
           isLoading={isLoading}
         />
 

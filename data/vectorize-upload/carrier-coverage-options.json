@@ -1,0 +1,171 @@
+{
+  "dataset": "carrier-coverage-options",
+  "version": "1.0",
+  "entries": [
+    {
+      "id": "geico-coverage-options",
+      "category": "carrier-options",
+      "title": "GEICO Coverage Options and Unique Features",
+      "content": "GEICO offers comprehensive coverage options with technology-focused delivery. Standard coverages: Liability up to $500k/$500k, comprehensive and collision with $0 deductible option, uninsured motorist matching liability limits. Unique features: Mechanical breakdown insurance (MBI) alternative to extended warranty, rideshare insurance for Uber/Lyft drivers, Emergency road service includes towing, jump-starts, lockouts. Discounts available: Multi-policy (up to 25%), military/federal employee (up to 15%), good driver (26% average), anti-theft devices (23%), defensive driving course (10%). Optional coverages: Rental reimbursement up to $50/day, Emergency roadside assistance $14/year, Personal umbrella policy up to $10M. Claims features: 24/7 claims service, GEICO ARX photo inspection, Express glass repair, guaranteed repairs at GEICO-approved shops. Digital capabilities: Mobile app highest-rated, virtual assistant Kate, online policy management, digital ID cards. Customer profile best fit: Tech-savvy, self-service preference, price-conscious, military/government employees. Limitations: Limited local agent support, less competitive for high-risk drivers.",
+      "metadata": {
+        "tags": ["geico", "coverage-options", "discounts", "digital", "military"],
+        "complexity": "intermediate",
+        "audience": "geico-shoppers"
+      }
+    },
+    {
+      "id": "state-farm-coverage-suite",
+      "category": "carrier-options",
+      "title": "State Farm Comprehensive Coverage Portfolio",
+      "content": "State Farm provides extensive coverage through exclusive agent network. Auto coverage options: Liability up to $1M/$1M, comprehensive/collision with disappearing deductible, medical payments up to $100k, rental coverage up to $100/day. Unique programs: Drive Safe & Save telematics (up to 30% discount), Steer Clear young driver program, accident forgiveness first accident, rideshare coverage available. Home insurance: Guaranteed replacement cost coverage, identity restoration coverage included, home systems protection available, water backup standard in many states. Life insurance products: Term, whole, universal life options, children's life insurance, mortgage protection insurance. Discounts structure: Multiple line (up to 20%), good driving (up to 20%), good student (up to 25%), anti-theft (up to 15%), defensive driving (up to 10%). Claims advantages: Pocket Agent for claims, Select Service repair shops, lifetime guarantee on repairs, rental car concierge service. Financial services: Banking products available, investment services, retirement planning. Best for: Families wanting one-stop shop, relationship-focused customers, bundling multiple products. Limitations: Often not cheapest option, requires agent interaction.",
+      "metadata": {
+        "tags": ["state-farm", "full-service", "bundling", "agent-network", "drive-safe"],
+        "complexity": "intermediate",
+        "audience": "comprehensive-shoppers"
+      }
+    },
+    {
+      "id": "progressive-innovation-coverages",
+      "category": "carrier-options",
+      "title": "Progressive Innovative Coverage Solutions",
+      "content": "Progressive pioneers unique coverage options and pricing tools. Signature features: Name Your Price Tool customizes coverage to budget, Snapshot usage-based insurance saves up to 30%, comparison shopping shows competitor rates, deductible savings bank earns $50 off deductible annually. Coverage innovations: Gap insurance for leased/financed vehicles, custom parts and equipment value coverage, pet injury coverage included, loan/lease payoff coverage. Unique options: Rideshare insurance seamless switching personal/commercial, rental car coverage for breakdowns too, roadside assistance includes $15 food delivery, carried contents coverage. Discounts available: Multi-policy (up to 12%), multi-car (up to 10%), continuous insurance (up to 14%), homeowner (average 5%), Snapshot (average $145/year). Claims features: Immediate Response Vehicles on-scene, photo estimate process, concierge level repair service, guaranteed repairs. Commercial expertise: Small business auto specialists, commercial rideshare leaders, fleet management tools. Digital tools: Progressive app with policy management, claims tracker real-time, coverage comparison tool. Best for: Price shoppers, high-risk drivers, usage-based discount seekers, rideshare drivers. Limitations: Customer service varies, multi-policy discounts lower than competitors.",
+      "metadata": {
+        "tags": ["progressive", "innovation", "snapshot", "rideshare", "name-your-price"],
+        "complexity": "intermediate",
+        "audience": "price-conscious"
+      }
+    },
+    {
+      "id": "allstate-protection-packages",
+      "category": "carrier-options",
+      "title": "Allstate Protection Packages and Rewards",
+      "content": "Allstate emphasizes comprehensive protection with reward programs. Core protections: Your Choice Auto with accident forgiveness, safe driving bonus check, deductible rewards, new car replacement. Unique claim features: Claim Satisfaction Guarantee, Claim RateGuard (rates don't increase), QuickFoto Claim for fast settlement, good hands rescue for roadside. Coverage enhancements: Sound system coverage up to $1,500, custom equipment up to $4,000, trip interruption coverage $600, identity theft restoration. Drivewise program: Telematics savings up to 40%, immediate sign-up bonus 10%, safe driving cash back, crash detection with emergency response. Home integration: House and Home package bundles, HostAdvantage for Airbnb hosts, yard and garden coverage, green improvement coverage. Rewards program: Allstate Rewards points for safe driving, redeemable for merchandise, gift cards, travel, donations. Discounts: Multi-policy (up to 25%), early signing (10%), eSmart discount (7%), good payer, senior citizen. Digital tools: Allstate mobile app comprehensive, digital locker for documentation, virtual assist Allie. Best for: Safety-conscious drivers, reward seekers, comprehensive coverage needs. Limitations: Higher premiums for minimum coverage, agent-dependent service quality.",
+      "metadata": {
+        "tags": ["allstate", "rewards", "drivewise", "protection-packages", "accident-forgiveness"],
+        "complexity": "intermediate",
+        "audience": "safety-focused"
+      }
+    },
+    {
+      "id": "usaa-military-exclusive",
+      "category": "carrier-options",
+      "title": "USAA Military-Exclusive Benefits and Coverage",
+      "content": "USAA exclusively serves military members with specialized coverage. Eligibility: Active duty, National Guard, Reserve, veterans, cadets, midshipmen, eligible family members. Deployment benefits: Coverage maintained during deployment, reduced rates for stored vehicles, overseas coverage included, uniform coverage standard. Auto advantages: Accident forgiveness after 5 years, annual mileage discount for low use, glass deductible buyback, returning from deployment discount. Unique military features: Valuable personal property for military gear, deployment-friendly policies, PCS move coverage, overseas liability coverage. Life insurance: No war clause restrictions, deployment doesn't affect rates, SGLI supplement options, veteran group life conversion. Home specialties: Earthquake/flood at competitive rates, military clause for breaking lease, uniform coverage, temporary military lodging. Claims excellence: Highest satisfaction ratings, 24/7 claims service, deployment claim handling, catastrophe response teams. Financial integration: Banking, investments, retirement, all integrated, financial counseling included. Discounts: Multi-vehicle (up to 10%), defensive driver, good student, driver training, stored vehicle (60%). Best for: All military-eligible members, deployment situations, integrated financial needs. No limitations for eligible members.",
+      "metadata": {
+        "tags": ["usaa", "military", "deployment", "exclusive", "integrated-services"],
+        "complexity": "basic",
+        "audience": "military-members"
+      }
+    },
+    {
+      "id": "liberty-mutual-customization",
+      "category": "carrier-options",
+      "title": "Liberty Mutual Customizable Coverage Options",
+      "content": "Liberty Mutual emphasizes customization and flexibility. Customization options: Build your own policy online, adjust coverage components individually, deductible options from $0-2500, coverage limits fully flexible. Unique coverages: Better car replacement (new car if totaled), accident forgiveness first accident, new graduate discount, teacher/educator special rates. RightTrack program: Usage-based discount up to 30%, 90-day monitoring period, app-based or plugin device, immediate 5% enrollment discount. Optional add-ons: Roadside assistance with jump starts and lockout, rental car coverage up to $100/day, comprehensive deductible waiver, pet injury coverage. Home insurance: Inflation protection automatic increases, better home replacement guarantee, liberty green home discount, water backup standard. Bundle benefits: Multi-policy up to 20% savings, single deductible for events affecting home and auto, simplified billing. Life options: Term life to age 95, simplified issue available, accelerated death benefits, conversion options. Claims: 24/7 hotline, guaranteed repairs, preferred repair shops, diminishing deductible. Best for: Customization seekers, teachers/educators, bundling opportunities, flexibility needed. Limitations: Rates vary significantly by location, less competitive in some states.",
+      "metadata": {
+        "tags": ["liberty-mutual", "customization", "righttrack", "teacher-discount", "better-car-replacement"],
+        "complexity": "intermediate",
+        "audience": "customization-seekers"
+      }
+    },
+    {
+      "id": "farmers-specialized-coverage",
+      "category": "carrier-options",
+      "title": "Farmers Insurance Specialized Coverage Solutions",
+      "content": "Farmers excels in specialized and unique coverage situations. Unique vehicles: Classic car agreed value coverage, motorcycle year-round coverage, RV full-timer coverage, boat agreed value options. Rideshare specific: Coverage during all periods, switch between personal/commercial, gap coverage included, higher liability available. Smart home discounts: Connected home devices 15% off, water leak sensors 10%, security systems 20%, smart thermostats 5%. Signal telematics: App-based program, up to 30% discount, 15% participation discount, trip feedback provided. Business packages: Artisan contractors coverage, in-home business endorsements, commercial auto diverse options, professional liability add-ons. Specialty home: High-value home coverage, collectors items scheduling, home-based business, green rebuilding coverage. Life products: Term, whole, universal options, final expense insurance, mortgage protection, children's policies. Claims features: Catastrophe response team, 24/7 claims service, HelpPoint claims advocacy, guaranteed replacement cost. Discount structure: Multi-line up to 25%, homeowner 5%, good driver 15%, distant student 10%. Best for: Unique vehicle owners, home business operators, rideshare drivers, specialty needs. Limitations: Limited availability in some states, premiums above average.",
+      "metadata": {
+        "tags": ["farmers", "specialty-coverage", "rideshare", "signal", "unique-vehicles"],
+        "complexity": "advanced",
+        "audience": "specialty-needs"
+      }
+    },
+    {
+      "id": "nationwide-vanishing-deductible",
+      "category": "carrier-options",
+      "title": "Nationwide On Your Side Coverage Features",
+      "content": "Nationwide offers unique diminishing benefits and family focus. Signature features: Vanishing deductible reduces $100/year for safe driving, accident forgiveness guaranteed, On Your Side review annual check-in, SmartRide usage discount up to 40%. Family programs: Family plan multi-car discount, teen driver program with app, good student up to 15%, distant student savings. Farm/ranch specialty: Leading farm insurer, AgriChoice coverage, equine coverage available, crop insurance offered. Coverage options: Gap coverage for new vehicles, roadside assistance upgraded versions, pet injury up to $1,000, custom equipment to $4,000. SmartMiles: Pay-per-mile option, base rate plus mileage, good for low-mileage drivers, tracked via device. Brand New Belongings: Home insurance replacement at today's prices, not depreciated value, unique in industry. Life insurance: Term and permanent options, long-term care riders, chronic illness benefits, living benefits. Affinity discounts: Employer groups common, association memberships, alumni organizations, union members. Claims: On Your Side Claims Service, guaranteed repairs, Express Response catastrophe. Best for: Families, farm/ranch owners, low-mileage drivers, employer groups. Limitations: Not available everywhere, agent quality varies.",
+      "metadata": {
+        "tags": ["nationwide", "vanishing-deductible", "smartride", "farm-insurance", "family-plan"],
+        "complexity": "intermediate",
+        "audience": "families"
+      }
+    },
+    {
+      "id": "travelers-premier-coverage",
+      "category": "carrier-options",
+      "title": "Travelers Premier Coverage and IntelliDrive",
+      "content": "Travelers focuses on premier coverage with stability emphasis. Premier new car: Replacement with new car for 5 years, better car replacement option, gap coverage included, loan/lease payoff. IntelliDrive program: 90-day monitoring, up to 30% discount, 10% enrollment discount, app or device based. Responsible driver plan: Minor violation forgiveness, first accident forgiveness included, good driver rewards, claim-free dividend. Coverage extensions: Extended transportation expenses, worldwide liability coverage, new car replacement 5 years, identity fraud coverage. Home advantages: Claim forgiveness first claim, guaranteed replacement cost, personal articles floater, water backup included many states. Umbrella excellence: Up to $10M coverage, worldwide coverage included, defense coverage included, personal injury protection. Green benefits: Hybrid vehicle discount 10%, green home discount 5%, solar panel coverage, green rebuilding option. Claim features: Xpress Estimate photo claims, preferred contractor network, guaranteed repair warranty, catastrophe response. Discount offerings: Multi-policy 13%, early quote 7%, continuous insurance 10%, IntelliDrive average 16%. Best for: Established drivers, premier coverage seekers, new car owners, stable insurance needs. Limitations: Less competitive for young drivers, limited high-risk appetite.",
+      "metadata": {
+        "tags": ["travelers", "intellidrive", "premier-coverage", "new-car", "stability"],
+        "complexity": "intermediate",
+        "audience": "premier-seekers"
+      }
+    },
+    {
+      "id": "erie-rate-lock-feature",
+      "category": "carrier-options",
+      "title": "Erie Insurance Rate Lock and Service Excellence",
+      "content": "Erie Insurance provides unique rate stability in 12 states plus DC. Signature Erie Rate Lock: Rates won't increase from claims/violations, as long as customer with Erie, applies after qualifying period, unique in industry. Coverage features: Accident forgiveness first incident, diminishing deductible program, roadside assistance included, pet injury coverage. Auto coverage extras: Transportation network coverage, custom equipment included, new auto security discount, original parts guarantee. Home specialties: Guaranteed replacement cost, no depreciation on roofs, service line coverage, identity theft included. Claims service: Highest satisfaction ratings, local adjuster preference, contractor referral network, ErieSecure home monitoring. Life insurance: Term and permanent available, accelerated death benefit, children's insurance rider, simplified underwriting. Multi-policy rewards: Up to 25% bundling discount, single deductible option, simplified billing, relationship pricing. Customer focus: Annual policy review standard, local agent relationships, community involvement emphasis, 97% retention rate. Geographic limits: Only 12 states plus DC, OH, PA, NY, MD strongest. Best for: Long-term relationship seekers, stability preference, service over price. Limited availability biggest drawback.",
+      "metadata": {
+        "tags": ["erie", "rate-lock", "service-excellence", "regional", "stability"],
+        "complexity": "intermediate",
+        "audience": "relationship-focused"
+      }
+    },
+    {
+      "id": "auto-owners-life-home-auto",
+      "category": "carrier-options",
+      "title": "Auto-Owners Life Home Auto Plus Package",
+      "content": "Auto-Owners excels with multi-line discounts and stability. Life Home Auto Plus: Combine all three for maximum 20%+ discount, simplified underwriting for life, single agent relationship, premium stability. Auto coverages: Accident waiver endorsement, diminishing deductible, roadside assistance, rental coverage standard. Home protection: Guaranteed replacement cost, personal property replacement, water backup standard, identity theft protection. Life integration: Term life simplified issue, whole life options, mortgage protection, estate planning focus. Claims reputation: A++ financial stability, local claim handling, preferred contractor network, lifetime repair guarantee. No direct sales: Only through independent agents, relationship focus, local service emphasis, personal touch maintained. Discount structure: Multi-line significant, paid-in-full, paperless, claim-free increasing yearly. Limited marketing: Word-of-mouth growth, agent relationships crucial, community focus, conservative approach. Geographic presence: 26 states only, stronger in Midwest, expanding slowly, selective growth. Best for: Multiple policy needs, relationship value, long-term stability, conservative approach preference. Limitations: No online quotes, limited states, agent dependent.",
+      "metadata": {
+        "tags": ["auto-owners", "life-home-auto", "multi-line", "stability", "independent-agents"],
+        "complexity": "intermediate",
+        "audience": "bundle-buyers"
+      }
+    },
+    {
+      "id": "hartford-aarp-program",
+      "category": "carrier-options",
+      "title": "The Hartford AARP Auto Insurance Program",
+      "content": "The Hartford specializes in 50+ drivers through AARP partnership. AARP advantages: Exclusive rates for members, lifetime renewability guarantee, RecoverCare after accidents, disappearing deductible. RecoverCare unique: Home assistance after injury, transportation coordination, meal delivery coverage, house cleaning help. First accident forgiveness: Included at no charge, protects rates, immediate availability, no waiting period. Disappearing deductible: Reduces $50 annually, maximum $500 reduction, for claim-free years, resets after claim. Coverage extras: New car replacement 15 months, full glass coverage, pet injury coverage, personal property coverage. Home insurance: AARP members eligible, special senior considerations, lifetime renewability, simplified claims. Claims advantages: 24/7 dedicated line, priority handling for seniors, simplified process, local adjusters. Discounts available: Multi-policy, vehicle safety, defensive driving 10%, paid-in-full, paperless. Age considerations: No rate increase for age alone, senior-specific benefits, understanding of fixed incomes. Best for: AARP members 50+, seeking stability, lifetime protection important, service focus. Limitations: Must maintain AARP membership, not always cheapest.",
+      "metadata": {
+        "tags": ["hartford", "aarp", "senior", "recovercare", "lifetime-renewal"],
+        "complexity": "intermediate",
+        "audience": "seniors-50-plus"
+      }
+    },
+    {
+      "id": "claims-satisfaction-comparison",
+      "category": "claims-performance",
+      "title": "Insurance Carrier Claims Satisfaction Rankings",
+      "content": "Claims satisfaction varies significantly among major carriers based on J.D. Power and Consumer Reports data. Top performers: USAA consistently #1 (880/1000 score), Erie Insurance #2 (875/1000), Auto-Owners #3 (868/1000), Amica often top 5. Customer experience leaders: USAA 24-hour average first contact, Erie 97% satisfaction rate, State Farm extensive network advantage, GEICO digital claims excel. Speed metrics: Progressive IRV immediate response, GEICO photo estimate same day, Liberty Mutual 3-day average settlement, Allstate QuickFoto 2-day process. Digital innovation: GEICO ARX augmented reality, Progressive video streaming adjusters, State Farm Pocket Agent, Allstate virtual assist. Problem areas: Resolution time average 30 days industry-wide, total loss valuations disputed 25% of time, parts delays increasing, labor shortages affecting repairs. Communication ratings: USAA proactive updates highest, State Farm agent involvement helps, Progressive tracker transparency, GEICO digital updates constant. Repair networks: State Farm Select Service largest, Allstate Good Hands network, Progressive concierge service, GEICO ARX partnerships. Catastrophe response: State Farm mobile units fastest, Allstate National Catastrophe Team, Travelers first response, USAA military expertise. Customer pain points: Depreciation disputes common, rental car limits insufficient, supplement requests delays, adjuster availability varies.",
+      "metadata": {
+        "tags": ["claims-satisfaction", "rankings", "performance", "customer-experience", "response-time"],
+        "complexity": "intermediate",
+        "audience": "comparison-shoppers"
+      }
+    },
+    {
+      "id": "telematics-programs-comparison",
+      "category": "technology-programs",
+      "title": "Usage-Based Insurance Programs Comparison",
+      "content": "Telematics programs vary significantly in features and savings potential. Progressive Snapshot: 90-day monitoring, up to 30% discount, app or device, $145 average savings, no rate increases most states. State Farm Drive Safe & Save: Continuous monitoring, up to 30% discount, app-based primarily, combines with other discounts. Allstate Drivewise: Continuous program, up to 40% potential, cash back rewards, immediate 10% signup, crash detection. Liberty Mutual RightTrack: 90-day program, up to 30% savings, 5% enrollment discount, flexible device options. Nationwide SmartRide: 4-6 month monitoring, up to 40% discount, 10% enrollment bonus, trip dashboard detailed. GEICO DriveEasy: App only, up to 25% discount, continuous monitoring, integrated with policy. Farmers Signal: App-based, up to 30% discount, 15% participation discount, distracted driving coaching. Travelers IntelliDrive: 90-day period, up to 30% off, 10% initial discount, comprehensive feedback. Key factors monitored: Hard braking (most weighted), rapid acceleration, time of day (night riskier), mileage (less is better), phone use (increasingly monitored). Privacy considerations: Location tracked, data stored varies, third-party sharing policies, opt-out implications.",
+      "metadata": {
+        "tags": ["telematics", "usage-based", "snapshot", "drivewise", "monitoring"],
+        "complexity": "intermediate",
+        "audience": "tech-savvy-drivers"
+      }
+    },
+    {
+      "id": "multi-policy-bundle-comparison",
+      "category": "bundling-options",
+      "title": "Carrier Bundle Discounts and Package Deals",
+      "content": "Bundle savings vary significantly across carriers with different sweet spots. Best bundlers overall: State Farm up to 25% combining, Allstate House & Home 25%, Auto-Owners Life-Home-Auto Plus 20%+, Farmers up to 25% multi-line. Auto + Home leaders: State Farm average $935/year savings, Allstate $800 average, Liberty Mutual $950 maximum, Nationwide $750 typical. Auto + Life combinations: State Farm strong life products, Nationwide competitive pricing, Farmers diverse options, Progressive through partners. Unique bundles: USAA all financial products, State Farm includes banking, Erie multi-policy single deductible, Travelers includes umbrella. Bundle requirements: Most require both active, same renewal dates helpful, address must match, named insureds consistent. Hidden benefits: Single deductible events, one agent relationship, simplified billing, loyalty advantages. Bundle myths: Not always cheapest option, compare unbundled too, switching complications, coverage gaps possible. Best practices: Quote separately first, negotiate bundle additional, review annually unbundled, consider partial bundles. Switching strategies: Time both policies together, compare early renewal penalties, maintain continuous coverage. Retention impact: Bundled customers stay longer, switching friction higher, relationship deeper.",
+      "metadata": {
+        "tags": ["bundling", "multi-policy", "discounts", "packages", "savings"],
+        "complexity": "intermediate",
+        "audience": "bundle-shoppers"
+      }
+    }
+  ]
+}

@@ -1,0 +1,171 @@
+{
+  "dataset": "risk-factors-pricing",
+  "version": "1.0",
+  "entries": [
+    {
+      "id": "credit-score-impact",
+      "category": "risk-factors",
+      "title": "Credit Score Impact on Insurance Premiums",
+      "content": "Credit scores dramatically affect insurance rates in most states. Impact levels: Excellent credit (750+) gets best rates baseline, Good credit (700-749) pays 10-20% more, Fair credit (650-699) pays 30-50% more, Poor credit (<650) pays 70-100% more. Why insurers use credit: Statistical correlation between credit and claims frequency, responsible financial behavior indicates responsible driving, predictive of future claims. States prohibiting credit: California, Hawaii, Massachusetts for auto, Maryland additionally for home. How scores are calculated: Payment history 35%, credit utilization 30%, length of history 15%, new credit 10%, credit mix 10%. Quick improvements: Pay down credit cards below 30% utilization, dispute errors on reports, become authorized user on old account. Timeline: Score improvements show in rates within 6-12 months. Example: Driver improves from 620 to 720, reduces annual premium from $2,400 to $1,600.",
+      "metadata": {
+        "tags": ["credit-score", "risk-factors", "premium-calculation", "state-regulations", "financial-behavior"],
+        "complexity": "intermediate",
+        "audience": "all-consumers"
+      }
+    },
+    {
+      "id": "age-gender-pricing",
+      "category": "risk-factors",
+      "title": "How Age and Gender Affect Insurance Rates",
+      "content": "Age and gender are primary rating factors. Age progression: 16-25 highest rates (200-300% above baseline), 25-65 lowest rates (baseline), 65+ gradual increase (10-30% above baseline by 80). Gender differences: Males 16-25 pay 15-25% more than females, gap narrows with age, after 30 minimal difference. Why age matters: Crash statistics show clear patterns, reaction times and judgment develop with experience, seniors face declining vision and reflexes. State restrictions: Some states limit or prohibit gender rating, California doesn't allow gender in rating. Teen driver impact: Adding 16-year-old increases family premium 150-200%, 18-year-old adds 100-150%, 20-year-old adds 50-75%. Milestone ages: Rate drops at 21, 25, and when married. Senior considerations: Some insurers specialize in 55+ with better rates. Case study: 16-year-old male pays $3,500/year, same coverage at 25 costs $1,200, at 35 costs $900, at 70 costs $1,100.",
+      "metadata": {
+        "tags": ["age-factors", "gender-rating", "teen-drivers", "senior-rates", "statistics"],
+        "complexity": "basic",
+        "audience": "all-ages"
+      }
+    },
+    {
+      "id": "driving-record-impact",
+      "category": "risk-factors",
+      "title": "Driving Record: Violations and Accidents Impact",
+      "content": "Driving history is the most controllable major rating factor. Violation impacts: Speeding 1-15 mph over: 20-30% increase, Speeding 16+ mph over: 25-40% increase, Reckless driving: 50-100% increase, DUI: 75-150% increase minimum. At-fault accidents: First accident: 30-50% increase, Second accident: 80-150% increase, Third accident: May be non-renewed. Not-at-fault accidents: Shouldn't increase rates but may lose claim-free discount, comprehensive claims (theft, weather) minimal impact. Duration of impact: Most violations affect rates 3 years, DUI affects rates 5-10 years depending on state, accidents typically 3-5 years. Point system: States assign points for violations, accumulation leads to license suspension, insurance tracks points closely. Clean record benefits: 5+ years clean: 10-20% good driver discount, some insurers offer accident forgiveness, vanishing deductibles for each clean year. Recovery strategies: Defensive driving course removes points, shop around as insurers weight violations differently. Example: Clean driver at $1,000/year, after DUI pays $2,500/year for 5 years = $7,500 total cost.",
+      "metadata": {
+        "tags": ["driving-record", "violations", "accidents", "dui", "points"],
+        "complexity": "intermediate",
+        "audience": "all-drivers"
+      }
+    },
+    {
+      "id": "vehicle-type-pricing",
+      "category": "risk-factors",
+      "title": "Vehicle Selection Impact on Insurance Costs",
+      "content": "Vehicle choice affects premiums by 20-50%. Factors: Repair costs (luxury/foreign parts expensive), safety ratings (5-star saves 15-20%), theft rates (check NICB hot list), horsepower (sports cars cost 50%+ more), size (larger vehicles generally cheaper). Cheapest vehicles: Honda CR-V, Subaru Outback, Jeep Wrangler - low theft, good safety, reasonable repairs. Most expensive: Tesla Model S ($3,500+/year), BMW M-Series, Mercedes AMG - high repairs, performance, theft. New vs used: New cars cost more to insure but have better safety features, 3-year-old cars optimal balance, depreciation helps reduce comprehensive/collision costs. Electric vehicles: Often 20-30% higher due to repair costs, battery replacement concerns, specialized technicians required. Safety technology discounts: Automatic braking 5-10% discount, Blind spot monitoring 3-5%, Adaptive cruise control 3-5%. Trim level matters: Base model vs sport can differ 30% in rates, turbo engines add 15-20%, AWD may reduce rates in snow states. Example: 2024 Honda Accord $1,200/year, 2024 BMW 3-Series $2,100/year, 2024 Corvette $3,200/year.",
+      "metadata": {
+        "tags": ["vehicle-selection", "safety-ratings", "repair-costs", "theft-rates", "technology"],
+        "complexity": "intermediate",
+        "audience": "car-buyers"
+      }
+    },
+    {
+      "id": "location-zip-code-factors",
+      "category": "risk-factors",
+      "title": "ZIP Code and Location Risk Factors",
+      "content": "Location can change rates by 200%+ even within same city. Urban vs suburban vs rural: City centers highest (theft, vandalism, accidents), suburbs moderate (balance of risks), rural lowest but longer emergency response. ZIP code factors: Crime rates (property and violent), traffic density and accident frequency, weather patterns (hail, flood, hurricane), population density, average income levels. Garaging location: Where car is primarily kept overnight, work location doesn't affect personal auto, multiple garaging locations need disclosure. State differences: Michigan average $2,800/year, Louisiana $2,500, California $2,000, Maine $1,100. Within-state variation: Los Angeles 40% higher than San Diego, Miami 50% higher than Orlando, Detroit 200% higher than Grand Rapids. Natural disaster zones: Coastal areas higher for wind/flood, tornado alley affects comprehensive, wildfire zones increasing rates. Strategies: Garage vs street parking saves 5-10%, security systems in high-crime areas help, can't use relatives' address (fraud). Example: Same driver/car: Beverly Hills $3,200, Pasadena $2,400, Bakersfield $1,800.",
+      "metadata": {
+        "tags": ["location", "zip-code", "geographic-risk", "crime-rates", "weather"],
+        "complexity": "intermediate",
+        "audience": "all-consumers"
+      }
+    },
+    {
+      "id": "annual-mileage-impact",
+      "category": "risk-factors",
+      "title": "Annual Mileage and Commute Distance Pricing",
+      "content": "Miles driven directly correlates with accident risk. Mileage brackets: 0-7,500 miles/year: Low mileage discount 15-25%, 7,500-10,000: Standard rates, 10,000-15,000: Slight increase 5-10%, 15,000+: Higher risk 10-20% increase. Commute categories: No commute (work from home): Best rates, Under 10 miles one-way: Standard, 10-25 miles: 5-10% increase, 25+ miles: 10-20% increase. Usage types: Pleasure only (lowest), Commute (moderate), Business use (highest +20-30%). Verification methods: Some insurers verify at renewal, telematics devices track actual mileage, photo odometer readings required. Work from home impact: Pandemic changed rating, permanent remote work saves 10-20%, hybrid work emerging category. Strategies: Accurate reporting prevents claim issues, carpooling reduces individual mileage, consider usage-based if truly low mileage. Multiple vehicles: Assign lowest mileage to most expensive vehicle. Example: Same driver - 5,000 miles/year pays $900, 12,000 miles pays $1,100, 20,000 miles pays $1,300.",
+      "metadata": {
+        "tags": ["mileage", "commute", "usage", "work-from-home", "risk-exposure"],
+        "complexity": "basic",
+        "audience": "all-drivers"
+      }
+    },
+    {
+      "id": "marital-status-homeownership",
+      "category": "risk-factors",
+      "title": "Marital Status and Homeownership Insurance Impact",
+      "content": "Marital status and homeownership indicate stability to insurers. Marital status impact: Married saves 5-15% on auto insurance, widowed similar to married rates, divorced/separated higher than single, single highest rates especially under 30. Why marriage matters: Statistics show fewer accidents for married drivers, assumed more responsible behavior, often combine policies for additional discounts. Homeownership factor: Homeowners save 3-8% on auto insurance, indicates financial stability, assumption of responsibility, bundling opportunities. Renter considerations: No automatic penalty but miss homeowner discount, renters insurance shows responsibility, may qualify for multi-policy discount. Living situation: Living with parents may affect rates, college students away discount available, multiple roommates can complicate coverage. Timing matters: Get married rates immediately, buy home takes effect at renewal, divorce may increase mid-term. Proof required: Marriage certificate for name changes, mortgage documents not always needed. Example: 30-year-old single renter $1,400/year, married renter $1,250, married homeowner $1,150.",
+      "metadata": {
+        "tags": ["marital-status", "homeownership", "stability", "demographics", "discounts"],
+        "complexity": "basic",
+        "audience": "all-consumers"
+      }
+    },
+    {
+      "id": "occupation-education-rating",
+      "category": "risk-factors",
+      "title": "How Your Job and Education Affect Insurance Rates",
+      "content": "Occupation and education serve as proxy risk indicators. Best-rated occupations: Engineers, teachers, nurses (5-10% discount), scientists, accountants, pilots - assumed careful and detail-oriented. Higher-risk occupations: Delivery drivers, bartenders, entertainers (5-15% surcharge), jobs requiring driving or night hours. Education impact: Bachelor's degree saves 5-10%, advanced degrees additional 2-5%, some insurers don't consider education. Why occupation matters: Correlates with accident frequency statistically, some jobs indicate risk-taking behavior, professional jobs assume stability. Professional group discounts: Many insurers offer affinity discounts, employer partnerships common, alumni associations qualify. Military/veteran status: Often receives 5-15% discount, USAA exclusive option, active duty special considerations. Verification: May require employment verification, education not always verified, changes should be reported. Strategies: Update insurer with job changes, check for employer group discounts, professional associations may offer programs. Example: Bartender pays $1,500/year, teacher same profile pays $1,350, engineer pays $1,300.",
+      "metadata": {
+        "tags": ["occupation", "education", "professional", "risk-correlation", "group-discounts"],
+        "complexity": "intermediate",
+        "audience": "professionals"
+      }
+    },
+    {
+      "id": "coverage-limits-deductibles",
+      "category": "risk-factors",
+      "title": "Coverage Limits and Deductibles Effect on Premiums",
+      "content": "Coverage selections significantly impact premiums. Liability limits: State minimum baseline, 50/100/50 adds 15-20%, 100/300/100 adds 30-40%, 250/500/250 adds 45-60%. Why higher limits cost less proportionally: First dollars of coverage most expensive, catastrophic claims relatively rare, economies of scale in coverage. Deductible impact: $250 to $500 saves 10-15%, $500 to $1000 saves 15-25%, $1000 to $2500 saves 20-30%. Comprehensive vs collision deductibles: Can differ (strategy: higher collision, lower comprehensive), percentage deductibles for catastrophic coverage. Physical damage coverage: Dropping collision on older cars saves 30-40% of premium, comprehensive alone for weather/theft, actual cash value vs replacement cost. Optional coverages cost: Rental reimbursement $30-60/year, Roadside assistance $15-30/year, Gap insurance $20-40/year. Balancing act: Higher liability limits more important than low deductibles, emergency fund should cover deductible, review annually as car depreciates. Example: Basic coverage $1,000/year, recommended 100/300/100 with $1000 deductibles $1,250/year, maximum coverage $1,800/year.",
+      "metadata": {
+        "tags": ["coverage-limits", "deductibles", "liability", "physical-damage", "optional-coverage"],
+        "complexity": "intermediate",
+        "audience": "coverage-shoppers"
+      }
+    },
+    {
+      "id": "claims-history-impact",
+      "category": "risk-factors",
+      "title": "Claims History and Insurance Score Impact",
+      "content": "Claims history affects rates for 3-7 years depending on type. First claim impact: At-fault accident increases 30-50%, comprehensive claim (theft/weather) 5-15%, glass claims often forgiven. Multiple claims: Two claims in 3 years possible non-renewal, three claims usually means high-risk status, pattern of claims worse than single large claim. Claim-free discounts: 3 years clean saves 5-10%, 5 years clean saves 10-20%, some insurers offer accident forgiveness. Insurance score factors: Similar to credit but weighs insurance history more, prior insurance important (continuous coverage vital), previous limits affect future rates. Gaps in coverage: 30+ day gap resets to new customer rates, may be considered high-risk, difficult to get preferred rates for 6-12 months. CLUE report: Comprehensive Loss Underwriting Exchange tracks 7 years, shared between all insurers, includes inquiries even without claims. Strategies: Small claims often not worth filing, increase deductible rather than file small claims, shop around as insurers weight differently. Example: Claim-free driver $1,000/year, after $5,000 claim pays $1,400/year for 3 years = $1,200 extra.",
+      "metadata": {
+        "tags": ["claims-history", "insurance-score", "clue-report", "continuous-coverage", "claim-strategy"],
+        "complexity": "intermediate",
+        "audience": "all-consumers"
+      }
+    },
+    {
+      "id": "regional-pricing-trends",
+      "category": "market-data",
+      "title": "Regional Insurance Pricing Trends and Market Conditions",
+      "content": "Regional markets vary dramatically in pricing and competition. Northeast region: Highest average rates due to density, weather, Massachusetts unique no-fault system, New York fraud issues increase costs 20%. Southeast: Hurricane exposure increases rates 15-30%, Florida litigation crisis doubles rates, Georgia and Carolinas moderate. Midwest: Generally lower rates except Michigan, tornadoes affect comprehensive, winter weather claims common. West Coast: California heavily regulated keeps rates moderate, wildfire exposure increasing rates 10-20% annually, Pacific Northwest lowest on coast. Texas: Large state with huge variation, hail capital affects comprehensive, urban areas 50% higher than rural. Market hardening cycles: Hard market (rising rates, less competition) 2019-2023, soft market (competition, lower rates) expected 2024-2026, catastrophes can change cycle quickly. Competitive landscapes: Some states have 100+ carriers competing, others dominated by few large players, online direct writers gaining share. Example: National average $1,500/year - Michigan $2,800, Louisiana $2,500, New York $2,200, California $1,900, Ohio $1,100, Maine $900.",
+      "metadata": {
+        "tags": ["regional-pricing", "market-conditions", "state-variations", "competition", "trends"],
+        "complexity": "intermediate",
+        "audience": "market-watchers"
+      }
+    },
+    {
+      "id": "weather-natural-disasters",
+      "category": "market-data",
+      "title": "Weather Patterns and Natural Disaster Risk Pricing",
+      "content": "Weather and catastrophe exposure significantly impact rates. Hurricane zones: Coastal areas pay 20-40% more, separate wind deductibles 2-5% of home value, flood insurance required separately. Tornado alley: Comprehensive rates 15-25% higher, Oklahoma, Kansas, Texas most affected, increasing frequency raising rates. Hail exposure: Colorado, Texas, Nebraska highest risk, comprehensive claims skyrocketing, some insurers excluding hail damage. Wildfire zones: California rates increased 30-50% since 2017, some areas becoming uninsurable, FAIR plans last resort. Winter weather: Northern states higher comprehensive, ice storm damage growing issue, salt damage affects vehicles. Flood risk: Standard auto covers flood but not home, 25% of flood claims outside high-risk zones, climate change expanding risk areas. Earthquake: Separate coverage needed, California Earthquake Authority provides, deductibles 10-20% typical. Climate trends: Increasing severity and frequency of events, insurers pulling out of high-risk areas, government backstops expanding. Example: Identical coverage - Miami (hurricane) $2,800, Denver (hail) $2,200, Phoenix (minimal weather) $1,600.",
+      "metadata": {
+        "tags": ["weather-risk", "natural-disasters", "catastrophe", "climate-change", "geographic-exposure"],
+        "complexity": "advanced",
+        "audience": "risk-aware"
+      }
+    },
+    {
+      "id": "urban-density-factors",
+      "category": "market-data",
+      "title": "Urban Density and Crime Rate Impact on Premiums",
+      "content": "Population density and crime dramatically affect insurance costs. Density impact: Major cities 40-80% higher than suburbs, suburbs 20-30% higher than rural, rural areas have lowest rates but limited carrier options. Crime factors: Auto theft adds 20-30% to comprehensive, vandalism claims frequent in cities, catalytic converter theft epidemic. Traffic considerations: Accident frequency 3x higher in cities, parking claims (hit while parked) common, uninsured motorist rates higher. Specific city challenges: NYC parking garages add risk, San Francisco break-ins extreme, Detroit highest theft rates. Suburban sweet spot: Lower crime than cities, better services than rural, most carrier competition. Rural challenges: Deer collisions increase 10x, longer response times, limited repair facilities. Garaging: Street parking vs garage saves 10-15%, security systems help in high-crime areas, gated communities get discounts. Strategies: Consider Park & Ride for commuters, usage-based insurance for low city mileage, higher comprehensive deductible in high-theft areas. Example: Los Angeles urban $3,200, LA suburbs $2,100, Central Valley rural $1,400.",
+      "metadata": {
+        "tags": ["urban-density", "crime-rates", "theft", "traffic", "population"],
+        "complexity": "intermediate",
+        "audience": "location-shoppers"
+      }
+    },
+    {
+      "id": "insurance-fraud-impact",
+      "category": "market-data",
+      "title": "How Insurance Fraud Affects Everyone's Rates",
+      "content": "Insurance fraud costs industry $80+ billion annually, adding $400-700 to average family's premiums. Types of fraud: Staged accidents (swoop and squat), exaggerated injuries (soft tissue claims), repair shop padding, premium fraud (lying on applications). Fraud hotspots: Florida leads in staged accidents, New York no-fault fraud prevalent, California organized fraud rings, medical provider fraud nationwide. Rate impact by state: Florida fraud adds 20% to premiums, New York 15% fraud tax, Michigan unlimited PIP attracts fraud. Industry responses: Special Investigation Units (SIU), data analytics detecting patterns, telematics proving accidents, photo requirements increasing. Consumer impact: Everyone pays for fraud through higher rates, legitimate claims scrutinized more, coverage restrictions in fraud areas. Red flags: Too-good-to-be-true rates often scams, unlicensed insurers proliferating, ghost brokers selling fake policies. Protection strategies: Buy from licensed insurers only, document everything thoroughly, report suspected fraud, dashboard cameras help. Example: No-fraud state $1,200/year, moderate fraud $1,400, high fraud areas $1,600+.",
+      "metadata": {
+        "tags": ["fraud", "staged-accidents", "premium-impact", "investigation", "consumer-cost"],
+        "complexity": "advanced",
+        "audience": "informed-consumers"
+      }
+    },
+    {
+      "id": "state-regulation-effects",
+      "category": "market-data",
+      "title": "State Insurance Regulation Impact on Pricing",
+      "content": "State regulations significantly affect insurance pricing and availability. Rate regulation types: Prior approval states (rates must be approved) - CA, NY, NJ - slower rate changes but more stable, File and use states - immediate implementation, more volatile, Competitive rating - market determines rates. No-fault states: Michigan, Florida, New York higher costs, PIP coverage mandatory and expensive, limited right to sue increases costs, reforms ongoing to reduce costs. Credit scoring bans: California, Hawaii, Massachusetts prohibit, Maryland for homeowners, rates 10-20% different structure. Coverage mandates: Some states require uninsured motorist, others make optional, minimum limits vary significantly, special coverages required (PIP, MedPay). Gender/age restrictions: Some states limit age/gender rating, creates cross-subsidization, young males benefit, older drivers may pay more. Assigned risk pools: High-risk drivers guaranteed coverage, rates capped but still expensive, funded by all insurers in state. Reform impacts: Michigan reform saved 20% average, Florida considering no-fault repeal, California Prop 103 effects ongoing. Example: Similar driver - California (heavy regulation) $1,800, Texas (light regulation) $1,600, varies by individual situation.",
+      "metadata": {
+        "tags": ["regulation", "state-laws", "no-fault", "rate-approval", "mandates"],
+        "complexity": "advanced",
+        "audience": "policy-watchers"
+      }
+    }
+  ]
+}

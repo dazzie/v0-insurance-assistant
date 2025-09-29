@@ -8,6 +8,7 @@ interface SuggestedPromptsProps {
   messages: Array<{ role: string; content: string }>
   customerProfile: any
   onPromptClick: (prompt: string) => void
+  onStartInformationGathering?: () => void
   isLoading: boolean
 }
 
@@ -15,6 +16,7 @@ export function SuggestedPrompts({
   messages, 
   customerProfile, 
   onPromptClick,
+  onStartInformationGathering,
   isLoading 
 }: SuggestedPromptsProps) {
   
@@ -48,6 +50,18 @@ export function SuggestedPrompts({
             </Button>
           )
         })}
+        
+        {/* Interactive Form Button */}
+        {onStartInformationGathering && (
+          <Button
+            onClick={onStartInformationGathering}
+            variant="outline"
+            size="sm"
+            className="text-xs border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+          >
+            📋 Fill Out Form
+          </Button>
+        )}
       </div>
     </div>
   )

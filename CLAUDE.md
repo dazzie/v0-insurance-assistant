@@ -3,16 +3,18 @@
 ## Project Overview
 Comprehensive AI-powered insurance assistant built with Next.js, TypeScript, and OpenAI GPT-4. The app transforms insurance shopping by providing personalized coaching, local agent connections, and professional carrier negotiation tools through conversational AI.
 
-**Current Status**: Week 2 Development - Enhanced with local agent outreach system, comprehensive carrier toolkit, support for all major insurance types (Auto, Home, Life, Renters, Pet), and upgraded to Vercel AI SDK with useChat for improved streaming performance.
+**Current Status**: Week 2 Development - Enhanced with local agent outreach system, comprehensive carrier toolkit, support for all major insurance types (Auto, Home, Life, Renters, Pet), upgraded to Vercel AI SDK with useChat for improved streaming performance, RAG integration with Vectorize.io, and persistent customer profile management.
 
 ## Tech Stack
 - **Framework**: Next.js 14.2.33 with TypeScript (recently updated for security)
 - **UI Components**: Radix UI + shadcn/ui components
-- **Styling**: Tailwind CSS with custom theme
+- **Styling**: Tailwind CSS with custom theme (v3 configuration)
 - **AI Integration**: Vercel AI SDK with OpenAI GPT-4 Turbo (streaming support)
 - **Streaming**: useChat hook for real-time chat responses
 - **State Management**: React hooks and context
 - **Form Handling**: react-hook-form with Zod validation
+- **RAG System**: Vectorize.io with @vectorize-io/vectorize-client library
+- **Data Persistence**: localStorage for customer profiles
 - **Deployment**: Vercel (auto-deploy from main branch)
 - **Development**: Currently on `week-2` branch for new features
 
@@ -110,12 +112,16 @@ git push -u origin week-2  # Push to week-2 branch
 /lib
   carrier-conversation-helper.ts  # Generates carrier prep toolkit
   carrier-database.ts            # Insurance carrier information
+  customer-profile.ts            # Customer profile management with localStorage
   information-tracker.ts         # Extracts data from messages
   insurance-needs-analysis.ts    # Analyzes insurance needs
   prompt-validator.ts            # Validates prompt-question matches
   quote-profile.ts              # Manages quote profile data
   suggested-prompts.ts          # Generates context-aware prompts
   utils.ts                      # Utility functions
+  /rag                           # RAG system components
+    /core
+      vectorize-io-client.ts     # Vectorize.io API client
 ```
 
 ## Core Business Logic
@@ -286,8 +292,18 @@ The toolkit now includes comprehensive coverage analysis:
 
 ## Environment Variables
 ```env
+# OpenAI Configuration
 OPENAI_API_KEY=<required>      # OpenAI API key for GPT-4
 USE_MOCK_RESPONSES=false       # Set to true for testing without API
+
+# Vectorize.io Configuration (for RAG)
+VECTORIZE_IO_API_KEY=<required>    # Vectorize.io API token
+VECTORIZE_IO_ORG_ID=<required>     # Organization ID
+VECTORIZE_IO_PIPELINE_ID=<required> # Pipeline ID
+TOKEN=<required>                    # Alternative env var for API token
+
+# RAG System
+ENABLE_RAG=true                    # Enable RAG features
 ```
 
 ## Testing Approach
@@ -1648,7 +1664,22 @@ export function AgentOutreachSection({
 
 ## Recent Updates (Week 2 - Latest)
 
-### 🚀 **Streaming Chat Implementation (Latest)**
+### 🌐 **RAG System & Vectorize.io Integration**
+- **Vector Database**: Integrated Vectorize.io for knowledge retrieval
+- **Knowledge Datasets**: 6 comprehensive JSON datasets with 120+ entries
+- **Official Client**: Using @vectorize-io/vectorize-client library
+- **Secure Configuration**: Environment variables for API credentials
+- **Data Coverage**: Insurance explanations, terminology, state requirements, discounts, FAQs, negotiation strategies
+
+### 👥 **Customer Profile Management**
+- **Persistent Storage**: Profiles saved to localStorage with browser checks
+- **Profile UI**: CustomerProfileCard component with edit/view modes
+- **Auto-extraction**: extractProfileFromConversation() pulls data from chat
+- **Import/Export**: JSON import/export functionality for profiles
+- **Profile Completeness**: Visual progress indicator (70% threshold)
+- **Chat Integration**: Profiles automatically enrich AI context
+
+### 🚀 **Streaming Chat Implementation**
 - **Upgraded to Vercel AI SDK**: Replaced manual OpenAI streaming with `useChat` hook
 - **Improved Performance**: Better streaming performance and error handling
 - **Cleaner Architecture**: Simplified chat logic with built-in state management
@@ -1679,6 +1710,52 @@ export function AgentOutreachSection({
 - Deployment fixes (pnpm/npm lockfile conflicts resolved)
 - Branch strategy: `week-2` for new development
 
+## Vectorize.io Data Management
+
+### Complete Knowledge Base Datasets
+Ready for upload in `/data/vectorize-upload/` (14 files, 356KB total):
+
+#### Core Insurance Knowledge
+1. **insurance-coverage-explanations.json** - 20 coverage types with examples
+2. **insurance-terminology-glossary.json** - 20 key terms with definitions
+3. **state-insurance-requirements.json** - 20 states with requirements
+4. **insurance-discounts-guide.json** - 20 discount types with criteria
+5. **insurance-faqs.json** - 20 comprehensive Q&As
+6. **negotiation-strategies.json** - 20 tactics and scripts
+
+#### Carrier Intelligence & Claims
+7. **insurance-carrier-profiles.json** - 15 major carriers (GEICO, State Farm, Progressive, etc.)
+8. **carrier-coverage-options.json** - 15 carrier-specific features, discounts, and programs
+9. **preferred-agents-directory.json** - 20 agent selection guides and quality indicators
+10. **insurance-claim-process.json** - 15 claim types with step-by-step processes
+
+#### Customer Scenarios & Optimization
+11. **customer-scenarios-lifecycles.json** - 15 life events (marriage, home purchase, retirement)
+12. **risk-factors-pricing.json** - 15 pricing factors (credit, location, vehicle type)
+13. **insurance-troubleshooting.json** - 15 common problems and solutions
+14. **insurance-money-saving-tips.json** - 15 savings strategies (bundling, deductibles)
+
+### Dataset Statistics
+- **Total Entries**: 235+ comprehensive insurance knowledge entries
+- **Coverage Areas**: All 6 originally requested categories fully covered
+- **File Format**: Consistent JSON structure with id, category, title, content, metadata
+- **Vectorization Ready**: Optimized for Vectorize.io pipeline processing
+
+### Upload Process
+1. Navigate to platform.vectorize.io
+2. Access your pipeline (ID in .env.local)
+3. Upload all 14 JSON files through admin UI
+4. Pipeline auto-chunks and vectorizes content
+5. ~1000+ vectors available for RAG queries with comprehensive coverage:
+   - Insurance fundamentals and terminology
+   - Carrier-specific information and options
+   - State regulations and requirements
+   - Claims processes and troubleshooting
+   - Life events and customer scenarios
+   - Money-saving strategies and optimizations
+   - Agent selection and evaluation
+   - Risk factors and pricing models
+
 ## Debug Tips
 - Check browser console for API errors
 - Verify `.env.local` has valid OpenAI key
@@ -1686,3 +1763,5 @@ export function AgentOutreachSection({
 - Check Next.js terminal output for server-side errors
 - **Streaming Issues**: Verify AI SDK dependencies are installed correctly
 - **useChat Errors**: Check message structure and API route implementation
+- **RAG Issues**: Check Vectorize.io credentials and pipeline status
+- **Profile Issues**: Check localStorage availability and browser permissions

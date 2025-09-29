@@ -1,0 +1,171 @@
+{
+  "dataset": "customer-scenarios-lifecycles",
+  "version": "1.0",
+  "entries": [
+    {
+      "id": "newlywed-insurance-changes",
+      "category": "life-events",
+      "title": "Getting Married: Insurance Impact and Optimization",
+      "content": "Marriage significantly impacts insurance needs and costs. Auto insurance: Married couples save 5-15% on average, combine policies for multi-car discount, review coverage limits for shared assets. Home/Renters: Update policy for spouse's belongings, typically need 30-50% more personal property coverage, add spouse to liability coverage. Life insurance: Each spouse needs coverage 5-10x annual income, consider mortgage payoff amount, update beneficiaries immediately. Health insurance: Compare employer plans during open enrollment, family deductible vs individual considerations, coordinate benefits if both have coverage. Name changes: Update all policies within 30 days, get new driver's license first. Combined assets: Increase liability limits, consider umbrella policy if combined income >$100k. Case example: 28-year-old couple saved $840/year combining auto policies, added $500k life insurance each, increased liability to 250/500/100.",
+      "metadata": {
+        "tags": ["marriage", "newlyweds", "life-events", "bundling", "beneficiaries"],
+        "complexity": "intermediate",
+        "audience": "newly-married"
+      }
+    },
+    {
+      "id": "first-time-homebuyer-scenario",
+      "category": "life-events",
+      "title": "First-Time Homebuyer Insurance Roadmap",
+      "content": "Buying first home triggers multiple insurance needs. Homeowners insurance: Required by mortgage, shop before closing, typical cost 0.5-1% of home value annually. Coverage amount: Dwelling coverage should equal rebuild cost not purchase price, get replacement cost coverage not actual cash value. Personal property: Usually 50-70% of dwelling coverage, inventory belongings, consider scheduling valuable items. Deductible strategy: $1000 standard, higher deductible saves 20-30% but ensure emergency fund covers it. Additional coverages: Flood insurance if in risk zone (separate policy, 30-day waiting period), earthquake if applicable, sewer backup coverage recommended. Auto insurance: Update with new address, rates may change significantly based on location. Life insurance: Add mortgage amount to coverage needs. Umbrella policy: Consider if home equity + assets exceed $300k. Case study: First-time buyer in suburbs, $300k home, paid $1,400/year homeowners, saved $200 bundling with auto, added $300k term life for $25/month.",
+      "metadata": {
+        "tags": ["homebuying", "first-time-buyer", "mortgage", "property-insurance", "coverage-needs"],
+        "complexity": "intermediate",
+        "audience": "first-time-buyers"
+      }
+    },
+    {
+      "id": "new-baby-insurance-adjustments",
+      "category": "life-events",
+      "title": "New Baby: Complete Insurance Checklist",
+      "content": "New baby requires immediate insurance adjustments. Health insurance: Add baby within 30-60 days for retroactive coverage, compare adding to mom vs dad's plan, understand well-baby visit coverage. Life insurance critical: Parents need 10x annual income minimum, consider 20-year term to cover through college, add child rider for $5-10k coverage. Disability insurance: Often overlooked but crucial - protects income if parent cannot work, typically need 60-70% income replacement. Auto insurance: No immediate change but plan for teen driver costs, start saving now - teens add $2,000+/year. College savings: 529 plan contributions, consider prepaid tuition plans. Update beneficiaries: All policies need reviewing, consider trust for minor children. Case example: New parents, combined $100k income, bought $1M/$500k term policies for $65/$35 monthly, added short-term disability, established 529 with $200/month contribution.",
+      "metadata": {
+        "tags": ["new-baby", "parenting", "life-insurance", "disability", "beneficiaries"],
+        "complexity": "intermediate",
+        "audience": "new-parents"
+      }
+    },
+    {
+      "id": "divorce-insurance-separation",
+      "category": "life-events",
+      "title": "Divorce: Separating and Rebuilding Insurance Coverage",
+      "content": "Divorce requires complete insurance restructuring. Auto insurance: Separate policies immediately, remove spouse as driver, rates typically increase 10-20% returning to single status. Homeowners/Renters: Person keeping home refinances and gets new policy, departing spouse needs renters insurance immediately. Life insurance: Court may require maintaining coverage for alimony/child support, remove ex-spouse as beneficiary unless required, consider new individual policy. Health insurance: COBRA available for 36 months but expensive, marketplace special enrollment period triggered, compare costs carefully. Children coverage: Divorce decree specifies who provides coverage, coordinate benefits if both parents cover. Asset protection: Update umbrella policy for new asset levels, review all coverage limits. Timeline: Start insurance changes during separation, finalize within 30 days of divorce. Case study: Divorcing couple saved money with separate auto policies despite higher individual rates, maintained life insurance per decree, each got appropriate home/renters coverage.",
+      "metadata": {
+        "tags": ["divorce", "separation", "policy-changes", "custody", "asset-protection"],
+        "complexity": "advanced",
+        "audience": "divorcing-individuals"
+      }
+    },
+    {
+      "id": "retirement-insurance-transition",
+      "category": "life-events",
+      "title": "Retirement: Insurance Strategy Transition",
+      "content": "Retirement triggers major insurance shifts. Health insurance: Bridge to Medicare with COBRA, marketplace, or retiree coverage, plan for Medicare at 65 (Parts A, B, D, supplement). Auto insurance: Rates often decrease with retirement discount 5-10%, reduce coverage on older vehicles, consider usage-based programs for low mileage. Homeowners: Review coverage as home value changes, consider flood/earthquake risk tolerance, maintain high liability limits. Life insurance: Evaluate need - may reduce or eliminate if mortgage paid and children independent, consider keeping for estate planning/final expenses. Long-term care: Critical decision window age 55-65, average annual cost $5,500, covers nursing home/home care. Umbrella policy: Essential with retirement assets exposed, typically need $1-2M coverage. Case example: 65-year-old couple, dropped life insurance saving $3,000/year, added long-term care for $4,000/year, maintained $2M umbrella, saved $800/year on auto with retirement discount.",
+      "metadata": {
+        "tags": ["retirement", "medicare", "long-term-care", "senior-planning", "asset-protection"],
+        "complexity": "advanced",
+        "audience": "near-retirees"
+      }
+    },
+    {
+      "id": "young-professional-starting",
+      "category": "age-based",
+      "title": "Young Professional (22-30): Building Insurance Foundation",
+      "content": "Young professionals need strategic insurance foundation. Auto insurance: Highest rates but improving, maintain continuous coverage crucial, usage-based discounts valuable for 20-30% savings. Renters insurance: Essential but often skipped, costs $15-30/month, covers belongings and liability, required for dog owners. Life insurance: Buy term now while healthy and cheap, $250k policy costs $15-20/month, locks in rates for 20-30 years. Disability insurance: Most important coverage often ignored, supplements employer coverage, costs 1-3% of income. Health insurance: Stay on parents until 26 if possible, understand HDHPs and HSAs, preventive care free. Building credit: Insurance rates affected by credit, improving score saves 20-40%. Professional liability: Consider if in healthcare, finance, consulting. Case study: 25-year-old teacher, pays $130/month auto, $20 renters, $18 for $500k term life, $45 disability, saved $500/year improving credit score from 650 to 750.",
+      "metadata": {
+        "tags": ["young-professional", "starting-out", "foundation", "credit-building", "career-start"],
+        "complexity": "basic",
+        "audience": "young-professionals"
+      }
+    },
+    {
+      "id": "middle-age-peak-protection",
+      "category": "age-based",
+      "title": "Middle Age (40-55): Peak Insurance Protection Period",
+      "content": "Middle age requires maximum insurance protection. Life insurance: Highest needs with mortgage and college costs, consider 10-15x income, layer term policies for flexibility. Disability: Critical with peak earning years, own-occupation coverage important, consider supplementing employer coverage. Umbrella policy: Essential with growing assets, minimum $1M, costs $150-300/year for first million. Teen drivers: Adds $1,500-3,000 per year, good student discounts save 20%, consider used safe vehicle. College planning: Life insurance crucial until graduation, coordinate health coverage during college years. Long-term care: Consider hybrid life/LTC policies, easier qualification than waiting. Asset protection: Review all liability limits, ensure replacement cost on home, schedule valuable items. Case example: 45-year-old executive, $200k income, carries $2.5M term life, $1M disability, $3M umbrella, teen driver adds $2,200 to auto, planning $5k/year long-term care at 50.",
+      "metadata": {
+        "tags": ["middle-age", "peak-protection", "family-coverage", "asset-growth", "teen-drivers"],
+        "complexity": "advanced",
+        "audience": "middle-aged"
+      }
+    },
+    {
+      "id": "senior-insurance-optimization",
+      "category": "age-based",
+      "title": "Senior Years (65+): Insurance Simplification and Protection",
+      "content": "Seniors need strategic insurance optimization. Medicare navigation: Original Medicare vs Advantage plans, supplement policies crucial for gap coverage, Part D prescription planning saves thousands. Auto insurance: Rates may increase after 70, defensive driving courses save 10%, consider when to stop driving. Home insurance: Review coverage for downsizing, maintenance affects rates significantly, age of home impacts coverage. Life insurance: May drop term coverage if estate settled, small whole life for final expenses ($10-25k), consider gifting strategies. Long-term care: Last chance to buy in early 70s, alternatives include hybrid policies, family caregiving agreements. Fraud protection: Identity theft coverage important, medical identity theft rising, elder financial abuse coverage. Simplification: Consolidate policies with one carrier, reduce vehicles if possible, eliminate unnecessary coverage. Case study: 70-year-old widow, Medicare + Plan G supplement, dropped life insurance, maintained auto with senior discount, added identity protection, saved $3,000/year overall.",
+      "metadata": {
+        "tags": ["senior", "medicare", "simplification", "final-expenses", "fraud-protection"],
+        "complexity": "intermediate",
+        "audience": "seniors"
+      }
+    },
+    {
+      "id": "high-risk-occupation-insurance",
+      "category": "occupation-risk",
+      "title": "High-Risk Occupations: Construction and Trade Workers",
+      "content": "Construction and trade workers need specialized insurance approach. Disability insurance: Critical due to physical demands, own-occupation definition essential, typically costs 2-4% of income but worth it. Workers comp: Understand employer coverage, gaps for independent contractors, consider occupational accident insurance. Life insurance: May face higher rates or exclusions, group coverage through unions valuable, AD&D riders important. Auto insurance: Commercial use exclusions common, need business auto or endorsement for work vehicles, tools coverage often excluded. Health insurance: Robust coverage important due to injury risk, understand emergency room vs urgent care coverage. Liability: Personal liability for side jobs, consider business liability even for part-time work. Equipment: Tools and equipment need separate coverage, inland marine policies for mobile equipment. Case example: Electrician, $70k income, pays $200/month for individual disability, $50/month extra for business auto endorsement, $30/month tools coverage, union life insurance saves 40%.",
+      "metadata": {
+        "tags": ["high-risk", "construction", "trades", "disability", "occupational"],
+        "complexity": "intermediate",
+        "audience": "trade-workers"
+      }
+    },
+    {
+      "id": "healthcare-professional-insurance",
+      "category": "occupation-risk",
+      "title": "Healthcare Professionals: Comprehensive Protection Strategy",
+      "content": "Healthcare workers require specialized insurance portfolio. Malpractice insurance: Essential even with employer coverage, occurrence vs claims-made understanding crucial, tail coverage for job changes. Disability: Own-occupation critical for specialists, higher benefit amounts available, typically need individual policy supplementing group. Life insurance: Higher limits available due to income, consider buy-sell agreements for practice owners, key person insurance for partners. Umbrella policy: Higher limits needed due to liability exposure, $2-5M minimum recommended, coordinates with malpractice. Auto insurance: Higher liability limits recommended, professional reputation at stake in accidents. Cyber liability: Growing exposure with electronic health records, data breach coverage important. Business overhead: Practice owners need expense coverage if disabled. Case example: Physician, $300k income, carries $1M/$3M malpractice, $15k/month disability, $5M term life, $5M umbrella, costs approximately $1,200/month total for comprehensive protection.",
+      "metadata": {
+        "tags": ["healthcare", "malpractice", "physician", "high-income", "professional-liability"],
+        "complexity": "advanced",
+        "audience": "healthcare-professionals"
+      }
+    },
+    {
+      "id": "gig-economy-insurance",
+      "category": "occupation-risk",
+      "title": "Gig Economy Workers: Closing Insurance Gaps",
+      "content": "Gig economy workers face unique insurance challenges. Auto insurance: Personal policies exclude rideshare/delivery, gap coverage during app-on period crucial, rideshare endorsement costs $10-30/month. Health insurance: No employer coverage means marketplace shopping, consider Health Savings Accounts with high-deductible plans, subsidies available based on variable income. Disability: No employer coverage but critical need, short-term policies more accessible than long-term, consider accident insurance as supplement. Liability: Personal liability for business activities, general liability policy costs $300-600/year, professional liability if consulting. Income protection: Variable income makes coverage complex, business interruption insurance if primary income, emergency fund crucial. Tax implications: Set aside 25-30% for taxes affects insurance affordability. Equipment: Laptop, phone need business personal property coverage. Case example: Rideshare driver, $40k annual income, added rideshare endorsement $20/month, marketplace health plan $250/month after subsidy, $500k term life $35/month, general liability $30/month.",
+      "metadata": {
+        "tags": ["gig-economy", "rideshare", "freelance", "self-employed", "coverage-gaps"],
+        "complexity": "intermediate",
+        "audience": "gig-workers"
+      }
+    },
+    {
+      "id": "remote-worker-insurance",
+      "category": "occupation-risk",
+      "title": "Remote Workers: Home Office Insurance Considerations",
+      "content": "Remote workers need specific insurance adjustments. Homeowners/Renters: Standard policies exclude business property, home business endorsement costs $15-30/month, covers equipment and liability. Equipment coverage: Employer equipment may not be covered, personal business property limit usually $2,500, consider inland marine for expensive equipment. Liability issues: Clients visiting home need liability coverage, dog bite exposure during video calls, data breach liability if handling client data. Auto insurance: Reduced commuting may lower rates 10-20%, but business errands need coverage, notify insurer of primary use change. Cyber insurance: Personal cyber coverage increasingly important, identity theft with business twist, coverage for ransomware. Workers comp: Independent contractors need own coverage, some states require for home businesses, costs vary by state. International considerations: Working abroad temporarily affects coverage, travel insurance for equipment, health insurance territory limits. Case example: Software developer working remotely, saved $400/year on auto, added $50/month business property coverage, $20/month cyber coverage, maintained professional liability.",
+      "metadata": {
+        "tags": ["remote-work", "home-office", "business-property", "cyber-risk", "liability"],
+        "complexity": "intermediate",
+        "audience": "remote-workers"
+      }
+    },
+    {
+      "id": "small-business-owner-personal",
+      "category": "occupation-risk",
+      "title": "Small Business Owners: Personal and Business Insurance Integration",
+      "content": "Small business owners must coordinate personal and business insurance. Personal asset protection: Business activities create personal exposure, umbrella policy essential minimum $2M, ensure covers business activities. Life insurance: Buy-sell agreements funded with life insurance, key person coverage for business value, personal coverage separate from business needs. Disability: Business overhead expense coverage plus personal disability, typically need both for complete protection, elimination periods should coordinate. Auto insurance: Clear separation personal vs business use, commercial policy if employees drive, hired/non-owned auto coverage. Home-based business: Homeowners endorsement insufficient for most businesses, separate business policy usually needed, general liability minimum. Health insurance: Group plans possible with just owner and spouse, Health Reimbursement Arrangements (HRAs) tax-advantaged, compare individual vs group costs. Retirement: SEP-IRA or Solo 401k affects insurance needs, life insurance sometimes used for retirement. Case example: Restaurant owner, personal umbrella $3M, $2M life for buy-sell, $500k personal life, business overhead disability plus personal disability, commercial auto, saved $5,000/year properly structuring coverage.",
+      "metadata": {
+        "tags": ["small-business", "business-owner", "asset-protection", "buy-sell", "coordination"],
+        "complexity": "advanced",
+        "audience": "business-owners"
+      }
+    },
+    {
+      "id": "military-insurance-transition",
+      "category": "life-events",
+      "title": "Military to Civilian: Insurance Transition Guide",
+      "content": "Military members face unique insurance transition challenges. TRICARE to civilian health: 180-day transition period, COBRA-like continuation available, compare employer vs marketplace options. Auto insurance: USAA eligibility continues post-service, overseas coverage issues resolve, rates may change with civilian address. Life insurance: SGLI conversion to VGLI within 240 days, rates much higher than term life, shop civilian market for better rates. Disability: VA disability doesn't replace income protection, civilian disability insurance crucial for income replacement, pre-existing conditions from service may affect eligibility. Home insurance: VA loan doesn't include insurance, shop competitively don't assume USAA cheapest, flood insurance gaps common. Transition timeline: Start planning 6 months before separation, secure health insurance first priority, life insurance conversion deadlines critical. Employment gap: COBRA expensive but maintains coverage, short-term health insurance risky with pre-existing conditions. Case example: Retiring E-7, converted $400k SGLI to civilian term saving $100/month, kept USAA auto, found State Farm homeowners 20% cheaper, employer health plan saved $500/month vs COBRA.",
+      "metadata": {
+        "tags": ["military", "veteran", "transition", "tricare", "sgli"],
+        "complexity": "advanced",
+        "audience": "military-families"
+      }
+    },
+    {
+      "id": "empty-nester-adjustments",
+      "category": "life-events",
+      "title": "Empty Nesters: Insurance Rightsizing Opportunity",
+      "content": "Empty nesters can significantly optimize insurance costs. Auto insurance: Remove children from policy saves $1,000-2,500/year, reduce vehicles if possible, consider classic car coverage for weekend vehicles. Home insurance: Consider downsizing coverage if planning to move, valuable items coverage for new hobbies/collections, review liability needs. Life insurance: Reduce coverage as college obligations end, may drop term if mortgage paid, consider small permanent for estate planning. Umbrella policy: May reduce from $3M to $1-2M, depends on assets and retirement accounts, maintain if children still financially dependent. Health insurance: Prepare for higher premiums age 55-65, explore employer early retirement options, HSA maximization before Medicare. Travel insurance: Annual policies if traveling more, medical evacuation coverage important, check if credit cards provide coverage. New activities: Adventure sports may need special coverage, volunteer work liability considerations, second home insurance if purchasing. Case example: 55-year-old couple, removed two children from auto saving $2,800/year, reduced life insurance from $1M to $250k, added travel insurance, downsized home reducing homeowners by $400/year.",
+      "metadata": {
+        "tags": ["empty-nest", "downsizing", "optimization", "lifestyle-change", "cost-reduction"],
+        "complexity": "intermediate",
+        "audience": "empty-nesters"
+      }
+    }
+  ]
+}

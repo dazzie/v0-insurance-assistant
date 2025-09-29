@@ -1,0 +1,171 @@
+{
+  "dataset": "insurance-claim-process",
+  "version": "1.0",
+  "entries": [
+    {
+      "id": "auto-accident-claim-process",
+      "category": "claims",
+      "title": "Auto Accident Claim Step-by-Step Process",
+      "content": "After an auto accident: 1) Ensure safety first - move to safe location if possible, check for injuries, call 911 if needed. 2) Document everything - take photos of damage, accident scene, license plates, driver licenses, insurance cards. Get witness contact information. 3) Exchange information but don't admit fault or discuss details. 4) Call your insurance company immediately or within 24 hours. 5) File police report if required by state or if damages exceed $1,000. 6) Get repair estimates from approved shops. 7) Work with adjuster who will inspect damage and determine coverage. 8) Review settlement offer carefully. 9) Complete repairs at approved facility. 10) Keep all receipts and documentation. Typical timeline: Initial claim 24-48 hours, adjuster contact 1-3 days, inspection 3-7 days, settlement 2-4 weeks for straightforward claims.",
+      "metadata": {
+        "tags": ["auto-claims", "accident-process", "documentation", "timeline", "settlement"],
+        "complexity": "intermediate",
+        "audience": "all-drivers"
+      }
+    },
+    {
+      "id": "home-insurance-claim-process",
+      "category": "claims",
+      "title": "Home Insurance Claim Filing Guide",
+      "content": "For home insurance claims: 1) Ensure safety - evacuate if structural damage, turn off utilities if needed. 2) Prevent further damage - tarp roof, board windows, but don't make permanent repairs. 3) Document damage extensively - photos, video, inventory of damaged items with values. 4) Contact insurance company immediately to start claim. 5) Keep receipts for temporary repairs and living expenses if displaced. 6) Meet with adjuster - be present during inspection, point out all damage. 7) Get contractor estimates for repairs. 8) Review settlement offer and understand replacement cost vs actual cash value. 9) Negotiate if settlement seems low - provide additional documentation. 10) Complete repairs and submit final receipts. Timeline: Emergency repairs immediate, adjuster visit 24-72 hours for major claims, settlement 15-30 days, complex claims may take 60+ days.",
+      "metadata": {
+        "tags": ["home-claims", "property-damage", "adjuster-inspection", "temporary-repairs", "documentation"],
+        "complexity": "intermediate",
+        "audience": "homeowners"
+      }
+    },
+    {
+      "id": "claim-denial-appeals",
+      "category": "claims",
+      "title": "How to Appeal a Denied Insurance Claim",
+      "content": "If your claim is denied: 1) Request denial reason in writing with specific policy provisions cited. 2) Review your policy carefully - understand coverage terms and exclusions. 3) Gather additional documentation - photos, expert opinions, repair estimates, medical records. 4) Write formal appeal letter within timeframe (usually 60-180 days). Include claim number, explanation of why denial is incorrect, supporting documents. 5) Request internal review by senior adjuster or manager. 6) Consider hiring public adjuster for property claims or attorney for injury claims. 7) File complaint with state insurance department if internal appeals fail. 8) Request mediation or appraisal if policy provides. 9) Consider arbitration as alternative to lawsuit. 10) Litigation as last resort - consult attorney about bad faith claims if applicable. Keep detailed records of all communications.",
+      "metadata": {
+        "tags": ["claim-denial", "appeals-process", "dispute-resolution", "bad-faith", "documentation"],
+        "complexity": "advanced",
+        "audience": "claim-disputes"
+      }
+    },
+    {
+      "id": "total-loss-vehicle-claim",
+      "category": "claims",
+      "title": "Total Loss Auto Claim Process",
+      "content": "When your vehicle is totaled: 1) Insurance declares total loss when repair costs exceed 70-75% of actual cash value (ACV). 2) Adjuster determines ACV using vehicle age, mileage, condition, local market values. 3) You'll receive settlement offer - review carefully against Kelly Blue Book, NADA guides. 4) Negotiate if offer seems low - provide evidence of recent maintenance, upgrades, lower mileage, excellent condition. 5) Understand deductions - deductible, prior damage, salvage value if keeping vehicle. 6) Gap insurance covers difference between ACV and loan balance if applicable. 7) Sign title over to insurance company unless keeping salvage. 8) Remove personal items and license plates before surrendering vehicle. 9) Cancel registration and insurance after settlement. 10) Use settlement for replacement vehicle. Timeline: Total loss determination 3-5 days, settlement offer 7-10 days, payment after accepting 3-5 days.",
+      "metadata": {
+        "tags": ["total-loss", "actual-cash-value", "settlement", "gap-insurance", "negotiation"],
+        "complexity": "intermediate",
+        "audience": "vehicle-owners"
+      }
+    },
+    {
+      "id": "water-damage-claim",
+      "category": "claims",
+      "title": "Water Damage Claim Guidelines",
+      "content": "Water damage claims require quick action: 1) Stop water source immediately - shut off main valve, call plumber for pipe burst. 2) Document everything before cleanup - photos, video showing water source and extent. 3) Call insurance company within 24 hours - delays can affect coverage. 4) Understand coverage differences - sudden pipe burst usually covered, gradual leaks often excluded, flood requires separate policy. 5) Begin mitigation immediately - extract water, run fans/dehumidifiers, prevent mold. 6) Keep damaged items for adjuster inspection. 7) Get professional water remediation estimate. 8) Test for mold within 48 hours - mold can void coverage if not addressed. 9) Keep receipts for all expenses including temporary housing. 10) Be aware of coverage limits for mold, usually $5,000-10,000. Common exclusions: groundwater seepage, poor maintenance, frozen pipes if home vacant.",
+      "metadata": {
+        "tags": ["water-damage", "pipe-burst", "flood", "mold", "mitigation"],
+        "complexity": "advanced",
+        "audience": "property-owners"
+      }
+    },
+    {
+      "id": "theft-claim-process",
+      "category": "claims",
+      "title": "Filing a Theft or Burglary Claim",
+      "content": "For theft/burglary claims: 1) Call police immediately - get report number, this is required for claim. 2) Don't touch anything until police document scene for burglary. 3) Contact insurance company within 24-48 hours. 4) Create detailed inventory of stolen items - description, purchase date, price, receipts if available. 5) Provide photos of stolen items if you have them. 6) Check for surveillance footage from your cameras or neighbors. 7) For auto theft, provide all keys to prove forced entry. 8) Cancel stolen credit cards, change locks, secure property. 9) Work with adjuster to value stolen items - may need appraisals for jewelry, art. 10) Understand your coverage limits - typical personal property coverage is 50-70% of dwelling coverage, special limits for jewelry, cash, electronics. Timeline: Police report immediate, insurance claim 24-48 hours, adjuster contact 1-3 days, settlement 2-4 weeks after documentation complete.",
+      "metadata": {
+        "tags": ["theft", "burglary", "police-report", "personal-property", "inventory"],
+        "complexity": "intermediate",
+        "audience": "crime-victims"
+      }
+    },
+    {
+      "id": "medical-payment-claims",
+      "category": "claims",
+      "title": "Medical Payments and PIP Claims",
+      "content": "Medical payments (MedPay) and Personal Injury Protection (PIP) claims: 1) Coverage pays regardless of fault for medical expenses from auto accidents. 2) Report injury to insurance company immediately, even minor injuries. 3) Seek medical treatment promptly - delays can affect claim. 4) Keep all medical records, bills, prescriptions, therapy notes. 5) Submit bills to auto insurance first, then health insurance for remainder. 6) PIP may cover lost wages (usually 60-80%), essential services, funeral expenses. 7) Coverage limits typically $5,000-25,000 per person. 8) No deductible for MedPay/PIP in most states. 9) Using coverage doesn't raise rates as it's no-fault. 10) Coordinate benefits if multiple policies apply - avoid double payment. 11) Time limits apply - most policies require treatment within one year. 12) Pre-approval may be required for ongoing treatment. Keep detailed mileage logs for medical appointments.",
+      "metadata": {
+        "tags": ["medical-payments", "pip", "no-fault", "injury-claims", "coordination-of-benefits"],
+        "complexity": "intermediate",
+        "audience": "accident-victims"
+      }
+    },
+    {
+      "id": "windstorm-hurricane-claims",
+      "category": "claims",
+      "title": "Hurricane and Windstorm Claim Process",
+      "content": "For hurricane/windstorm damage: 1) Evacuate if ordered - safety first, property second. 2) Document pre-storm condition with photos/video if time permits. 3) After storm, photograph all damage before cleanup - include date stamps. 4) Separate wind damage from flood damage - different coverage applies. 5) Make temporary repairs to prevent further damage - tarp roof, board windows. 6) Don't throw away damaged items until adjuster sees them. 7) Contact insurance immediately but expect delays due to volume. 8) Understand your deductible - hurricane deductibles often 2-5% of home value, not flat amount. 9) Be aware of flood exclusions - storm surge requires flood insurance. 10) Watch for assignment of benefits scams from contractors. 11) Get multiple repair estimates from licensed contractors. 12) Keep receipts for additional living expenses if home uninhabitable. Timeline: Can be extended due to catastrophe - adjusters may take 1-2 weeks, settlements 30-90 days.",
+      "metadata": {
+        "tags": ["hurricane", "windstorm", "catastrophe", "flood-exclusion", "emergency-repairs"],
+        "complexity": "advanced",
+        "audience": "coastal-residents"
+      }
+    },
+    {
+      "id": "liability-claim-defense",
+      "category": "claims",
+      "title": "When You're Sued - Liability Claim Defense",
+      "content": "If you're sued for liability: 1) Contact insurance immediately - same day you're served with lawsuit. 2) Never ignore lawsuit - default judgment can exceed policy limits. 3) Forward all legal documents to insurance company immediately. 4) Insurance has 'duty to defend' - they provide attorney at no cost. 5) Cooperate fully with insurance attorney - attend depositions, provide information. 6) Don't admit fault or give statements without attorney present. 7) Understand policy limits - you're personally responsible for amounts above limits. 8) Consider umbrella policy for future protection. 9) Insurance controls settlement decisions within policy limits. 10) If bad faith suspected (failure to settle within limits), consult personal attorney. 11) Keep all correspondence and document all conversations. 12) Be honest with your attorney - lying voids coverage. Timeline: Attorney assignment within days, discovery phase months, trial 1-2 years if no settlement.",
+      "metadata": {
+        "tags": ["liability", "lawsuit", "duty-to-defend", "legal-defense", "settlement"],
+        "complexity": "advanced",
+        "audience": "liability-defendants"
+      }
+    },
+    {
+      "id": "uninsured-motorist-claim",
+      "category": "claims",
+      "title": "Uninsured Motorist Claim Process",
+      "content": "When hit by uninsured/underinsured driver: 1) Get police report - essential to prove other driver at fault and uninsured. 2) Obtain all information about other driver even if uninsured. 3) Take photos of damage, injuries, accident scene immediately. 4) Report to your insurance within 24-48 hours. 5) Your uninsured motorist coverage acts as if you're claiming against other driver's insurance. 6) Coverage includes medical bills, lost wages, pain and suffering, property damage in some states. 7) You may need to prove other driver uninsured - insurance company will verify. 8) Hit-and-run accidents covered if you report to police within 24 hours typically. 9) Your rates shouldn't increase for uninsured motorist claims. 10) Stack coverage if you have multiple vehicles for higher limits in some states. 11) Arbitration often required for disputes instead of lawsuit. 12) Consider hiring attorney for serious injuries - contingency fee basis common.",
+      "metadata": {
+        "tags": ["uninsured-motorist", "underinsured", "hit-and-run", "fault-determination", "arbitration"],
+        "complexity": "intermediate",
+        "audience": "accident-victims"
+      }
+    },
+    {
+      "id": "business-interruption-claims",
+      "category": "claims",
+      "title": "Business Interruption Insurance Claims",
+      "content": "Filing business interruption claims: 1) Coverage triggers when physical damage forces business closure/reduction. 2) Document all lost income - compare to previous year same period, show projections. 3) Keep detailed records of continuing expenses during closure - rent, salaries, utilities. 4) Calculate lost profits using historical data, not just lost revenue. 5) Extra expense coverage pays for temporary location, expedited repairs. 6) Civil authority coverage applies if government orders closure due to nearby damage. 7) Waiting period usually 48-72 hours before coverage begins. 8) Restoration period coverage continues until reasonably rebuilt, not just reopened. 9) Use forensic accountant for complex claims - worth the investment. 10) Extended business income covers ramp-up period after reopening. 11) Understand exclusions - pandemic, flood, maintenance issues often excluded. 12) Advance payments available for immediate expenses. Timeline: Initial documentation 7-14 days, forensic accounting 30-60 days, settlement 60-180 days for large claims.",
+      "metadata": {
+        "tags": ["business-interruption", "lost-income", "commercial-claims", "forensic-accounting", "restoration-period"],
+        "complexity": "advanced",
+        "audience": "business-owners"
+      }
+    },
+    {
+      "id": "life-insurance-claims",
+      "category": "claims",
+      "title": "Life Insurance Claim Process for Beneficiaries",
+      "content": "Filing a life insurance claim: 1) Notify insurance company immediately - most have dedicated claim lines. 2) Obtain multiple certified death certificates - need originals for each insurance company. 3) Locate original policy documents if possible, though not always required. 4) Complete claim forms - available online or from agent, must be notarized. 5) Provide additional documents - birth certificate, marriage certificate, proof of beneficiary identity. 6) Understand payout options - lump sum, annuity, retained asset account. 7) Normal processing 30-60 days after all documents received. 8) Delays possible for death within contestability period (first 2 years), suicide, homicide investigation. 9) Tax implications - death benefits usually tax-free, but interest earned while pending is taxable. 10) Multiple beneficiaries - each must file separately. 11) Minor beneficiaries may require guardian or trust setup. 12) Consider consulting financial advisor for large payouts. Expedited payment available for funeral expenses with proof.",
+      "metadata": {
+        "tags": ["life-insurance", "death-benefits", "beneficiary", "claim-forms", "payout-options"],
+        "complexity": "intermediate",
+        "audience": "beneficiaries"
+      }
+    },
+    {
+      "id": "disability-claim-process",
+      "category": "claims",
+      "title": "Long-Term Disability Claim Filing",
+      "content": "Filing long-term disability claims: 1) Review policy for definition of disability - own occupation vs any occupation. 2) Notify employer and insurance company as soon as disability appears long-term. 3) Elimination period typically 90-180 days - must be disabled entire period. 4) Obtain attending physician statement - crucial document detailing restrictions. 5) Complete extensive paperwork - employment history, job duties, medical history. 6) Provide medical records - all doctors, hospitals, therapies, medications. 7) Submit proof of income - W2s, tax returns, pay stubs for benefit calculation. 8) Undergo independent medical exam if requested - be honest about limitations. 9) Keep detailed symptom diary - daily activities, pain levels, limitations. 10) Benefits typically 60-70% of income, may coordinate with Social Security. 11) Surveillance possible - be consistent in reported activities. 12) Regular updates required - continuing disability reviews every 6-24 months. Consider attorney if denied - ERISA laws complex for employer plans.",
+      "metadata": {
+        "tags": ["disability", "long-term-disability", "medical-documentation", "income-replacement", "erisa"],
+        "complexity": "advanced",
+        "audience": "disabled-workers"
+      }
+    },
+    {
+      "id": "pet-insurance-claims",
+      "category": "claims",
+      "title": "Pet Insurance Claim Submission",
+      "content": "Filing pet insurance claims: 1) Pay vet bill upfront - pet insurance reimburses after treatment. 2) Obtain detailed invoice with diagnosis codes, treatments, medications. 3) Complete claim form - available online or mobile app for most insurers. 4) Submit within timeframe - usually 60-90 days from treatment date. 5) Include all medical records related to condition - history important for chronic issues. 6) Understand waiting periods - accidents 2-5 days, illnesses 14-30 days, orthopedic 6-12 months. 7) Pre-existing conditions excluded - anything diagnosed before coverage or during waiting period. 8) Annual deductible applies - per year or per condition depending on policy. 9) Reimbursement levels typically 70-90% after deductible. 10) Direct payment to vet rare but increasing. 11) Wellness coverage separate - vaccines, dental cleanings often add-on coverage. 12) Keep all receipts - prescription food, rehabilitation may be covered. Processing usually 5-10 business days, faster with mobile app submission.",
+      "metadata": {
+        "tags": ["pet-insurance", "veterinary", "reimbursement", "pre-existing", "wellness"],
+        "complexity": "basic",
+        "audience": "pet-owners"
+      }
+    },
+    {
+      "id": "earthquake-claim-specifics",
+      "category": "claims",
+      "title": "Earthquake Insurance Claim Process",
+      "content": "Earthquake claim procedures: 1) Ensure safety first - check for gas leaks, structural damage before entering. 2) Document damage immediately - photos before any cleanup or repairs. 3) Earthquake deductibles typically 10-20% of coverage limit, not flat amount. 4) Separate policies or endorsements required - standard homeowners excludes earthquake. 5) Coverage includes dwelling, personal property, additional living expenses. 6) Masonry veneer exclusion common - check policy for specific exclusions. 7) Land damage (sinkholes, land movement) typically excluded. 8) Building code upgrades may be covered if included in policy. 9) Swimming pools, detached structures may have separate limits. 10) Emergency repairs allowed but keep receipts and photos. 11) Engineering inspection often required for structural damage assessment. 12) Contents inventory crucial - room by room documentation. 13) Aftershock damage covered if occurs within 72 hours typically. Settlement timeline extended due to widespread damage - expect 60-180 days.",
+      "metadata": {
+        "tags": ["earthquake", "natural-disaster", "deductibles", "structural-damage", "separate-policy"],
+        "complexity": "advanced",
+        "audience": "earthquake-zones"
+      }
+    }
+  ]
+}

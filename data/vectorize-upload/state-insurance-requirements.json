@@ -1,0 +1,226 @@
+{
+  "dataset": "state-insurance-requirements",
+  "version": "1.0",
+  "entries": [
+    {
+      "id": "california-requirements",
+      "category": "state-requirements",
+      "title": "California Auto Insurance Requirements",
+      "content": "California requires minimum liability coverage of 15/30/5 ($15,000 bodily injury per person, $30,000 per accident, $5,000 property damage). These are among the lowest minimums in the nation and insufficient for most accidents. California also requires uninsured motorist coverage equal to liability limits unless rejected in writing. The state allows electronic proof of insurance and has a 30-day grace period for new vehicle purchases. California is a fault state, meaning the at-fault driver's insurance pays for damages. Penalties for driving without insurance include license suspension, vehicle impoundment, and fines up to $500. SR-22 filing is required for certain violations. California has implemented usage-based insurance regulations and allows insurance companies to consider additional factors like education and occupation in pricing, making it unique among states.",
+      "metadata": {
+        "tags": ["california", "15-30-5", "uninsured-motorist", "fault-state", "SR-22"],
+        "complexity": "intermediate",
+        "audience": "california-drivers"
+      }
+    },
+    {
+      "id": "florida-requirements",
+      "category": "state-requirements",
+      "title": "Florida Auto Insurance Requirements",
+      "content": "Florida requires Personal Injury Protection (PIP) coverage of $10,000 and Property Damage Liability of $10,000, but surprisingly does not require bodily injury liability coverage. This makes Florida unique among states. PIP covers 80% of medical expenses and 60% of lost wages regardless of fault. Florida is a no-fault state, meaning your own PIP coverage pays for your medical expenses regardless of who caused the accident. However, you can sue for serious injuries that meet the 'tort threshold.' Florida has high uninsured motorist rates (over 20%), making UM coverage highly recommended though not required. The state accepts electronic proof of insurance and has strict penalties for driving without coverage, including license suspension and vehicle registration suspension. SR-22 filings are required for certain violations.",
+      "metadata": {
+        "tags": ["florida", "PIP-required", "no-bodily-injury-requirement", "no-fault-state", "high-uninsured-rate"],
+        "complexity": "intermediate",
+        "audience": "florida-drivers"
+      }
+    },
+    {
+      "id": "texas-requirements",
+      "category": "state-requirements",
+      "title": "Texas Auto Insurance Requirements",
+      "content": "Texas requires minimum liability coverage of 30/60/25 ($30,000 bodily injury per person, $60,000 per accident, $25,000 property damage). Texas is a fault state with a modified comparative negligence rule - you can recover damages if you're less than 51% at fault. The state does not require PIP, medical payments, or uninsured motorist coverage, but UM is available and recommended given Texas's 14% uninsured motorist rate. Texas has a 'TexasSure' electronic verification system that allows law enforcement to verify insurance status immediately. Penalties for driving without insurance include fines up to $350, license suspension, and vehicle impoundment. Texas allows insurance companies to use credit scores in pricing and has specific regulations for military personnel. The state also has unique provisions for ride-sharing and delivery drivers that require commercial coverage during business use.",
+      "metadata": {
+        "tags": ["texas", "30-60-25", "fault-state", "TexasSure", "comparative-negligence"],
+        "complexity": "intermediate",
+        "audience": "texas-drivers"
+      }
+    },
+    {
+      "id": "new-york-requirements",
+      "category": "state-requirements",
+      "title": "New York Auto Insurance Requirements",
+      "content": "New York requires comprehensive auto insurance including liability (25/50/10), PIP ($50,000), and uninsured motorist coverage (25/50/10). New York is a no-fault state where your own insurance pays for medical expenses and lost wages regardless of who caused the accident through PIP coverage. The state has a serious injury threshold that must be met to sue for pain and suffering. Unique to New York is the requirement for supplementary uninsured/underinsured motorist coverage (SUM) equal to liability limits unless rejected in writing. New York also requires coverage for emergency medical services and has specific provisions for motorcycles and taxis. The state accepts electronic proof of insurance and has severe penalties for driving without coverage, including license suspension and vehicle registration suspension. SR-22 filings are required for certain violations.",
+      "metadata": {
+        "tags": ["new-york", "no-fault-state", "PIP-required", "SUM-coverage", "serious-injury-threshold"],
+        "complexity": "intermediate",
+        "audience": "new-york-drivers"
+      }
+    },
+    {
+      "id": "michigan-requirements",
+      "category": "state-requirements",
+      "title": "Michigan Auto Insurance Requirements",
+      "content": "Michigan has unique unlimited Personal Injury Protection (PIP) coverage, though recent reforms allow drivers to choose lower PIP limits if they have qualified health insurance. Required coverage includes liability (50/100/10), PIP (unlimited or chosen amount), and property protection insurance ($1 million). Michigan is a no-fault state with the most comprehensive PIP system in the nation, covering unlimited medical expenses, wage loss, and essential services. The state has the highest auto insurance rates nationally due to unlimited PIP. Recent reforms allow drivers with qualifying health insurance to choose PIP limits of $250,000, $500,000, or unlimited. Michigan also has unique provisions for motorcycles (PIP not required if you have health insurance) and allows insurance companies to use non-driving factors in pricing. The state requires coverage for damage to other people's property regardless of fault.",
+      "metadata": {
+        "tags": ["michigan", "unlimited-PIP", "no-fault-state", "property-protection", "recent-reforms"],
+        "complexity": "advanced",
+        "audience": "michigan-drivers"
+      }
+    },
+    {
+      "id": "massachusetts-requirements",
+      "category": "state-requirements",
+      "title": "Massachusetts Auto Insurance Requirements",
+      "content": "Massachusetts requires liability (20/40/5), PIP ($8,000), and uninsured motorist coverage (20/40/5). The state is no-fault for medical expenses up to $2,000, after which the tort system applies. Massachusetts has strict insurance regulations and all rates must be approved by the state insurance commissioner. The state pioneered managed competition in auto insurance and has specific requirements for good driver discounts. Uninsured motorist coverage is mandatory and includes hit-and-run accidents. Massachusetts also requires coverage for damage to someone else's property. The state has a Safe Driver Insurance Plan (SDIP) that assigns points for violations and accidents, affecting insurance rates. Electronic proof of insurance is accepted, and penalties for driving without insurance include license suspension and registration suspension. Massachusetts has some of the most consumer-friendly insurance regulations in the nation.",
+      "metadata": {
+        "tags": ["massachusetts", "rate-regulation", "mandatory-UM", "SDIP", "consumer-protection"],
+        "complexity": "intermediate",
+        "audience": "massachusetts-drivers"
+      }
+    },
+    {
+      "id": "arizona-requirements",
+      "category": "state-requirements",
+      "title": "Arizona Auto Insurance Requirements",
+      "content": "Arizona requires liability coverage of 25/50/15 ($25,000 bodily injury per person, $50,000 per accident, $15,000 property damage). Arizona is a fault state with a pure comparative negligence rule, meaning you can recover damages even if you're 99% at fault (though your recovery is reduced by your percentage of fault). The state does not require PIP, medical payments, or uninsured motorist coverage, but these are available and recommended given Arizona's relatively high uninsured motorist rate. Arizona has an 'implied consent' law for DUI enforcement and specific penalties for driving without insurance, including license suspension and vehicle impoundment. The state requires SR-22 filings for certain violations and has specific provisions for self-insurance for large fleets. Arizona accepts electronic proof of insurance and has been proactive in adopting technology-based insurance verification systems.",
+      "metadata": {
+        "tags": ["arizona", "25-50-15", "fault-state", "pure-comparative-negligence", "high-uninsured-rate"],
+        "complexity": "intermediate",
+        "audience": "arizona-drivers"
+      }
+    },
+    {
+      "id": "pennsylvania-requirements",
+      "category": "state-requirements",
+      "title": "Pennsylvania Auto Insurance Requirements",
+      "content": "Pennsylvania offers drivers a choice between limited tort (no-fault) and full tort options. Under limited tort, you give up the right to sue for pain and suffering except in cases of serious injury. Required coverage includes liability (15/30/5), PIP ($5,000), and first-party benefits. Pennsylvania's unique system allows drivers to choose their level of lawsuit protection. The state requires uninsured/underinsured motorist coverage unless specifically rejected. Pennsylvania has specific provisions for motorcycles and allows insurance companies to offer significant discounts for choosing limited tort. The state accepts electronic proof of insurance and has penalties for driving without coverage including license suspension. Pennsylvania's insurance system is complex due to the tort/no-fault choice, and drivers should carefully consider their options. The state also has specific requirements for teen drivers and good student discounts.",
+      "metadata": {
+        "tags": ["pennsylvania", "limited-tort-option", "choice-system", "first-party-benefits", "complex-system"],
+        "complexity": "advanced",
+        "audience": "pennsylvania-drivers"
+      }
+    },
+    {
+      "id": "illinois-requirements",
+      "category": "state-requirements",
+      "title": "Illinois Auto Insurance Requirements",
+      "content": "Illinois requires liability coverage of 25/50/20 ($25,000 bodily injury per person, $50,000 per accident, $20,000 property damage) and uninsured motorist coverage of 25/50/20. Illinois is a fault state with a modified comparative negligence rule (51% rule). The state does not require PIP or medical payments coverage but both are available. Illinois has specific provisions for underinsured motorist coverage and requires coverage for hit-and-run accidents under the uninsured motorist provision. The state accepts electronic proof of insurance and has penalties for driving without coverage including license suspension and vehicle impoundment. Illinois has been proactive in insurance reform and consumer protection, including regulations on credit scoring and specific protections for military personnel. The state also has unique provisions for rideshare drivers and requires commercial coverage during business use.",
+      "metadata": {
+        "tags": ["illinois", "25-50-20", "mandatory-UM", "fault-state", "consumer-protection"],
+        "complexity": "intermediate",
+        "audience": "illinois-drivers"
+      }
+    },
+    {
+      "id": "ohio-requirements",
+      "category": "state-requirements",
+      "title": "Ohio Auto Insurance Requirements",
+      "content": "Ohio requires liability coverage of 25/50/25 ($25,000 bodily injury per person, $50,000 per accident, $25,000 property damage). Ohio is a fault state with a modified comparative negligence rule (51% rule). The state does not require PIP, medical payments, or uninsured motorist coverage, though these are available and recommended. Ohio has specific provisions for financial responsibility and allows alternatives to insurance including self-insurance bonds for large fleets. The state accepts electronic proof of insurance and has penalties for driving without coverage including license suspension and vehicle registration suspension. Ohio has implemented reforms to reduce insurance fraud and has specific regulations for glass coverage. The state also has unique provisions for historical and antique vehicles and allows insurance companies to offer usage-based insurance programs with regulatory oversight.",
+      "metadata": {
+        "tags": ["ohio", "25-50-25", "fault-state", "financial-responsibility", "fraud-prevention"],
+        "complexity": "intermediate",
+        "audience": "ohio-drivers"
+      }
+    },
+    {
+      "id": "georgia-requirements",
+      "category": "state-requirements",
+      "title": "Georgia Auto Insurance Requirements",
+      "content": "Georgia requires liability coverage of 25/50/25 ($25,000 bodily injury per person, $50,000 per accident, $25,000 property damage). Georgia is a fault state with a modified comparative negligence rule (50% rule), meaning you cannot recover damages if you're 50% or more at fault. The state does not require PIP, medical payments, or uninsured motorist coverage, but these are available. Georgia has implemented an electronic insurance verification system and accepts electronic proof of insurance. Penalties for driving without insurance include license suspension, fines, and potential vehicle impoundment. Georgia has specific provisions for teen drivers and requires driver education for certain age groups. The state also has unique provisions for military personnel and has been active in insurance reform, including regulations on credit scoring and genetic information use.",
+      "metadata": {
+        "tags": ["georgia", "25-50-25", "50-percent-rule", "electronic-verification", "teen-driver-provisions"],
+        "complexity": "intermediate",
+        "audience": "georgia-drivers"
+      }
+    },
+    {
+      "id": "north-carolina-requirements",
+      "category": "state-requirements",
+      "title": "North Carolina Auto Insurance Requirements",
+      "content": "North Carolina requires liability coverage of 30/60/25 ($30,000 bodily injury per person, $60,000 per accident, $25,000 property damage), uninsured motorist coverage of 30/60/25, and underinsured motorist coverage of 30/60/25. North Carolina is a fault state with a pure contributory negligence rule, which is harsh - if you're even 1% at fault, you cannot recover damages from the other party. This makes having adequate insurance coverage particularly important. The state has a unique 'safe driver incentive plan' that provides rate reductions for claim-free driving. North Carolina requires UM/UIM coverage unless specifically rejected in writing. The state accepts electronic proof of insurance and has penalties for driving without coverage including license suspension. North Carolina has specific provisions for motorcycles and mopeds and regulates insurance rates through prior approval requirements.",
+      "metadata": {
+        "tags": ["north-carolina", "30-60-25", "contributory-negligence", "mandatory-UM-UIM", "safe-driver-plan"],
+        "complexity": "advanced",
+        "audience": "north-carolina-drivers"
+      }
+    },
+    {
+      "id": "virginia-requirements",
+      "category": "state-requirements",
+      "title": "Virginia Auto Insurance Requirements",
+      "content": "Virginia requires liability coverage of 25/50/20 ($25,000 bodily injury per person, $50,000 per accident, $20,000 property damage) OR payment of a $500 annual uninsured motor vehicle fee to the DMV. This makes Virginia unique as one of the few states allowing drivers to legally drive without insurance by paying a fee. However, the fee does not provide any coverage, leaving drivers personally liable for all damages they cause. Virginia is a fault state with a pure contributory negligence rule. The state does not require PIP, medical payments, or uninsured motorist coverage, though these are available. Virginia accepts electronic proof of insurance and has penalties for driving without insurance or fee payment including license suspension. The state has specific provisions for military personnel and has implemented various insurance reforms including regulations on credit scoring.",
+      "metadata": {
+        "tags": ["virginia", "uninsured-fee-option", "25-50-20", "contributory-negligence", "unique-system"],
+        "complexity": "intermediate",
+        "audience": "virginia-drivers"
+      }
+    },
+    {
+      "id": "washington-requirements",
+      "category": "state-requirements",
+      "title": "Washington Auto Insurance Requirements",
+      "content": "Washington requires liability coverage of 25/50/10 ($25,000 bodily injury per person, $50,000 per accident, $10,000 property damage). Washington is a fault state with a pure comparative negligence rule. The state does not require PIP, medical payments, or uninsured motorist coverage, but these are available and recommended given Washington's moderate uninsured motorist rate. Washington has implemented comprehensive insurance reforms including restrictions on credit scoring, requirements for insurance companies to offer good driver discounts, and consumer protections. The state accepts electronic proof of insurance and has penalties for driving without coverage including license suspension and vehicle impoundment. Washington has specific provisions for motorcycles and has been proactive in regulating usage-based insurance programs. The state also has unique environmental considerations and provisions for electric vehicle coverage.",
+      "metadata": {
+        "tags": ["washington", "25-50-10", "insurance-reforms", "credit-restrictions", "environmental-considerations"],
+        "complexity": "intermediate",
+        "audience": "washington-drivers"
+      }
+    },
+    {
+      "id": "colorado-requirements",
+      "category": "state-requirements",
+      "title": "Colorado Auto Insurance Requirements",
+      "content": "Colorado requires liability coverage of 25/50/15 ($25,000 bodily injury per person, $50,000 per accident, $15,000 property damage). Colorado is a fault state with a modified comparative negligence rule (50% rule). The state does not require PIP, medical payments, or uninsured motorist coverage, though these are available. Colorado has implemented various insurance reforms including regulations on credit scoring and requirements for insurance companies to offer payment plans. The state accepts electronic proof of insurance and has penalties for driving without coverage including license suspension and potential vehicle impoundment. Colorado has specific provisions for high-altitude driving conditions and mountain driving requirements. The state also has unique provisions for recreational vehicles and has been active in regulating new insurance technologies including usage-based insurance and autonomous vehicle coverage.",
+      "metadata": {
+        "tags": ["colorado", "25-50-15", "mountain-driving", "recreational-vehicles", "technology-regulation"],
+        "complexity": "intermediate",
+        "audience": "colorado-drivers"
+      }
+    },
+    {
+      "id": "nevada-requirements",
+      "category": "state-requirements",
+      "title": "Nevada Auto Insurance Requirements",
+      "content": "Nevada requires liability coverage of 25/50/20 ($25,000 bodily injury per person, $50,000 per accident, $20,000 property damage). Nevada is a fault state with a modified comparative negligence rule (51% rule). The state does not require PIP, medical payments, or uninsured motorist coverage, but these are available and recommended. Nevada has a relatively high uninsured motorist rate, making UM coverage particularly valuable. The state accepts electronic proof of insurance and has penalties for driving without coverage including license suspension and vehicle impoundment. Nevada has specific provisions for classic and antique vehicles and has implemented various consumer protections including regulations on claim handling and rate increases. The state also has unique considerations for tourism and rental vehicle coverage given Las Vegas's tourism industry.",
+      "metadata": {
+        "tags": ["nevada", "25-50-20", "high-uninsured-rate", "tourism-considerations", "consumer-protections"],
+        "complexity": "intermediate",
+        "audience": "nevada-drivers"
+      }
+    },
+    {
+      "id": "wisconsin-requirements",
+      "category": "state-requirements",
+      "title": "Wisconsin Auto Insurance Requirements",
+      "content": "Wisconsin requires liability coverage of 25/50/10 ($25,000 bodily injury per person, $50,000 per accident, $10,000 property damage) and uninsured motorist coverage of 25/50/10. Wisconsin is a fault state with a modified comparative negligence rule (51% rule). The state requires UM coverage unless specifically rejected in writing. Wisconsin does not require PIP or medical payments coverage but both are available. The state has implemented various consumer protections including requirements for insurance companies to offer good driver discounts and restrictions on certain rating factors. Wisconsin accepts electronic proof of insurance and has penalties for driving without coverage including license suspension. The state has specific provisions for farm vehicles and agricultural use and has been active in insurance regulation including oversight of new insurance technologies and programs.",
+      "metadata": {
+        "tags": ["wisconsin", "mandatory-UM", "25-50-10", "agricultural-provisions", "consumer-protections"],
+        "complexity": "intermediate",
+        "audience": "wisconsin-drivers"
+      }
+    },
+    {
+      "id": "minnesota-requirements",
+      "category": "state-requirements",
+      "title": "Minnesota Auto Insurance Requirements",
+      "content": "Minnesota requires liability coverage of 30/60/10 ($30,000 bodily injury per person, $60,000 per accident, $10,000 property damage), PIP ($30,000), and uninsured motorist coverage of 25/50/10. Minnesota is a no-fault state for medical expenses and wage loss up to PIP limits, after which the tort system may apply depending on the severity of injuries. The state has a 'serious injury threshold' that must be met to sue for non-economic damages. Minnesota requires both PIP and UM coverage, providing comprehensive protection for drivers. The state accepts electronic proof of insurance and has penalties for driving without coverage including license suspension and vehicle impoundment. Minnesota has implemented various consumer protections and has specific provisions for snowmobile and ATV coverage given the state's recreational vehicle usage.",
+      "metadata": {
+        "tags": ["minnesota", "no-fault-state", "mandatory-PIP-UM", "serious-injury-threshold", "recreational-vehicles"],
+        "complexity": "intermediate",
+        "audience": "minnesota-drivers"
+      }
+    },
+    {
+      "id": "louisiana-requirements",
+      "category": "state-requirements",
+      "title": "Louisiana Auto Insurance Requirements",
+      "content": "Louisiana requires liability coverage of 15/30/25 ($15,000 bodily injury per person, $30,000 per accident, $25,000 property damage). Louisiana is a fault state with a pure comparative negligence rule. The state does not require PIP, medical payments, or uninsured motorist coverage, though these are available and highly recommended given Louisiana's high uninsured motorist rate (over 13%). Louisiana has unique legal traditions based on Civil Law rather than Common Law, which can affect insurance claim handling and legal procedures. The state accepts electronic proof of insurance and has penalties for driving without coverage including license suspension and vehicle impoundment. Louisiana has specific provisions for hurricane and flood-related vehicle damage and has implemented various consumer protections including regulations on claim handling during natural disasters.",
+      "metadata": {
+        "tags": ["louisiana", "15-30-25", "high-uninsured-rate", "civil-law-system", "hurricane-provisions"],
+        "complexity": "intermediate",
+        "audience": "louisiana-drivers"
+      }
+    },
+    {
+      "id": "new-hampshire-requirements",
+      "category": "state-requirements",
+      "title": "New Hampshire Auto Insurance Requirements",
+      "content": "New Hampshire is unique as the only state that does not require auto insurance, but drivers must prove financial responsibility if they cause an accident. If you cannot prove financial responsibility (insurance, bond, or cash deposit), you face license suspension and must file SR-22 for three years. Most drivers choose insurance as the practical way to meet financial responsibility requirements. If you choose insurance, you must carry minimum liability coverage of 25/50/25 ($25,000 bodily injury per person, $50,000 per accident, $25,000 property damage), PIP ($1,000), and uninsured motorist coverage of 25/50/25. New Hampshire is a fault state with a modified comparative negligence rule (51% rule). The state accepts electronic proof of insurance when carried voluntarily.",
+      "metadata": {
+        "tags": ["new-hampshire", "no-insurance-requirement", "financial-responsibility", "unique-system", "SR-22-consequences"],
+        "complexity": "advanced",
+        "audience": "new-hampshire-drivers"
+      }
+    }
+  ]
+}

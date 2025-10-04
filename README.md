@@ -277,56 +277,58 @@ The system automatically saves the following information as it's mentioned:
 - Health status, smoker status
 - Insurance type preference
 
-## Recent Major Updates (Week 2 - Latest)
-
-### 🔄 Real-Time Profile Updates (NEW)
-1. **Automatic Data Capture** - Extracts information from conversation in real-time
-2. **Persistent Storage** - Profile saves after every message to localStorage
-3. **Smart Recognition** - Detects age, vehicles, marital status, ZIP codes automatically
-4. **Never Forgets** - Information mentioned once is saved forever
-5. **Visual Confirmation** - Shows saved data with checkmarks (✓ SAVED)
-
-### 💰 Premium Estimates & Monthly Costs
-1. **Auto Insurance** - Shows state minimum, standard, and full coverage monthly costs
-2. **Home Insurance** - Displays basic, standard, and premium coverage monthly rates
-3. **Life Insurance** - Provides term (20yr, 30yr) and whole life monthly premiums
-4. **Instant Estimates** - Premium ranges shown immediately after basic data collection
-5. **Carrier-Specific** - Lists top carriers with their estimated monthly costs
-
-### 🎯 Step-by-Step Needs Analysis
-1. **One Question at a Time** - Never overwhelming users with multiple questions
-2. **Numbered Options** - Every question includes choices (1, 2, 3, etc.) for quick response
-3. **Smart Memory** - Never asks for information already provided or mentioned
-4. **Progress Tracking** - Shows what's collected and what's still needed
-5. **Milestone Summaries** - Provides summary with estimates at key collection points
-
 ## Recent Major Updates (Week 2)
 
-### 🎯 Enhanced AI Rules & Data Collection
-1. **Minimum Quote Requirements** - Clear 5-field mandatory collection
-2. **Targeted Initial Responses** - Direct, actionable numbered options
-3. **Specific Next Steps** - No more vague questions, always provide concrete choices
-4. **Comprehensive Coverage Types** - Auto, Home, Life, Renters, Pet insurance support
+### 🔄 Real-Time Profile Updates
+- **Automatic Data Capture** - Extracts information from conversation in real-time using regex patterns
+- **Persistent Storage** - Profile saves after every message to localStorage
+- **Smart Recognition** - Detects age, vehicles, marital status, ZIP codes, home values automatically
+- **Never Forgets** - Information mentioned once is saved forever and auto-fills in system prompts
+- **Visual Confirmation** - Shows saved data with checkmarks (✓ SAVED - USE THIS)
 
-### 🤝 Local Agent Outreach System  
-1. **Agent Discovery** - Find top-rated local agents by location and specialization
-2. **Professional Email Generation** - Personalized introduction emails with user specifics
-3. **Reputation Scoring** - Rank agents by ratings, experience, and response time
-4. **Direct Contact Integration** - Call, email, or send introduction immediately
+### 💰 Premium Estimates & Monthly Costs
+- **Auto Insurance** - $800-4,000/year ($67-333/month) based on driver age, record, vehicle
+- **Home Insurance** - $600-4,000/year ($50-333/month) based on home value and location
+- **Life Insurance** - $25-400/month based on age, health status, coverage amount
+- **Instant Estimates** - Premium ranges shown immediately after basic data collection
+- **Three-Tier Display** - Shows state minimum, standard coverage, and full coverage costs
+- **Carrier-Specific** - Lists GEICO, State Farm, Progressive with estimated monthly costs
+
+### 🎯 Step-by-Step Needs Analysis
+- **One Question at a Time** - Never overwhelming users with multiple questions
+- **Numbered Options** - Every question includes 3-4 choices (1, 2, 3, 4) for quick response
+- **Smart Memory** - Never asks for information already provided or mentioned anywhere
+- **Progress Tracking** - Shows "I have: X, Y, Z. Now I need: A" summaries
+- **Milestone Summaries** - Provides estimates at key collection points (after 5 basic fields)
+
+### 🎯 Enhanced AI Rules & Data Collection
+- **Minimum Quote Requirements** - Mandatory 5-field collection (drivers, vehicles, ZIP, ages, vehicle details)
+- **Targeted Initial Responses** - Always provide 2-3 numbered, actionable options
+- **Specific Next Steps** - No vague questions like "What would you like to explore?"
+- **Comprehensive Coverage Types** - Full support for Auto, Home, Life, Renters, Pet insurance
+- **Quote Path Selection** - Quick quote (5 min) vs Detailed quote (10-15 min) options
+
+### 🤝 Local Agent Outreach System
+- **Agent Discovery** - Find top-rated local agents by ZIP code and insurance specialization
+- **Professional Email Generation** - Personalized introduction emails with customer profile integration
+- **Reputation Scoring** - Rank by ratings (40%), experience (25%), reviews (20%), response time (15%)
+- **Direct Contact Integration** - Call, email, or send introduction with one click
+- **Alternative Agents** - Provides 3-4 backup agent recommendations
 
 ### 📋 Enhanced Carrier Toolkit
-1. **Coverage Requirements Analysis** - Required vs. flexible coverage breakdown
-2. **Negotiation Scripts** - Professional conversation starters and questions
-3. **Insurance-Specific Examples** - Tailored for Auto, Home, Life insurance
-4. **State-Specific Requirements** - Minimum liability and mandatory coverage details
+- **Required vs Flexible Coverage** - Clear breakdown of non-negotiable vs optional coverages
+- **Negotiation Scripts** - Professional questions: deductible comparison, discount eligibility, competitor matching
+- **Insurance-Specific Examples** - Tailored toolkits for Auto, Home, Life with state minimums
+- **State-Specific Requirements** - CA: 15/30/5 liability, PIP in no-fault states, uninsured motorist
+- **Document Checklist** - What to have ready when calling carriers
 
 ### 🔧 Technical Improvements
-1. **UI Text Wrapping** - Fixed chat bubble overflow issues
-2. **Security Updates** - Next.js updated to 14.2.33 (critical vulnerabilities resolved)
-3. **Deployment Fixes** - Resolved pnpm/npm lockfile conflicts
-4. **Branch Strategy** - Using `week-2` branch for new development
-5. **Customer Profile System** - Persistent profile storage with localStorage
-6. **RAG Integration** - Vectorize.io integration for knowledge retrieval
+- **Vercel AI SDK Upgrade** - Replaced manual OpenAI streaming with `useChat` hook
+- **UI Text Wrapping** - Fixed chat bubble overflow with solid white backgrounds
+- **Security Updates** - Next.js updated to 14.2.33 (CVE fixes)
+- **Deployment Fixes** - Resolved pnpm/npm lockfile conflicts for Vercel
+- **Customer Profile System** - localStorage persistence with import/export
+- **RAG Integration** - Vectorize.io with 14 datasets (235+ entries, 356KB knowledge base)
 
 ## Best Practices
 
@@ -430,6 +432,102 @@ The app includes a comprehensive customer profile system:
 - Insurance: Type, current insurer, premium
 - Demographics: Marital status, home ownership, occupation
 - Additional: Credit range, driver/vehicle counts
+
+## Stretch Goals
+
+These are planned future enhancements that would significantly expand the platform's capabilities:
+
+### 🎯 Rating Engine Implementation
+
+Build an actual insurance premium calculation engine using industry-standard algorithms to replace estimate ranges with precise pricing.
+
+**Key Features:**
+- Auto/Home/Life insurance rating algorithms with industry-standard multipliers
+- Integration with state insurance department rate filings and actuarial tables
+- Real-time premium calculations based on collected customer data
+- Transparent factor breakdowns showing how premiums are calculated
+- Confidence scoring based on data completeness
+
+**Technical Requirements:**
+- State rate filings and loss cost data (ISO, NCCI)
+- Vehicle data APIs (NHTSA, IIHS safety ratings)
+- Property data APIs (Zillow/CoreLogic)
+- Credit data integration (LexisNexis)
+- Actuarial tables (CSO 2017 for life insurance)
+
+**Benefits:**
+- Accurate pricing instead of broad estimates
+- Instant quotes without waiting for carrier responses
+- Higher lead conversion with precise pricing
+- Scalability without carrier API dependencies
+
+---
+
+### 🔌 Carrier API Integration
+
+Automate the quote process by integrating directly with insurance carrier public APIs for real-time pricing.
+
+**Key Features:**
+- Direct integrations with GEICO, Progressive, State Farm, Allstate, USAA, Liberty Mutual
+- Parallel API calls with intelligent rate limiting
+- Data mapping between our format and carrier-specific formats
+- Quote aggregation and side-by-side comparison
+- Graceful error handling and fallback mechanisms
+
+**Technical Requirements:**
+- OAuth 2.0 and API key authentication
+- Carrier-specific data mappers and response normalizers
+- Rate limiting (100-200 req/min depending on carrier)
+- Retry logic and partial failure handling
+- Secure token storage and rotation
+
+**Benefits:**
+- Real-time quotes from multiple carriers instantly
+- Comprehensive comparison with identical coverage
+- No need for users to visit multiple websites
+- Carrier partnership and referral revenue opportunities
+
+---
+
+### 🤝 Enhanced Local Agent Outreach System
+
+Expand the local agent connection feature with a comprehensive agent directory and relationship management.
+
+**Key Features:**
+- Agent discovery by location and specialization with reputation ranking
+- Professional email composition with customer profile integration
+- Agent profile analysis with ratings, experience, response time
+- Direct contact integration (call, email, send introduction)
+- Follow-up reminders and agent performance tracking
+
+**Technical Requirements:**
+- Agent database with license verification
+- Integration with Google Reviews, Yelp, BBB for ratings
+- Email template system with insurance-type customization
+- Geolocation and radius search (25-mile default)
+- Agent scoring algorithm (ratings 40%, experience 25%, reviews 20%, response time 15%)
+
+**Benefits:**
+- Personal touch with local face-to-face service
+- Agents often have access to exclusive rates
+- Ongoing support for claims and policy management
+- Revenue sharing with referring agents
+- Higher customer satisfaction with human element
+
+---
+
+### 📊 Advanced Analytics & Market Insights
+
+Provide users and agents with market trend data and pricing insights.
+
+**Potential Features:**
+- Premium trends by region and demographics
+- Seasonal pricing patterns
+- Carrier competitiveness analysis
+- Risk factor impact visualization
+- Policy recommendation engine based on user profile
+
+---
 
 ## Contributing
 

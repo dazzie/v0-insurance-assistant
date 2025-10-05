@@ -300,9 +300,11 @@ export function extractProfileFromConversation(messages: any[]): Partial<Custome
       const make = vehicleMatch[2]
       const model = vehicleMatch[3]
 
-      // Check if this vehicle isn't already in the array
+      // Check if this vehicle isn't already in the array (case-insensitive)
       const exists = extracted.vehicles.some(v =>
-        v.year === year && v.make === make && v.model === model
+        v.year === year &&
+        v.make.toLowerCase() === make.toLowerCase() &&
+        v.model.toLowerCase() === model.toLowerCase()
       )
 
       if (!exists && year > 1990 && year <= new Date().getFullYear() + 1) {

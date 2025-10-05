@@ -88,8 +88,125 @@ Think of me as your trusted advisor who will help you navigate coverage options,
     }
   }, [messages])
 
-  const handlePromptClick = (promptText: string) => {
-    setInput(promptText)
+  const handlePromptClick = async (promptText: string) => {
+    if (isLoading) return
+
+    // Create and send the message immediately
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: promptText,
+      createdAt: new Date(),
+    }
+
+    setMessages((prev) => [...prev, userMessage])
+    setInput("")
+
+    // Check if user is asking for quotes/comparisons
+    if (promptText.toLowerCase().includes('quote') ||
+        promptText.toLowerCase().includes('compare') ||
+        promptText.toLowerCase().includes('price') ||
+        promptText.toLowerCase().includes('get insurance')) {
+
+      // Check if we already have enough information to show quotes
+      const hasEnoughInfo = liveProfile.vehicles && liveProfile.vehicles.length > 0 &&
+                           liveProfile.driversCount && liveProfile.driversCount > 0
+
+      if (hasEnoughInfo) {
+        // We have enough info, show quote results directly
+        const quoteData = {
+          insuranceType: 'Auto',
+          customerProfile: liveProfile,
+          coverageAmount: liveProfile.coverageAmount || '$500,000',
+          deductible: liveProfile.deductible || '$1,000',
+          requestId: `REQ-${Date.now()}`
+        }
+        setQuoteData(quoteData)
+        setShowQuoteResults(true)
+        return
+      } else {
+        // Need more information, show information gatherer
+        setShowInformationGatherer(true)
+        return
+      }
+    }
+
+    setIsLoading(true)
+
+    const assistantMessageId = (Date.now() + 1).toString()
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [...messages, userMessage].map((msg) => ({
+            role: msg.role,
+            content: msg.content,
+          })),
+          customerProfile,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        console.error("[v0] API Error:", errorData)
+        throw new Error(`API Error: ${response.status}`)
+      }
+
+      const reader = response.body?.getReader()
+      const decoder = new TextDecoder()
+      let assistantContent = ""
+
+      const assistantMessage: Message = {
+        id: assistantMessageId,
+        role: "assistant",
+        content: "",
+        createdAt: new Date(),
+      }
+      setMessages((prev) => [...prev, assistantMessage])
+
+      if (reader) {
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+
+            if (done) {
+              break
+            }
+
+            const chunk = decoder.decode(value, { stream: true })
+            assistantContent += chunk
+
+            if (assistantContent.trim()) {
+              setMessages((prev) =>
+                prev.map((msg) => (msg.id === assistantMessageId ? { ...msg, content: assistantContent } : msg)),
+              )
+            }
+          }
+        } catch (streamError) {
+          console.error("[v0] Stream reading error:", streamError)
+          throw streamError
+        } finally {
+          reader.releaseLock()
+        }
+      }
+    } catch (error) {
+      console.error("[v0] Chat error:", error)
+      setMessages((prev) => prev.filter((msg) => msg.id !== assistantMessageId))
+
+      const fallbackMessage: Message = {
+        id: (Date.now() + 2).toString(),
+        role: "assistant",
+        content: generateStructuredResponse(promptText, customerProfile),
+        createdAt: new Date(),
+      }
+      setMessages((prev) => [...prev, fallbackMessage])
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleStartInformationGathering = () => {

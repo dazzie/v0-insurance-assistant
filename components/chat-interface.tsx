@@ -11,8 +11,11 @@ import { FormattedResponse } from "@/components/formatted-response"
 import { SuggestedPrompts } from "@/components/suggested-prompts"
 import { QuoteProfileDisplay } from "@/components/quote-profile-display"
 import { QuoteInformationGatherer } from "@/components/quote-information-gatherer"
+import { QuoteResults } from "@/components/quote-results"
 import { buildQuoteProfile } from "@/lib/quote-profile"
 import type { CustomerProfile } from "@/app/page"
+import { ProfileSummaryCard } from "@/components/profile-summary-card"
+import { profileManager, extractProfileFromConversation } from "@/lib/customer-profile"
 
 interface ChatInterfaceProps {
   customerProfile: CustomerProfile
@@ -49,13 +52,34 @@ Think of me as your trusted advisor who will help you navigate coverage options,
   const [isLoading, setIsLoading] = useState(false)
   const [showInformationGatherer, setShowInformationGatherer] = useState(false)
   const [gatheredInformation, setGatheredInformation] = useState<any>(null)
+  const [showQuoteResults, setShowQuoteResults] = useState(false)
+  const [quoteData, setQuoteData] = useState<any>(null)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
-  
+
+  // Track live profile updates from conversation
+  const [liveProfile, setLiveProfile] = useState(() => {
+    const saved = profileManager.loadProfile() || {}
+    return { ...saved, ...customerProfile }
+  })
+
   // Build quote profile from messages for auto insurance
   const quoteProfile = useMemo(() => {
     if (!isAutoInsurance) return null
     return buildQuoteProfile(messages, customerProfile)
   }, [messages, customerProfile, isAutoInsurance])
+
+  // Extract and update profile from messages in real-time
+  useEffect(() => {
+    const extractedProfile = extractProfileFromConversation(messages.map(m => ({
+      role: m.role,
+      content: m.content
+    })))
+    if (Object.keys(extractedProfile).length > 0) {
+      const currentProfile = profileManager.loadProfile() || {}
+      const updatedProfile = { ...currentProfile, ...customerProfile, ...extractedProfile }
+      setLiveProfile(updatedProfile)
+    }
+  }, [messages, customerProfile])
 
   // Auto-scroll to bottom when new messages are added
   useEffect(() => {
@@ -64,8 +88,125 @@ Think of me as your trusted advisor who will help you navigate coverage options,
     }
   }, [messages])
 
-  const handlePromptClick = (promptText: string) => {
-    setInput(promptText)
+  const handlePromptClick = async (promptText: string) => {
+    if (isLoading) return
+
+    // Create and send the message immediately
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: promptText,
+      createdAt: new Date(),
+    }
+
+    setMessages((prev) => [...prev, userMessage])
+    setInput("")
+
+    // Check if user is asking for quotes/comparisons
+    if (promptText.toLowerCase().includes('quote') ||
+        promptText.toLowerCase().includes('compare') ||
+        promptText.toLowerCase().includes('price') ||
+        promptText.toLowerCase().includes('get insurance')) {
+
+      // Check if we already have enough information to show quotes
+      const hasEnoughInfo = liveProfile.vehicles && liveProfile.vehicles.length > 0 &&
+                           liveProfile.driversCount && liveProfile.driversCount > 0
+
+      if (hasEnoughInfo) {
+        // We have enough info, show quote results directly
+        const quoteData = {
+          insuranceType: 'Auto',
+          customerProfile: liveProfile,
+          coverageAmount: liveProfile.coverageAmount || '$500,000',
+          deductible: liveProfile.deductible || '$1,000',
+          requestId: `REQ-${Date.now()}`
+        }
+        setQuoteData(quoteData)
+        setShowQuoteResults(true)
+        return
+      } else {
+        // Need more information, show information gatherer
+        setShowInformationGatherer(true)
+        return
+      }
+    }
+
+    setIsLoading(true)
+
+    const assistantMessageId = (Date.now() + 1).toString()
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [...messages, userMessage].map((msg) => ({
+            role: msg.role,
+            content: msg.content,
+          })),
+          customerProfile,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        console.error("[v0] API Error:", errorData)
+        throw new Error(`API Error: ${response.status}`)
+      }
+
+      const reader = response.body?.getReader()
+      const decoder = new TextDecoder()
+      let assistantContent = ""
+
+      const assistantMessage: Message = {
+        id: assistantMessageId,
+        role: "assistant",
+        content: "",
+        createdAt: new Date(),
+      }
+      setMessages((prev) => [...prev, assistantMessage])
+
+      if (reader) {
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+
+            if (done) {
+              break
+            }
+
+            const chunk = decoder.decode(value, { stream: true })
+            assistantContent += chunk
+
+            if (assistantContent.trim()) {
+              setMessages((prev) =>
+                prev.map((msg) => (msg.id === assistantMessageId ? { ...msg, content: assistantContent } : msg)),
+              )
+            }
+          }
+        } catch (streamError) {
+          console.error("[v0] Stream reading error:", streamError)
+          throw streamError
+        } finally {
+          reader.releaseLock()
+        }
+      }
+    } catch (error) {
+      console.error("[v0] Chat error:", error)
+      setMessages((prev) => prev.filter((msg) => msg.id !== assistantMessageId))
+
+      const fallbackMessage: Message = {
+        id: (Date.now() + 2).toString(),
+        role: "assistant",
+        content: generateStructuredResponse(promptText, customerProfile),
+        createdAt: new Date(),
+      }
+      setMessages((prev) => [...prev, fallbackMessage])
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleStartInformationGathering = () => {
@@ -86,12 +227,57 @@ Think of me as your trusted advisor who will help you navigate coverage options,
     
     setMessages(prev => [...prev, informationMessage])
     
-    // Send to API for processing
-    handleSubmitWithInformation(information)
+    // Check if this is a quote request and show quote results
+    if (information.insuranceType || information.needs?.some((need: string) => 
+      need.toLowerCase().includes('quote') || 
+      need.toLowerCase().includes('compare') ||
+      need.toLowerCase().includes('price')
+    )) {
+      const quoteData = {
+        insuranceType: information.insuranceType || 'Auto',
+        customerProfile: { ...customerProfile, ...information },
+        coverageAmount: information.coverageAmount || '$500,000',
+        deductible: information.deductible || '$1,000',
+        requestId: `REQ-${Date.now()}`
+      }
+      setQuoteData(quoteData)
+      setShowQuoteResults(true)
+    } else {
+      // Check if we now have enough information to show quotes automatically
+      const hasEnoughInfo = information.vehicles && information.vehicles.length > 0 && 
+                           information.driversCount && information.driversCount > 0
+      
+      if (hasEnoughInfo) {
+        // Automatically show quote results since we have enough info
+        const quoteData = {
+          insuranceType: 'Auto',
+          customerProfile: { ...customerProfile, ...information },
+          coverageAmount: information.coverageAmount || '$500,000',
+          deductible: information.deductible || '$1,000',
+          requestId: `REQ-${Date.now()}`
+        }
+        setQuoteData(quoteData)
+        setShowQuoteResults(true)
+      } else {
+        // Send to API for processing
+        handleSubmitWithInformation(information)
+      }
+    }
   }
 
   const handleInformationCancel = () => {
     setShowInformationGatherer(false)
+  }
+
+  const handleBackToChat = () => {
+    setShowQuoteResults(false)
+    setQuoteData(null)
+  }
+
+  const handleNewQuote = () => {
+    setShowQuoteResults(false)
+    setQuoteData(null)
+    setShowInformationGatherer(true)
   }
 
   const handleSubmitWithInformation = async (information: any) => {
@@ -171,6 +357,36 @@ Think of me as your trusted advisor who will help you navigate coverage options,
     setMessages((prev) => [...prev, userMessage])
     const currentInput = input
     setInput("")
+    
+    // Check if user is asking for quotes/comparisons
+    if (currentInput.toLowerCase().includes('quote') || 
+        currentInput.toLowerCase().includes('compare') || 
+        currentInput.toLowerCase().includes('price') || 
+        currentInput.toLowerCase().includes('get insurance')) {
+      
+      // Check if we already have enough information to show quotes
+      const hasEnoughInfo = liveProfile.vehicles && liveProfile.vehicles.length > 0 && 
+                           liveProfile.driversCount && liveProfile.driversCount > 0
+      
+      if (hasEnoughInfo) {
+        // We have enough info, show quote results directly
+        const quoteData = {
+          insuranceType: 'Auto',
+          customerProfile: liveProfile,
+          coverageAmount: liveProfile.coverageAmount || '$500,000',
+          deductible: liveProfile.deductible || '$1,000',
+          requestId: `REQ-${Date.now()}`
+        }
+        setQuoteData(quoteData)
+        setShowQuoteResults(true)
+        return
+      } else {
+        // Need more information, show information gatherer
+        setShowInformationGatherer(true)
+        return
+      }
+    }
+    
     setIsLoading(true)
 
     const assistantMessageId = (Date.now() + 1).toString()
@@ -303,8 +519,22 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
     )
   }
 
+  // Show quote results if available
+  if (showQuoteResults && quoteData) {
+    return (
+      <QuoteResults
+        quoteData={quoteData}
+        onBack={handleBackToChat}
+        onNewQuote={handleNewQuote}
+      />
+    )
+  }
+
   return (
     <div className="space-y-4">
+      {/* Dynamic Profile Summary Card */}
+      <ProfileSummaryCard profile={liveProfile} />
+
       {/* Quote Profile Display - Only for Auto Insurance */}
       {isAutoInsurance && quoteProfile && messages.length > 1 && (
         <QuoteProfileDisplay profile={quoteProfile} />

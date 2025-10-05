@@ -469,9 +469,24 @@ Updated system rules with strict minimum requirements for auto insurance quotes:
 ## Current Focus Areas
 - **Primary**: Auto insurance (fully implemented with enhanced rules)
 - **Future**: Home, Life, Health insurance modules
-- **Active Development**: Quote accuracy optimization and user experience refinement
+- **Active Development**: MCP server integration for Claude Code (Week 3)
 
-## Recent Updates (Week 2)
+## Recent Updates
+
+### Week 3 (Current)
+
+#### 🔌 MCP Server Integration
+- **Direct Claude Code Access**: Query Vectorize.io knowledge base directly from Claude Code using Model Context Protocol
+- **Four MCP Tools Available**:
+  - `search_insurance_knowledge` - General search across 235+ entries
+  - `get_coverage_explanation` - Detailed coverage type explanations
+  - `get_state_requirements` - State-specific insurance requirements
+  - `get_discount_opportunities` - Find applicable discounts
+- **Automatic Context Enhancement**: Claude Code fetches insurance knowledge on-demand during conversations
+- **Location**: `/mcp-server/` directory with complete setup documentation
+- **Configuration**: JSON config for Claude Code settings provided
+
+### Week 2
 
 ### 🔄 Real-Time Profile Updates
 - Automatic data capture using regex patterns (age, vehicles, marital status, ZIP, home value)

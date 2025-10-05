@@ -383,6 +383,30 @@ The app auto-deploys to Vercel on push to main branch.
 ### Overview
 The assistant uses Retrieval-Augmented Generation (RAG) with Vectorize.io for enhanced knowledge retrieval, providing more accurate and contextual insurance information.
 
+### MCP Server (NEW - Week 3)
+
+**Direct Claude Code Integration** - Query the insurance knowledge base directly from Claude Code using Model Context Protocol (MCP).
+
+**Setup:**
+1. Navigate to `mcp-server` directory
+2. Run `npm install` to install dependencies
+3. Configure Claude Code with the MCP server (see `mcp-server/README.md`)
+4. Restart Claude Code
+
+**Available Tools:**
+- `search_insurance_knowledge` - Search 235+ insurance entries
+- `get_coverage_explanation` - Get detailed coverage explanations
+- `get_state_requirements` - Retrieve state-specific requirements
+- `get_discount_opportunities` - Find applicable discounts
+
+**Example Usage in Claude Code:**
+```
+Use search_insurance_knowledge to find "comprehensive coverage explanation"
+Use get_state_requirements for state="CA" insuranceType="auto"
+```
+
+See `/mcp-server/README.md` for complete setup and usage instructions.
+
 ### Vectorize.io Data Sets
 The following datasets are available in `/data/vectorize-upload/` for upload to your Vectorize pipeline:
 

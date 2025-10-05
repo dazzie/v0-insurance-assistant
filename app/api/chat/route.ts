@@ -162,7 +162,8 @@ ${JSON.stringify(STATE_MINIMUM_COVERAGE[state], null, 2)}`
   let nextPrompts: string[] = []
   
   if (needs.includes("auto") && messages.length > 0) {
-    const quoteProfile = buildQuoteProfile(messages, customerProfile)
+    // Use the MERGED profile (includes saved data) when building quote profile
+    const quoteProfile = buildQuoteProfile(messages, mergedProfile)
     nextPrompts = getPromptsForMissingInfo(quoteProfile)
     
     quoteProfileInfo = `

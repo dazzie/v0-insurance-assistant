@@ -11,6 +11,7 @@ import { FormattedResponse } from "@/components/formatted-response"
 import { SuggestedPrompts } from "@/components/suggested-prompts"
 import { QuoteProfileDisplay } from "@/components/quote-profile-display"
 import { QuoteInformationGatherer } from "@/components/quote-information-gatherer"
+import { QuoteResults } from "@/components/quote-results"
 import { buildQuoteProfile } from "@/lib/quote-profile"
 import type { CustomerProfile } from "@/app/page"
 
@@ -49,6 +50,8 @@ Think of me as your trusted advisor who will help you navigate coverage options,
   const [isLoading, setIsLoading] = useState(false)
   const [showInformationGatherer, setShowInformationGatherer] = useState(false)
   const [gatheredInformation, setGatheredInformation] = useState<any>(null)
+  const [showQuoteResults, setShowQuoteResults] = useState(false)
+  const [quoteData, setQuoteData] = useState<any>(null)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   
   // Build quote profile from messages for auto insurance
@@ -86,12 +89,40 @@ Think of me as your trusted advisor who will help you navigate coverage options,
     
     setMessages(prev => [...prev, informationMessage])
     
-    // Send to API for processing
-    handleSubmitWithInformation(information)
+    // Check if this is a quote request and show quote results
+    if (information.insuranceType || information.needs?.some((need: string) => 
+      need.toLowerCase().includes('quote') || 
+      need.toLowerCase().includes('compare') ||
+      need.toLowerCase().includes('price')
+    )) {
+      const quoteData = {
+        insuranceType: information.insuranceType || 'Auto',
+        customerProfile: { ...customerProfile, ...information },
+        coverageAmount: information.coverageAmount || '$500,000',
+        deductible: information.deductible || '$1,000',
+        requestId: `REQ-${Date.now()}`
+      }
+      setQuoteData(quoteData)
+      setShowQuoteResults(true)
+    } else {
+      // Send to API for processing
+      handleSubmitWithInformation(information)
+    }
   }
 
   const handleInformationCancel = () => {
     setShowInformationGatherer(false)
+  }
+
+  const handleBackToChat = () => {
+    setShowQuoteResults(false)
+    setQuoteData(null)
+  }
+
+  const handleNewQuote = () => {
+    setShowQuoteResults(false)
+    setQuoteData(null)
+    setShowInformationGatherer(true)
   }
 
   const handleSubmitWithInformation = async (information: any) => {
@@ -171,6 +202,17 @@ Think of me as your trusted advisor who will help you navigate coverage options,
     setMessages((prev) => [...prev, userMessage])
     const currentInput = input
     setInput("")
+    
+    // Check if user is asking for quotes/comparisons
+    if (currentInput.toLowerCase().includes('quote') || 
+        currentInput.toLowerCase().includes('compare') || 
+        currentInput.toLowerCase().includes('price') || 
+        currentInput.toLowerCase().includes('get insurance')) {
+      // Trigger quote information gathering
+      setShowInformationGatherer(true)
+      return
+    }
+    
     setIsLoading(true)
 
     const assistantMessageId = (Date.now() + 1).toString()
@@ -300,6 +342,17 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
           onCancel={handleInformationCancel}
         />
       </div>
+    )
+  }
+
+  // Show quote results if available
+  if (showQuoteResults && quoteData) {
+    return (
+      <QuoteResults
+        quoteData={quoteData}
+        onBack={handleBackToChat}
+        onNewQuote={handleNewQuote}
+      />
     )
   }
 

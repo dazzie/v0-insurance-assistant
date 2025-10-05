@@ -14,6 +14,8 @@ import { QuoteInformationGatherer } from "@/components/quote-information-gathere
 import { QuoteResults } from "@/components/quote-results"
 import { buildQuoteProfile } from "@/lib/quote-profile"
 import type { CustomerProfile } from "@/app/page"
+import { ProfileSummaryCard } from "@/components/profile-summary-card"
+import { profileManager, extractProfileFromConversation } from "@/lib/customer-profile"
 
 interface ChatInterfaceProps {
   customerProfile: CustomerProfile
@@ -53,12 +55,31 @@ Think of me as your trusted advisor who will help you navigate coverage options,
   const [showQuoteResults, setShowQuoteResults] = useState(false)
   const [quoteData, setQuoteData] = useState<any>(null)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
-  
+
+  // Track live profile updates from conversation
+  const [liveProfile, setLiveProfile] = useState(() => {
+    const saved = profileManager.loadProfile() || {}
+    return { ...saved, ...customerProfile }
+  })
+
   // Build quote profile from messages for auto insurance
   const quoteProfile = useMemo(() => {
     if (!isAutoInsurance) return null
     return buildQuoteProfile(messages, customerProfile)
   }, [messages, customerProfile, isAutoInsurance])
+
+  // Extract and update profile from messages in real-time
+  useEffect(() => {
+    const extractedProfile = extractProfileFromConversation(messages.map(m => ({
+      role: m.role,
+      content: m.content
+    })))
+    if (Object.keys(extractedProfile).length > 0) {
+      const currentProfile = profileManager.loadProfile() || {}
+      const updatedProfile = { ...currentProfile, ...customerProfile, ...extractedProfile }
+      setLiveProfile(updatedProfile)
+    }
+  }, [messages, customerProfile])
 
   // Auto-scroll to bottom when new messages are added
   useEffect(() => {
@@ -105,8 +126,25 @@ Think of me as your trusted advisor who will help you navigate coverage options,
       setQuoteData(quoteData)
       setShowQuoteResults(true)
     } else {
-      // Send to API for processing
-      handleSubmitWithInformation(information)
+      // Check if we now have enough information to show quotes automatically
+      const hasEnoughInfo = information.vehicles && information.vehicles.length > 0 && 
+                           information.driversCount && information.driversCount > 0
+      
+      if (hasEnoughInfo) {
+        // Automatically show quote results since we have enough info
+        const quoteData = {
+          insuranceType: 'Auto',
+          customerProfile: { ...customerProfile, ...information },
+          coverageAmount: information.coverageAmount || '$500,000',
+          deductible: information.deductible || '$1,000',
+          requestId: `REQ-${Date.now()}`
+        }
+        setQuoteData(quoteData)
+        setShowQuoteResults(true)
+      } else {
+        // Send to API for processing
+        handleSubmitWithInformation(information)
+      }
     }
   }
 
@@ -208,9 +246,28 @@ Think of me as your trusted advisor who will help you navigate coverage options,
         currentInput.toLowerCase().includes('compare') || 
         currentInput.toLowerCase().includes('price') || 
         currentInput.toLowerCase().includes('get insurance')) {
-      // Trigger quote information gathering
-      setShowInformationGatherer(true)
-      return
+      
+      // Check if we already have enough information to show quotes
+      const hasEnoughInfo = liveProfile.vehicles && liveProfile.vehicles.length > 0 && 
+                           liveProfile.driversCount && liveProfile.driversCount > 0
+      
+      if (hasEnoughInfo) {
+        // We have enough info, show quote results directly
+        const quoteData = {
+          insuranceType: 'Auto',
+          customerProfile: liveProfile,
+          coverageAmount: liveProfile.coverageAmount || '$500,000',
+          deductible: liveProfile.deductible || '$1,000',
+          requestId: `REQ-${Date.now()}`
+        }
+        setQuoteData(quoteData)
+        setShowQuoteResults(true)
+        return
+      } else {
+        // Need more information, show information gatherer
+        setShowInformationGatherer(true)
+        return
+      }
     }
     
     setIsLoading(true)
@@ -358,6 +415,9 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
 
   return (
     <div className="space-y-4">
+      {/* Dynamic Profile Summary Card */}
+      <ProfileSummaryCard profile={liveProfile} />
+
       {/* Quote Profile Display - Only for Auto Insurance */}
       {isAutoInsurance && quoteProfile && messages.length > 1 && (
         <QuoteProfileDisplay profile={quoteProfile} />

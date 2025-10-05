@@ -1,24 +1,41 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CustomerProfileForm } from "@/components/customer-profile-form"
 import { ChatInterface } from "@/components/chat-interface"
 import { CustomerProfileCard } from "@/components/customer-profile-card"
-
-export interface CustomerProfile {
-  location: string
-  age: string
-  needs: string[]
-}
+import { profileManager } from "@/lib/customer-profile"
+import type { CustomerProfile } from "@/lib/customer-profile"
 
 type ViewType = "profile" | "chat"
 
 export default function InsuranceAssistant() {
   const [customerProfile, setCustomerProfile] = useState<CustomerProfile | null>(null)
   const [currentView, setCurrentView] = useState<ViewType>("profile")
+
+  // Load profile from localStorage on mount
+  useEffect(() => {
+    const loaded = profileManager.loadProfile()
+    if (loaded) {
+      setCustomerProfile(loaded)
+      setCurrentView("chat")
+    }
+  }, [])
+
+  // Listen for profile updates from the API
+  useEffect(() => {
+    const handleProfileUpdate = (event: CustomEvent) => {
+      setCustomerProfile(event.detail)
+    }
+
+    window.addEventListener('profileUpdated' as any, handleProfileUpdate)
+    return () => {
+      window.removeEventListener('profileUpdated' as any, handleProfileUpdate)
+    }
+  }, [])
 
   const handleProfileSubmit = (profile: CustomerProfile) => {
     setCustomerProfile(profile)

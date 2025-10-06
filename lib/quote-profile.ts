@@ -391,7 +391,8 @@ export function formatProfileSummary(profile: QuoteProfile): string {
 }
 
 // Helper to extract state from location string
-function extractStateFromLocation(location: string): string | undefined {
+function extractStateFromLocation(location?: string): string | undefined {
+  if (!location) return undefined
   const stateMatch = location.match(/\b([A-Z]{2})\b/)
   return stateMatch ? stateMatch[1] : undefined
 }

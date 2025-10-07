@@ -309,3 +309,5 @@ export function getInsuranceTypeConfig(insuranceType: string): InsuranceTypeConf
 export function getAllInsuranceTypes(): string[] {
   return Object.keys(insuranceTypeConfigs)
 }
+
+

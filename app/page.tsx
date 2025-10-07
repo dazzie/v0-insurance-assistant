@@ -16,8 +16,10 @@ export default function InsuranceAssistant() {
   const [customerProfile, setCustomerProfile] = useState<CustomerProfile | null>(null)
   const [currentView, setCurrentView] = useState<ViewType>("profile")
 
-  // Load profile from localStorage on mount
+  // Load profile from localStorage on mount (client-side only)
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     const loaded = profileManager.loadProfile()
     if (loaded) {
       setCustomerProfile(loaded)
@@ -38,6 +40,12 @@ export default function InsuranceAssistant() {
   }, [])
 
   const handleProfileSubmit = (profile: CustomerProfile) => {
+    console.log('[Page] Profile submitted from form:', profile)
+    console.log('[Page] Vehicle count:', profile.vehiclesCount)
+    console.log('[Page] Vehicles array:', profile.vehicles)
+    console.log('[Page] Drivers count:', profile.driversCount)
+    console.log('[Page] Drivers array:', profile.drivers)
+
     setCustomerProfile(profile)
     setCurrentView("chat")
   }

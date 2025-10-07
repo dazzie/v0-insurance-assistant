@@ -189,10 +189,23 @@ CRITICAL RULES FOR AUTO INSURANCE QUOTES:
 - Phone: ${mergedProfile?.phone || "Not specified"} ${mergedProfile?.phone ? "(✓ SAVED)" : ""}
 - Marital Status: ${mergedProfile?.maritalStatus || "Not specified"} ${mergedProfile?.maritalStatus ? "(✓ SAVED)" : ""}
 - Drivers Count: ${mergedProfile?.driversCount || "Not specified"} ${mergedProfile?.driversCount ? "(✓ SAVED)" : ""}
+${mergedProfile?.drivers && mergedProfile.drivers.length > 0 ? `- Drivers Details: ${mergedProfile.drivers.map((d: any) => `${d.name || 'Driver'} (Age: ${d.age || 'N/A'}, ${d.yearsLicensed ? d.yearsLicensed + ' years licensed' : 'License info N/A'})`).join(', ')} (✓ SAVED)` : ""}
 - Vehicles Count: ${mergedProfile?.vehiclesCount || "Not specified"} ${mergedProfile?.vehiclesCount ? "(✓ SAVED)" : ""}
-${mergedProfile?.vehicles && mergedProfile.vehicles.length > 0 ? `- Vehicles: ${mergedProfile.vehicles.map((v: any) => `${v.year} ${v.make} ${v.model}`).join(', ')} (✓ SAVED)` : ""}
+${mergedProfile?.vehicles && mergedProfile.vehicles.length > 0 ? `- Vehicles Details:
+${mergedProfile.vehicles.map((v: any) => {
+  const parts = [`  • ${v.year} ${v.make} ${v.model}`]
+  if (v.vin) parts.push(`VIN: ${v.vin}`)
+  if (v.primaryUse) parts.push(`Primary Use: ${v.primaryUse}`)
+  if (v.annualMileage) parts.push(`Annual Mileage: ${v.annualMileage}`)
+  return parts.join(', ')
+}).join('\n')} (✓ SAVED)` : ""}
+${mergedProfile?.garagingAddress ? `- Garaging Address: ${mergedProfile.garagingAddress} (✓ SAVED)` : ""}
+${mergedProfile?.currentInsurer ? `- Current Insurer: ${mergedProfile.currentInsurer} (✓ SAVED)` : ""}
+${mergedProfile?.currentPremium ? `- Current Premium: ${mergedProfile.currentPremium} (✓ SAVED)` : ""}
 ${mergedProfile?.homeType ? `- Home Type: ${mergedProfile.homeType} (✓ SAVED)` : ""}
 ${mergedProfile?.homeValue ? `- Home Value: $${mergedProfile.homeValue} (✓ SAVED)` : ""}
+${mergedProfile?.yearBuilt ? `- Year Built: ${mergedProfile.yearBuilt} (✓ SAVED)` : ""}
+${mergedProfile?.squareFootage ? `- Square Footage: ${mergedProfile.squareFootage} (✓ SAVED)` : ""}
 ${mergedProfile?.coverageAmount ? `- Coverage Amount: $${mergedProfile.coverageAmount} (✓ SAVED)` : ""}
 
 **INFORMATION PERSISTENCE RULES:**

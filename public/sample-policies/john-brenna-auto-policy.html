@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Insurance Policy - John Brenna</title>
+    <style>
+        @media print {
+            body { margin: 0; padding: 20px; }
+            .no-print { display: none; }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+        .policy-number {
+            font-size: 14px;
+            color: #666;
+        }
+        .section {
+            margin-bottom: 30px;
+            border-left: 4px solid #0066cc;
+            padding-left: 15px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .info-item {
+            padding: 8px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+        .label {
+            font-weight: bold;
+            color: #666;
+            font-size: 12px;
+        }
+        .value {
+            color: #333;
+            font-size: 14px;
+        }
+        .coverage-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .coverage-table th {
+            background: #0066cc;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        .coverage-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .coverage-table tr:hover {
+            background: #f5f5f5;
+        }
+        .total-row {
+            font-weight: bold;
+            background: #e6f2ff;
+        }
+        .discount-item {
+            padding: 8px;
+            background: #e6f7e6;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .gap-warning {
+            padding: 12px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            margin: 10px 0;
+        }
+        .recommendation {
+            padding: 12px;
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            margin: 10px 0;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
+        .checkmark {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .warning {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        .download-btn {
+            background: #0066cc;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        .download-btn:hover {
+            background: #0052a3;
+        }
+    </style>
+</head>
+<body>
+    <button class="download-btn no-print" onclick="window.print()">📄 Download as PDF</button>
+
+    <div class="header">
+        <div class="company-name">PROGRESSIVE INSURANCE COMPANY</div>
+        <div class="policy-number">Policy Number: PRG-2024-SF-891234</div>
+        <div class="policy-number">Effective: November 1, 2024 | Expires: November 1, 2025</div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">NAMED INSURED</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="label">Name</div>
+                <div class="value">John Brenna</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Date of Birth</div>
+                <div class="value">January 15, 2002 (Age 23)</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Address</div>
+                <div class="value">1234 Market Street, Apt 5B</div>
+            </div>
+            <div class="info-item">
+                <div class="label">City, State, ZIP</div>
+                <div class="value">San Francisco, CA 94102</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Email</div>
+                <div class="value">john.brenna@email.com</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Phone</div>
+                <div class="value">(415) 555-0123</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">INSURED VEHICLE</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="label">Vehicle</div>
+                <div class="value">2018 Tesla Model 3</div>
+            </div>
+            <div class="info-item">
+                <div class="label">VIN</div>
+                <div class="value">5YJ3E1EA8JF000123</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Primary Use</div>
+                <div class="value">Commute to Work</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Annual Mileage</div>
+                <div class="value">12,000 miles</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Primary Driver</div>
+                <div class="value">John Brenna</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Garaging Address</div>
+                <div class="value">Same as insured</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">COVERAGE SUMMARY</div>
+        <table class="coverage-table">
+            <thead>
+                <tr>
+                    <th>Coverage Type</th>
+                    <th>Limit / Deductible</th>
+                    <th>Premium (6 mo)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Bodily Injury Liability</td>
+                    <td>$100,000 / $300,000</td>
+                    <td>$385.00</td>
+                </tr>
+                <tr>
+                    <td>Property Damage Liability</td>
+                    <td>$100,000</td>
+                    <td>$295.00</td>
+                </tr>
+                <tr>
+                    <td>Uninsured Motorist - Bodily Injury</td>
+                    <td>$100,000 / $300,000</td>
+                    <td>$145.00</td>
+                </tr>
+                <tr>
+                    <td>Uninsured Motorist - Property Damage</td>
+                    <td>$100,000 (Ded: $250)</td>
+                    <td>$85.00</td>
+                </tr>
+                <tr>
+                    <td>Comprehensive Coverage</td>
+                    <td>ACV (Ded: $500)</td>
+                    <td>$245.00</td>
+                </tr>
+                <tr>
+                    <td>Collision Coverage</td>
+                    <td>ACV (Ded: $500)</td>
+                    <td>$320.00</td>
+                </tr>
+                <tr>
+                    <td>Medical Payments</td>
+                    <td>$5,000 per person</td>
+                    <td>$35.00</td>
+                </tr>
+                <tr>
+                    <td>Roadside Assistance</td>
+                    <td>Included</td>
+                    <td>$15.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">DISCOUNTS APPLIED</div>
+        <div class="discount-item">
+            <span class="checkmark">✓</span> Good Student Discount: -15% ($195.00 savings)
+        </div>
+        <div class="discount-item">
+            <span class="checkmark">✓</span> Paperless Discount: -3% ($40.00 savings)
+        </div>
+        <div class="discount-item">
+            <span class="checkmark">✓</span> Safe Driver Discount: -10% ($130.00 savings)
+        </div>
+        <div class="discount-item">
+            <span class="checkmark">✓</span> Electric Vehicle Discount: -5% ($65.00 savings)
+        </div>
+        <div class="discount-item" style="background: #f5f5f5;">
+            <strong>Total Discounts: $430.00 per 6 months</strong>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">PREMIUM BREAKDOWN</div>
+        <table class="coverage-table">
+            <tbody>
+                <tr>
+                    <td>Base Premium (6 months)</td>
+                    <td>$1,955.00</td>
+                </tr>
+                <tr>
+                    <td>Total Discounts</td>
+                    <td>-$430.00</td>
+                </tr>
+                <tr>
+                    <td>Subtotal</td>
+                    <td>$1,525.00</td>
+                </tr>
+                <tr>
+                    <td>State Fees & Taxes</td>
+                    <td>$48.75</td>
+                </tr>
+                <tr class="total-row">
+                    <td><strong>TOTAL PREMIUM (6 MONTHS)</strong></td>
+                    <td><strong>$1,573.75</strong></td>
+                </tr>
+                <tr class="total-row">
+                    <td><strong>MONTHLY PAYMENT</strong></td>
+                    <td><strong>$262.29</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">DRIVER INFORMATION</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="label">License Number</div>
+                <div class="value">D1234567 (CA)</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Years Licensed</div>
+                <div class="value">7 years</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Driving Record</div>
+                <div class="value">Clean - No violations</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Accidents</div>
+                <div class="value">None in past 5 years</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Occupation</div>
+                <div class="value">Software Engineer</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Education</div>
+                <div class="value">Bachelor's Degree</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">COVERAGE GAPS & RECOMMENDATIONS</div>
+
+        <h4 style="color: #ffc107; margin-top: 20px;"><span class="warning">⚠️</span> Potential Coverage Gaps:</h4>
+
+        <div class="gap-warning">
+            <strong>1. Liability Limits</strong><br>
+            Current limits of 100/300/100 may be insufficient for California's high cost of living and litigation environment
+        </div>
+
+        <div class="gap-warning">
+            <strong>2. No Umbrella Policy</strong><br>
+            No additional liability protection beyond auto policy limits
+        </div>
+
+        <div class="gap-warning">
+            <strong>3. No Rental Reimbursement</strong><br>
+            No coverage for rental car expenses during repairs
+        </div>
+
+        <div class="gap-warning">
+            <strong>4. No Gap Insurance</strong><br>
+            Vehicle may depreciate faster than loan/lease payoff amount
+        </div>
+
+        <h4 style="color: #17a2b8; margin-top: 30px;"><span class="checkmark">✓</span> Recommendations to Improve Coverage:</h4>
+
+        <div class="recommendation">
+            <strong>Increase Liability to 250/500/250</strong><br>
+            Additional cost ~$45/6 months for significantly better protection
+        </div>
+
+        <div class="recommendation">
+            <strong>Add Umbrella Policy</strong><br>
+            $1-2M umbrella coverage for ~$150-300/year across all policies
+        </div>
+
+        <div class="recommendation">
+            <strong>Add Rental Reimbursement</strong><br>
+            $30-50/day coverage for ~$15/6 months
+        </div>
+
+        <div class="recommendation">
+            <strong>Bundle with Renters Insurance</strong><br>
+            Potential 15-25% discount on both policies
+        </div>
+
+        <div class="recommendation">
+            <strong>Lower Deductibles</strong><br>
+            Reduce from $500 to $250 for ~$50/6 months more in premiums
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">CALIFORNIA MINIMUM REQUIREMENTS</div>
+        <p><span class="checkmark">✓</span> <strong>Bodily Injury:</strong> $15,000/$30,000 required (You have: $100,000/$300,000)</p>
+        <p><span class="checkmark">✓</span> <strong>Property Damage:</strong> $5,000 required (You have: $100,000)</p>
+        <p style="color: #28a745; font-weight: bold;">Your policy meets all California minimum insurance requirements.</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">PAYMENT SCHEDULE</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="label">Payment Method</div>
+                <div class="value">Auto-Pay via Bank Account</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Payment Date</div>
+                <div class="value">1st of each month</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Next Payment Due</div>
+                <div class="value">November 1, 2024</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Monthly Amount</div>
+                <div class="value">$262.29</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">AGENT INFORMATION</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="label">Agency</div>
+                <div class="value">Bay Area Insurance Services</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Agent</div>
+                <div class="value">Maria Rodriguez</div>
+            </div>
+            <div class="info-item">
+                <div class="label">License</div>
+                <div class="value">CA-INS-987654</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Contact</div>
+                <div class="value">(415) 555-8900</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>IMPORTANT NOTICES</strong></p>
+        <p>This policy will automatically renew on November 1, 2025, unless cancelled by you or the company.</p>
+        <p><strong>Claims Hotline:</strong> 1-800-PROGRESSIVE (1-800-776-4737) | <strong>24/7 Roadside:</strong> 1-800-776-4737</p>
+        <p style="margin-top: 20px; font-style: italic; color: #999;">
+            This is a SAMPLE policy for testing purposes only. Not a real insurance policy.<br>
+            Document Generated: October 15, 2024 | Page 1 of 1
+        </p>
+    </div>
+</body>
+</html>

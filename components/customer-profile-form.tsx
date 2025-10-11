@@ -9,7 +9,13 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import type { CustomerProfile } from "@/app/page"
+=======
+import { CoverageAnalyzer } from "@/components/coverage-analyzer"
+import { PolicyScanner } from "@/components/policy-scanner"
+import type { CustomerProfile } from "@/lib/customer-profile"
+>>>>>>> Stashed changes
 =======
 import { CoverageAnalyzer } from "@/components/coverage-analyzer"
 import { PolicyScanner } from "@/components/policy-scanner"

@@ -1,0 +1,27 @@
+{
+  "name": "opencage-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for OpenCage geocoding and address standardization",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "opencage-mcp": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": [
+    "mcp",
+    "opencage",
+    "geocoding",
+    "address"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "dotenv": "^16.4.5"
+  }
+}
+

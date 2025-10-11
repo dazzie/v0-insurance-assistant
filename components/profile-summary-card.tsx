@@ -148,11 +148,40 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
                 icon={<Calendar className="w-4 h-4" />}
                 label="Vehicles"
                 value={
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-2">
                     {profile.vehicles.map((vehicle, idx) => (
-                      <span key={idx} className="text-sm">
-                        {vehicle.year} {vehicle.make} {vehicle.model}
-                      </span>
+                      <div key={idx} className="text-sm space-y-1">
+                        <div className="font-medium">
+                          {vehicle.year} {vehicle.make} {vehicle.model}
+                        </div>
+                        {vehicle.enriched && (
+                          <div className="text-xs text-muted-foreground space-y-0.5 ml-2">
+                            {vehicle.bodyClass && (
+                              <div>• {vehicle.bodyClass}</div>
+                            )}
+                            {vehicle.fuelType && (
+                              <div>• Fuel: {vehicle.fuelType}</div>
+                            )}
+                            {vehicle.doors && (
+                              <div>• {vehicle.doors} doors</div>
+                            )}
+                            {vehicle.manufacturer && (
+                              <div>• Made by {vehicle.manufacturer}</div>
+                            )}
+                            {vehicle.plantCity && vehicle.plantState && (
+                              <div>• Built in {vehicle.plantCity}, {vehicle.plantState}</div>
+                            )}
+                            <div className="text-[10px] text-green-600 dark:text-green-400 mt-1">
+                              ✓ Verified by NHTSA
+                            </div>
+                          </div>
+                        )}
+                        {vehicle.vin && (
+                          <div className="text-xs text-muted-foreground ml-2">
+                            VIN: {vehicle.vin}
+                          </div>
+                        )}
+                      </div>
                     ))}
                   </div>
                 }

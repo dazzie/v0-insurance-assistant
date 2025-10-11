@@ -1,572 +1,244 @@
-# Personal Insurance Coverage Coach
+# 🎯 Personal Insurance Coverage Coach
 
-*AI-powered insurance coaching, quote comparison, and local agent connection assistant*
+An AI-powered insurance research assistant that helps users find optimal insurance coverage through intelligent conversations, policy analysis, and personalized recommendations.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/dazzie-7787s-projects/v0-insurance-assistant)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/4bZyCFmRYm9)
+## ✨ Features
 
-## Overview
+### 🤖 AI-Powered Chat Interface
+- Natural language conversations about insurance needs
+- Real-time profile updates from conversations
+- Context-aware recommendations
+- Multi-line of business support (Auto, Home, Life, Health)
 
-A comprehensive insurance assistant that transforms how users approach insurance shopping. Unlike traditional quote forms, this app provides **personalized coaching**, **educational insights**, **carrier negotiation preparation**, and **local agent connections** through natural conversation.
+### 📱 Mobile Policy Scanner
+- Camera-based document capture
+- GPT-4o Vision for text extraction
+- Automatic policy data parsing
+- Mobile-optimized interface
 
-**Current Coverage**: Auto, Home, Life, Renters, Pet Insurance (all types supported)  
-**Latest Enhancements**: Local agent outreach system, enhanced carrier toolkit with coverage requirements, rating engine architecture
+### 📊 Quote Comparison
+- Multi-carrier quote generation
+- Side-by-side comparisons
+- Summary view for all lines of business
+- Detailed feature breakdowns
 
-## ✨ What Makes This Different
+### 🔍 Coverage Analysis
+- PDF and image policy upload
+- Gap analysis and recommendations
+- Coverage adequacy assessment
+- Personalized improvement suggestions
 
-- **🎯 Personal Coach**: Not just quotes - comprehensive insurance guidance
-- **🤝 Local Agent Connection**: Find and connect with top-rated local agents
-- **💼 Professional Toolkit**: Carrier conversation scripts and negotiation strategies
-- **📊 Coverage Analysis**: Required vs. flexible coverage breakdown
-- **🔄 Complete Journey**: From education to quotes to agent relationships
+### 💾 Smart Profile Management
+- Real-time profile updates
+- Local storage persistence
+- Export/import functionality
+- Profile completeness tracking
 
-## Key Features
-
-### 🤖 OpenAI GPT-4 Integration
-- **Intelligent responses** using GPT-4 Turbo for personalized insurance coaching
-- **Streaming support** for real-time conversational experience
-- **Context awareness** maintains conversation history and customer profile
-- **Fallback mode** automatically uses mock responses if OpenAI is unavailable
-
-### 🚗 Auto Insurance Quote System
-- **Progressive information gathering** - One question at a time, never overwhelming
-- **Smart information extraction** - Recognizes details from natural language
-- **No repeated questions** - Tracks what's collected, never asks twice
-- **Customer profile integration** - Uses provided age/location automatically
-- **Step-by-step with options** - Every question includes numbered choices for easy response
-- **Instant premium estimates** - Shows monthly costs immediately after basic info collected
-- **Memory persistence** - Never forgets information mentioned in conversation
-
-### 📊 Quote Profile Management
-- **Real-time progress tracking** - Visual progress bar (0-100% complete)
-- **Section-by-section collection** - Organized flow: drivers → vehicles → coverage
-- **Color-coded status indicators**:
-  - ✅ Green - Information collected
-  - 🟡 Yellow - Required field missing
-  - ⚪ Gray - Optional field missing
-- **Completeness scoring** - Know exactly when ready for quotes
-
-### 💡 Enhanced User Experience
-- **Predefined answer options** - Every question includes numbered choices (1, 2, 3, etc.)
-- **Instant premium estimates** - Shows "$X-Y/month" immediately after basic info
-- **Smart memory** - Remembers everything, never asks twice
-- **Progress summaries** - "I have: X, Y, Z. Now I need: A"
-- **Coverage tier comparison** - Shows minimum vs standard vs full coverage costs
-
-### 📋 Enhanced Carrier Conversation Toolkit
-Generated after information collection, includes:
-- **Profile summary** - All information formatted for easy reference
-- **REQUIRED vs FLEXIBLE Coverage Breakdown** - Critical negotiation guide
-- **Smart questions** - What to ask each carrier
-- **Negotiation strategies** - Scripts for better rates
-- **Document checklist** - What you'll need ready
-- **Strengths to emphasize** - Your rate-lowering advantages
-- **Red flags** - Warning signs to watch for
-
-### 🤝 Local Agent Outreach System
-Connect with top-rated local insurance professionals:
-- **Agent Discovery** - Find agents by location and specialization
-- **Reputation Ranking** - Scored by ratings, experience, and response time
-- **Professional Email Composition** - Personalized introduction emails
-- **Agent Profile Analysis** - Why each agent is recommended
-- **Direct Contact Options** - Call, email, or send introduction immediately
-
-### 🏗️ Future Enhancements
-- **Rating Engine** - Real-time premium calculations with carrier algorithms
-- **Carrier API Integration** - Automated quote requests to carrier APIs
-- **Advanced Analytics** - Market trends and pricing insights
-
-## Setup
+## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+
+- Node.js 18+ 
 - npm or yarn
-- OpenAI API key (for AI responses)
-- Vectorize.io account (for RAG features)
+- OpenAI API key
+- Vectorize.io account (optional, for knowledge base)
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone [repository-url]
-   cd v0-insurance-assistant
-   npm install
-   ```
-
-2. **Configure environment**
-   Create `.env.local`:
-   ```env
-   # OpenAI Configuration
-   OPENAI_API_KEY=your-actual-api-key-here
-   USE_MOCK_RESPONSES=false
-
-   # Vectorize.io Configuration (for RAG)
-   VECTORIZE_IO_API_KEY=your-vectorize-token
-   VECTORIZE_IO_ORG_ID=your-org-id
-   VECTORIZE_IO_PIPELINE_ID=your-pipeline-id
-   TOKEN=your-vectorize-token  # Alternative env var name
-
-   # RAG System
-   ENABLE_RAG=true
-   ```
-
-3. **Test OpenAI connection**
-   ```bash
-   node test-openai.js
-   ```
-
-4. **Run the application**
-   ```bash
-   npm run dev
-   ```
-   *Note: If port 3000 is in use, Next.js will automatically use port 3001*
-
-5. **Access the app**
-   Open `http://localhost:3000` (or `http://localhost:3001` if port 3000 is busy)
-
-## How It Works
-
-### Information Collection Flow
-
-1. **Initial Setup**
-   - User provides age and location
-   - Selects insurance type (auto, home, life)
-   - System uses saved profile data automatically
-
-2. **Step-by-Step Collection with Options**
-   ```
-   Example Auto Insurance Flow:
-
-   Q: "How many drivers will be on this policy?"
-   1) Just me
-   2) 2 drivers
-   3) 3 drivers
-   4) 4+ drivers
-
-   Q: "What's your marital status?"
-   1) Single
-   2) Married
-   3) Divorced
-   4) Widowed
-
-   Q: "Annual mileage for this vehicle?"
-   1) Under 7,500 (low mileage discount)
-   2) 7,500-12,000 (average)
-   3) 12,000-15,000
-   4) Over 15,000
-   ```
-
-3. **Smart Memory & Validation**
-   - Never asks for information already provided
-   - Remembers details mentioned in passing
-   - Acknowledges what's already known
-   - Shows progress: "I have: X, Y, Z. Now I need: A"
-
-4. **Instant Premium Estimates**
-   ```
-   After basic info collected:
-
-   ESTIMATED PREMIUM RANGE: $1,200-1,800/year ($100-150/month)
-   - State minimum coverage: ~$75/month
-   - Standard coverage: ~$125/month
-   - Full coverage: ~$175/month
-
-   Top carriers for your profile:
-   - GEICO: $95-120/month
-   - State Farm: $105-130/month
-   - Progressive: $100-125/month
-   ```
-
-### Technical Architecture
-
-#### Core Systems
-
-**Information Tracking** (`lib/information-tracker.ts`)
-- Extracts data from natural language
-- Prioritizes collection order
-- Prevents redundant questions
-- Auto-fills from customer profile
-
-**Quote Profile** (`lib/quote-profile.ts`)
-- Builds comprehensive profile
-- Calculates completeness
-- Generates missing field prompts
-- Tracks readiness for quotes
-
-**Prompt Validation** (`lib/prompt-validator.ts`)
-- Validates prompts match questions
-- 75% confidence requirement
-- Question-prompt mapping
-- Fallback to no prompts
-
-**Dynamic Prompts** (`lib/suggested-prompts.ts`)
-- Context-aware generation
-- Removes collected information
-- Adapts to conversation state
-- Post-quote action prompts
-
-#### Key Components
-
-- `components/chat-interface.tsx` - Main chat UI
-- `components/quote-profile-display.tsx` - Progress visualization
-- `components/suggested-prompts.tsx` - Dynamic prompt buttons
-- `app/api/chat/route.ts` - OpenAI integration & prompting
-
-### Information Extraction Examples (Enhanced Real-Time)
-
-```javascript
-// Basic Information
-"I'm 35 years old" →
-  age: 35 (✓ SAVED PERMANENTLY)
-
-"My ZIP is 94105" →
-  zipCode: 94105 (✓ SAVED)
-
-// Vehicle Information
-"I have a 2020 Toyota Camry" →
-  vehicles: [{year: 2020, make: "Toyota", model: "Camry"}] (✓ SAVED)
-
-// Driver Information
-"Just me driving" →
-  driversCount: 1, age: [from saved profile]
-
-"I'm married with 2 drivers" →
-  maritalStatus: "married", driversCount: 2 (✓ SAVED)
-
-// Home Insurance
-"I own a single family home worth $400k" →
-  homeType: "single-family", homeValue: "400000", homeOwnership: "own" (✓ SAVED)
-
-// Life Insurance
-"I need $500k coverage, non-smoker" →
-  coverageAmount: "500000", smoker: false (✓ SAVED)
-
-// Contact Information
-"Call me at 415-555-1234" →
-  phone: "415-555-1234" (✓ SAVED)
-
-"My email is john@example.com" →
-  email: "john@example.com" (✓ SAVED)
-```
-
-### Real-Time Profile Data Storage
-
-The system automatically saves the following information as it's mentioned:
-
-**Personal Information:**
-- Name, age, email, phone
-- Marital status, gender
-- Occupation
-
-**Location Data:**
-- City, state, ZIP code
-- Full address
-
-**Auto Insurance:**
-- Number of drivers and vehicles
-- Vehicle details (year, make, model, mileage)
-- Driver details (age, violations, accidents)
-
-**Home Insurance:**
-- Home type and value
-- Year built, square footage
-- Ownership status
-
-**Life Insurance:**
-- Coverage amount desired
-- Health status, smoker status
-- Insurance type preference
-
-## Recent Major Updates (Week 2)
-
-### 🔄 Real-Time Profile Updates
-- **Automatic Data Capture** - Extracts information from conversation in real-time using regex patterns
-- **Persistent Storage** - Profile saves after every message to localStorage
-- **Smart Recognition** - Detects age, vehicles, marital status, ZIP codes, home values automatically
-- **Never Forgets** - Information mentioned once is saved forever and auto-fills in system prompts
-- **Visual Confirmation** - Shows saved data with checkmarks (✓ SAVED - USE THIS)
-
-### 💰 Premium Estimates & Monthly Costs
-- **Auto Insurance** - $800-4,000/year ($67-333/month) based on driver age, record, vehicle
-- **Home Insurance** - $600-4,000/year ($50-333/month) based on home value and location
-- **Life Insurance** - $25-400/month based on age, health status, coverage amount
-- **Instant Estimates** - Premium ranges shown immediately after basic data collection
-- **Three-Tier Display** - Shows state minimum, standard coverage, and full coverage costs
-- **Carrier-Specific** - Lists GEICO, State Farm, Progressive with estimated monthly costs
-
-### 🎯 Step-by-Step Needs Analysis
-- **One Question at a Time** - Never overwhelming users with multiple questions
-- **Numbered Options** - Every question includes 3-4 choices (1, 2, 3, 4) for quick response
-- **Smart Memory** - Never asks for information already provided or mentioned anywhere
-- **Progress Tracking** - Shows "I have: X, Y, Z. Now I need: A" summaries
-- **Milestone Summaries** - Provides estimates at key collection points (after 5 basic fields)
-
-### 🎯 Enhanced AI Rules & Data Collection
-- **Minimum Quote Requirements** - Mandatory 5-field collection (drivers, vehicles, ZIP, ages, vehicle details)
-- **Targeted Initial Responses** - Always provide 2-3 numbered, actionable options
-- **Specific Next Steps** - No vague questions like "What would you like to explore?"
-- **Comprehensive Coverage Types** - Full support for Auto, Home, Life, Renters, Pet insurance
-- **Quote Path Selection** - Quick quote (5 min) vs Detailed quote (10-15 min) options
-
-### 🤝 Local Agent Outreach System
-- **Agent Discovery** - Find top-rated local agents by ZIP code and insurance specialization
-- **Professional Email Generation** - Personalized introduction emails with customer profile integration
-- **Reputation Scoring** - Rank by ratings (40%), experience (25%), reviews (20%), response time (15%)
-- **Direct Contact Integration** - Call, email, or send introduction with one click
-- **Alternative Agents** - Provides 3-4 backup agent recommendations
-
-### 📋 Enhanced Carrier Toolkit
-- **Required vs Flexible Coverage** - Clear breakdown of non-negotiable vs optional coverages
-- **Negotiation Scripts** - Professional questions: deductible comparison, discount eligibility, competitor matching
-- **Insurance-Specific Examples** - Tailored toolkits for Auto, Home, Life with state minimums
-- **State-Specific Requirements** - CA: 15/30/5 liability, PIP in no-fault states, uninsured motorist
-- **Document Checklist** - What to have ready when calling carriers
-
-### 🔧 Technical Improvements
-- **Vercel AI SDK Upgrade** - Replaced manual OpenAI streaming with `useChat` hook
-- **UI Text Wrapping** - Fixed chat bubble overflow with solid white backgrounds
-- **Security Updates** - Next.js updated to 14.2.33 (CVE fixes)
-- **Deployment Fixes** - Resolved pnpm/npm lockfile conflicts for Vercel
-- **Customer Profile System** - localStorage persistence with import/export
-- **RAG Integration** - Vectorize.io with 14 datasets (235+ entries, 356KB knowledge base)
-
-## Best Practices
-
-### For Users
-- Answer one question at a time
-- Provide accurate information for better quotes
-- Review the complete toolkit before calling carriers
-- Use suggested prompts for faster input
-
-### For Developers
-- Always validate prompts against questions
-- Maintain 75% confidence threshold
-- Test information extraction thoroughly
-- Keep collection order logical
-
-## Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `OPENAI_API_KEY` | Your OpenAI API key | Required |
-| `USE_MOCK_RESPONSES` | Use mock responses instead of OpenAI | `false` |
-
-## Testing
-
 ```bash
-# Test OpenAI connection
-node test-openai.js
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/v0-insurance-assistant.git
+cd v0-insurance-assistant
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your API keys
 
 # Run development server
 npm run dev
 
-# Build for production
+# Open http://localhost:3000
+```
+
+### Environment Variables
+
+Create a `.env.local` file with:
+
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+VECTORIZE_IO_API_KEY=your_vectorize_api_key_here
+VECTORIZE_IO_PIPELINE_ID=your_pipeline_id_here
+```
+
+## 📱 Mobile Testing
+
+Access from your phone on the same WiFi network:
+
+```
+http://YOUR_COMPUTER_IP:3000
+```
+
+Find your IP:
+- Mac: `ifconfig | grep "inet " | grep -v 127.0.0.1`
+- Windows: `ipconfig`
+- Linux: `ip addr show`
+
+## 🏗️ Project Structure
+
+```
+v0-insurance-assistant/
+├── app/                    # Next.js app directory
+│   ├── api/               # API routes
+│   │   ├── chat/         # Chat endpoint
+│   │   ├── analyze-coverage/
+│   │   ├── extract-text/  # Policy text extraction
+│   │   └── parse-pdf/     # PDF parsing
+│   ├── layout.tsx         # Root layout
+│   ├── page.tsx           # Main page
+│   └── globals.css        # Global styles
+├── components/            # React components
+│   ├── chat-interface.tsx
+│   ├── policy-scanner.tsx
+│   ├── quote-results.tsx
+│   ├── coverage-analyzer.tsx
+│   └── ui/               # UI components
+├── lib/                   # Utilities and helpers
+│   ├── customer-profile.ts
+│   ├── insurance-comparison-generator.ts
+│   └── text-extraction.ts
+├── mcp-server/           # MCP server for knowledge base
+│   ├── index.js          # Main MCP server
+│   └── extract-text-from-image.js
+└── vectorize-data/       # Insurance knowledge base data
+```
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Radix UI
+- **AI**: OpenAI GPT-4o
+- **Knowledge Base**: Vectorize.io
+- **State Management**: React Hooks + Local Storage
+
+## 🎨 Key Components
+
+### Chat Interface
+Natural language interface for insurance consultations with real-time profile updates.
+
+### Policy Scanner
+Mobile-optimized camera interface using GPT-4o Vision for policy document extraction.
+
+### Quote Comparison
+Multi-carrier comparison system with summary and detailed views.
+
+### Coverage Analyzer
+Upload existing policies for gap analysis and improvement recommendations.
+
+## 🔧 Development
+
+```bash
+# Development server
+npm run dev
+
+# Production build
 npm run build
 
-# Run production build
+# Start production server
 npm start
+
+# Run linting
+npm run lint
+
+# Type checking
+npm run type-check
 ```
 
-## Deployment
+## 📦 Deployment
 
-The app auto-deploys to Vercel on push to main branch.
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 
-**Live URL**: [https://vercel.com/dazzie-7787s-projects/v0-insurance-assistant](https://vercel.com/dazzie-7787s-projects/v0-insurance-assistant)
+### Quick Deploy to Vercel
 
-### Development Workflow
-- **Main Branch**: Production-ready code
-- **Week-2 Branch**: Current development branch for new features
-- **Local Development**: Runs on `localhost:3000` (or `:3001` if port busy)
+```bash
+# Install Vercel CLI
+npm i -g vercel
 
-## RAG System & Vectorize.io Integration
-
-### Overview
-The assistant uses Retrieval-Augmented Generation (RAG) with Vectorize.io for enhanced knowledge retrieval, providing more accurate and contextual insurance information.
-
-### MCP Server (NEW - Week 3)
-
-**Direct Claude Code Integration** - Query the insurance knowledge base directly from Claude Code using Model Context Protocol (MCP).
-
-**Setup:**
-1. Navigate to `mcp-server` directory
-2. Run `npm install` to install dependencies
-3. Configure Claude Code with the MCP server (see `mcp-server/README.md`)
-4. Restart Claude Code
-
-**Available Tools:**
-- `search_insurance_knowledge` - Search 235+ insurance entries
-- `get_coverage_explanation` - Get detailed coverage explanations
-- `get_state_requirements` - Retrieve state-specific requirements
-- `get_discount_opportunities` - Find applicable discounts
-
-**Example Usage in Claude Code:**
-```
-Use search_insurance_knowledge to find "comprehensive coverage explanation"
-Use get_state_requirements for state="CA" insuranceType="auto"
+# Deploy
+vercel --prod
 ```
 
-See `/mcp-server/README.md` for complete setup and usage instructions.
+## 🧪 Testing
 
-### Vectorize.io Data Sets
-The following datasets are available in `/data/vectorize-upload/` for upload to your Vectorize pipeline:
+### Manual Testing Checklist
+- [ ] Profile creation and editing
+- [ ] Chat interface interactions
+- [ ] Policy scanner (mobile camera)
+- [ ] Quote generation
+- [ ] Coverage analyzer
+- [ ] Profile persistence
+- [ ] Mobile responsiveness
 
-#### Core Knowledge Base (6 files)
-1. **insurance-coverage-explanations.json** (23KB) - 20 detailed coverage type explanations
-2. **insurance-terminology-glossary.json** (23KB) - 20 essential insurance terms
-3. **state-insurance-requirements.json** (26KB) - State-by-state requirements for 20 major states
-4. **insurance-discounts-guide.json** (29KB) - 20 discount types with qualification criteria
-5. **insurance-faqs.json** (28KB) - 20 comprehensive Q&As
-6. **negotiation-strategies.json** (30KB) - 20 negotiation tactics and scripts
+### Mobile Testing
+Test camera functionality on actual mobile devices for best results.
 
-#### Carrier & Market Intelligence (4 files)
-7. **insurance-carrier-profiles.json** - 15 major carrier detailed profiles
-8. **carrier-coverage-options.json** - 15 carrier-specific coverage options and features
-9. **preferred-agents-directory.json** - 20 agent selection and evaluation guides
-10. **insurance-claim-process.json** - 15 step-by-step claim process guides
+## 📊 MCP Server
 
-#### Customer Guidance & Optimization (4 files)
-11. **customer-scenarios-lifecycles.json** - 15 life events, age-based, and occupation scenarios
-12. **risk-factors-pricing.json** - 15 pricing factors and regional market data
-13. **insurance-troubleshooting.json** - 15 problem-solving guides and red flags
-14. **insurance-money-saving-tips.json** - 15 comprehensive savings strategies
+The Model Context Protocol (MCP) server provides:
+- Insurance knowledge base queries
+- Policy text extraction
+- Coverage explanations
+- State-specific requirements
 
-**Total: 14 files, 235+ entries, 356KB of structured insurance knowledge**
+See [mcp-server/README.md](./mcp-server/README.md) for details.
 
-### Setting Up Vectorize.io
-1. Create account at [platform.vectorize.io](https://platform.vectorize.io)
-2. Create a new pipeline with:
-   - Extractor: Vectorize Built-in
-   - Chunker: Vectorize Built-in
-   - Embedder: OpenAI v3 small (1536 dimensions)
-3. Upload JSON files through the admin UI
-4. Copy your credentials to `.env.local`
-5. The pipeline will automatically chunk and vectorize content
+## 🔒 Security
 
-### Customer Profile Management
-The app includes a comprehensive customer profile system:
-- **Persistent Storage**: Profiles saved to localStorage
-- **Auto-extraction**: Profile data extracted from conversations
-- **Profile Completeness**: Visual indicator showing profile completion percentage
-- **Import/Export**: JSON import/export functionality
-- **Profile Integration**: Automatically enriches chat context
+- API keys stored as environment variables
+- No sensitive data in client-side code
+- HTTPS enforced in production
+- Input validation on all forms
+- Rate limiting on API routes
 
-### Profile Fields
-- Personal: Name, email, phone, age, gender
-- Location: Address, city, state, ZIP code
-- Insurance: Type, current insurer, premium
-- Demographics: Marital status, home ownership, occupation
-- Additional: Credit range, driver/vehicle counts
+## 🤝 Contributing
 
-## Stretch Goals
+Contributions are welcome! Please follow these steps:
 
-These are planned future enhancements that would significantly expand the platform's capabilities:
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-### 🎯 Rating Engine Implementation
+## 📄 License
 
-Build an actual insurance premium calculation engine using industry-standard algorithms to replace estimate ranges with precise pricing.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-**Key Features:**
-- Auto/Home/Life insurance rating algorithms with industry-standard multipliers
-- Integration with state insurance department rate filings and actuarial tables
-- Real-time premium calculations based on collected customer data
-- Transparent factor breakdowns showing how premiums are calculated
-- Confidence scoring based on data completeness
+## 🙏 Acknowledgments
 
-**Technical Requirements:**
-- State rate filings and loss cost data (ISO, NCCI)
-- Vehicle data APIs (NHTSA, IIHS safety ratings)
-- Property data APIs (Zillow/CoreLogic)
-- Credit data integration (LexisNexis)
-- Actuarial tables (CSO 2017 for life insurance)
+- Built with [v0.dev](https://v0.dev)
+- UI components from [shadcn/ui](https://ui.shadcn.com)
+- Powered by [OpenAI](https://openai.com)
+- Knowledge base by [Vectorize.io](https://vectorize.io)
 
-**Benefits:**
-- Accurate pricing instead of broad estimates
-- Instant quotes without waiting for carrier responses
-- Higher lead conversion with precise pricing
-- Scalability without carrier API dependencies
+## 📞 Support
+
+- 📧 Email: support@example.com
+- 💬 Discord: [Join our community](#)
+- 🐛 Issues: [GitHub Issues](https://github.com/YOUR_USERNAME/v0-insurance-assistant/issues)
+
+## 🗺️ Roadmap
+
+- [ ] Multi-language support
+- [ ] Voice interface
+- [ ] Advanced analytics dashboard
+- [ ] Integration with insurance carriers
+- [ ] Agent portal
+- [ ] Mobile apps (iOS/Android)
 
 ---
 
-### 🔌 Carrier API Integration
-
-Automate the quote process by integrating directly with insurance carrier public APIs for real-time pricing.
-
-**Key Features:**
-- Direct integrations with GEICO, Progressive, State Farm, Allstate, USAA, Liberty Mutual
-- Parallel API calls with intelligent rate limiting
-- Data mapping between our format and carrier-specific formats
-- Quote aggregation and side-by-side comparison
-- Graceful error handling and fallback mechanisms
-
-**Technical Requirements:**
-- OAuth 2.0 and API key authentication
-- Carrier-specific data mappers and response normalizers
-- Rate limiting (100-200 req/min depending on carrier)
-- Retry logic and partial failure handling
-- Secure token storage and rotation
-
-**Benefits:**
-- Real-time quotes from multiple carriers instantly
-- Comprehensive comparison with identical coverage
-- No need for users to visit multiple websites
-- Carrier partnership and referral revenue opportunities
-
----
-
-### 🤝 Enhanced Local Agent Outreach System
-
-Expand the local agent connection feature with a comprehensive agent directory and relationship management.
-
-**Key Features:**
-- Agent discovery by location and specialization with reputation ranking
-- Professional email composition with customer profile integration
-- Agent profile analysis with ratings, experience, response time
-- Direct contact integration (call, email, send introduction)
-- Follow-up reminders and agent performance tracking
-
-**Technical Requirements:**
-- Agent database with license verification
-- Integration with Google Reviews, Yelp, BBB for ratings
-- Email template system with insurance-type customization
-- Geolocation and radius search (25-mile default)
-- Agent scoring algorithm (ratings 40%, experience 25%, reviews 20%, response time 15%)
-
-**Benefits:**
-- Personal touch with local face-to-face service
-- Agents often have access to exclusive rates
-- Ongoing support for claims and policy management
-- Revenue sharing with referring agents
-- Higher customer satisfaction with human element
-
----
-
-### 📊 Advanced Analytics & Market Insights
-
-Provide users and agents with market trend data and pricing insights.
-
-**Potential Features:**
-- Premium trends by region and demographics
-- Seasonal pricing patterns
-- Carrier competitiveness analysis
-- Risk factor impact visualization
-- Policy recommendation engine based on user profile
-
----
-
-## Contributing
-
-1. Create feature branch
-2. Make changes
-3. Test thoroughly
-4. Submit pull request
-
-## License
-
-[License information]
-
-## Support
-
-For issues or questions:
-- GitHub Issues: [repository-issues-url]
-- Documentation: This README
-- v0.app Project: [https://v0.app/chat/projects/4bZyCFmRYm9](https://v0.app/chat/projects/4bZyCFmRYm9)
+Built with ❤️ using Next.js and AI

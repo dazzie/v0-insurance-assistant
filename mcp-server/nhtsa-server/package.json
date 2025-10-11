@@ -1,0 +1,26 @@
+{
+  "name": "nhtsa-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for NHTSA VIN decoding",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "nhtsa-mcp": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": [
+    "mcp",
+    "nhtsa",
+    "vin",
+    "vehicle"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  }
+}
+

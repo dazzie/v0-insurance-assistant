@@ -213,7 +213,6 @@ export function generateInsuranceComparisons(
   
   // Filter carriers that serve the location and offer the insurance type
   const relevantCarriers = carriers
-<<<<<<< HEAD
     .filter(carrier => {
       // Check if carrier has states and location is available
       if (!carrier.states || !customerProfile.location) return true
@@ -222,18 +221,10 @@ export function generateInsuranceComparisons(
       if (!locationState) return true
       
       return carrier.states.includes(locationState) &&
-        carrier.products?.some(product => 
-          product.toLowerCase().includes(insuranceType.toLowerCase().split(" ")[0])
+        carrier.types?.some(type => 
+          type.toLowerCase().includes(insuranceType.toLowerCase().split(" ")[0])
         )
     })
-=======
-    .filter(carrier =>
-      (carrier.coverage?.states && carrier.coverage.states.includes(customerProfile.location.split(",")[0].trim())) &&
-      carrier.types.some(type =>
-        type.toLowerCase().includes(insuranceType.toLowerCase().split(" ")[0])
-      )
-    )
->>>>>>> 90ae56cd375ec9a32135989c5f5467490595d96c
     .slice(0, count)
 
   return relevantCarriers.map((carrier, index) => {

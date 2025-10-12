@@ -189,19 +189,13 @@ CRITICAL RULES FOR AUTO INSURANCE QUOTES:
 - Drivers Count: ${mergedProfile?.driversCount || "Not specified"} ${mergedProfile?.driversCount ? "(✓ SAVED)" : ""}
 ${mergedProfile?.drivers && mergedProfile.drivers.length > 0 ? `- Drivers Details: ${mergedProfile.drivers.map((d: any) => `${d.name || 'Driver'} (Age: ${d.age || 'N/A'}, ${d.yearsLicensed ? d.yearsLicensed + ' years licensed' : 'License info N/A'})`).join(', ')} (✓ SAVED)` : ""}
 - Vehicles Count: ${mergedProfile?.vehiclesCount || "Not specified"} ${mergedProfile?.vehiclesCount ? "(✓ SAVED)" : ""}
-<<<<<<< HEAD
-${mergedProfile?.vehicles && mergedProfile.vehicles.length > 0 ? `- Vehicles: ${mergedProfile.vehicles.map((v: any) => {
-  let vehicleStr = `${v.year} ${v.make} ${v.model}`
-  if (v.enriched && v.enrichmentSource === 'NHTSA') {
-    vehicleStr += ` (NHTSA-verified: ${v.bodyClass || ''}, ${v.fuelType || ''}, ${v.manufacturer || ''})`
-  }
-  return vehicleStr
-}).join(', ')} (✓ SAVED)` : ""}
-=======
 ${mergedProfile?.vehicles && mergedProfile.vehicles.length > 0 ? `- Vehicles Details:
 ${mergedProfile.vehicles.map((v: any) => {
   const parts = [`  • ${v.year} ${v.make} ${v.model}`]
   if (v.vin) parts.push(`VIN: ${v.vin}`)
+  if (v.enriched && v.enrichmentSource === 'NHTSA') {
+    parts.push(`NHTSA-verified: ${v.bodyClass || ''}, ${v.fuelType || ''}, ${v.manufacturer || ''}`)
+  }
   if (v.primaryUse) parts.push(`Primary Use: ${v.primaryUse}`)
   if (v.annualMileage) parts.push(`Annual Mileage: ${v.annualMileage}`)
   return parts.join(', ')
@@ -209,7 +203,6 @@ ${mergedProfile.vehicles.map((v: any) => {
 ${mergedProfile?.garagingAddress ? `- Garaging Address: ${mergedProfile.garagingAddress} (✓ SAVED)` : ""}
 ${mergedProfile?.currentInsurer ? `- Current Insurer: ${mergedProfile.currentInsurer} (✓ SAVED)` : ""}
 ${mergedProfile?.currentPremium ? `- Current Premium: ${mergedProfile.currentPremium} (✓ SAVED)` : ""}
->>>>>>> 90ae56cd375ec9a32135989c5f5467490595d96c
 ${mergedProfile?.homeType ? `- Home Type: ${mergedProfile.homeType} (✓ SAVED)` : ""}
 ${mergedProfile?.homeValue ? `- Home Value: $${mergedProfile.homeValue} (✓ SAVED)` : ""}
 ${mergedProfile?.yearBuilt ? `- Year Built: ${mergedProfile.yearBuilt} (✓ SAVED)` : ""}

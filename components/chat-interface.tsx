@@ -31,7 +31,6 @@ interface Message {
 
 export function ChatInterface({ customerProfile }: ChatInterfaceProps) {
   const isAutoInsurance = customerProfile?.needs?.includes("auto") || false
-<<<<<<< HEAD
   
   // Build a better greeting based on what profile data we have
   const getInitialGreeting = () => {
@@ -53,15 +52,6 @@ How many drivers will be on this policy?`
       : `I'm`
     
     return `Welcome! I'm your personal insurance coverage coach. ${profileSummary} here to guide you toward the optimal insurance strategy for your unique situation. 
-=======
-
-  const initialGreeting = isAutoInsurance
-    ? `Welcome! I'll help you get accurate auto insurance quotes quickly.
-
-**Quick questions to get started:**
-How many drivers will be on this policy?`
-    : `Welcome! I'm your personal insurance coverage coach. I've reviewed your profile (${customerProfile?.location || 'your location'}, age ${customerProfile?.age || 'N/A'}, focusing on ${customerProfile?.needs?.join(", ") || 'your insurance needs'}), and I'm here to guide you toward the optimal insurance strategy for your unique situation.
->>>>>>> 90ae56cd375ec9a32135989c5f5467490595d96c
 
 Think of me as your trusted advisor who will help you navigate coverage options, understand what protection you truly need, and find the best value for your specific circumstances. What aspect of your insurance coverage would you like to explore first?`
   }

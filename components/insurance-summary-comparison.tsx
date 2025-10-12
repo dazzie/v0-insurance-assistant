@@ -82,14 +82,22 @@ export function InsuranceSummaryComparison({
 
   const getBestValueCarrier = () => {
     if (comparisons.length === 0) return null
+<<<<<<< HEAD
     return comparisons.reduce((best, current) => 
+=======
+    return comparisons.reduce((best, current) =>
+>>>>>>> 90ae56cd375ec9a32135989c5f5467490595d96c
       current.monthlyPremium < best.monthlyPremium ? current : best
     )
   }
 
   const getHighestRatedCarrier = () => {
     if (comparisons.length === 0) return null
+<<<<<<< HEAD
     return comparisons.reduce((best, current) => 
+=======
+    return comparisons.reduce((best, current) =>
+>>>>>>> 90ae56cd375ec9a32135989c5f5467490595d96c
       current.rating > best.rating ? current : best
     )
   }
@@ -115,6 +123,7 @@ export function InsuranceSummaryComparison({
       </div>
 
       {/* Quick Stats */}
+<<<<<<< HEAD
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {bestValue && (
           <Card>
@@ -139,6 +148,34 @@ export function InsuranceSummaryComparison({
           </CardContent>
         </Card>
       </div>
+=======
+      {comparisons.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {bestValue && (
+            <Card>
+              <CardContent className="p-4 text-center">
+                <div className="text-2xl font-bold text-green-600">${bestValue.monthlyPremium}/mo</div>
+                <div className="text-sm text-muted-foreground">Best Value: {bestValue.carrierName}</div>
+              </CardContent>
+            </Card>
+          )}
+          {highestRated && (
+            <Card>
+              <CardContent className="p-4 text-center">
+                <div className="text-2xl font-bold text-blue-600">{highestRated.rating}★</div>
+                <div className="text-sm text-muted-foreground">Highest Rated: {highestRated.carrierName}</div>
+              </CardContent>
+            </Card>
+          )}
+          <Card>
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-purple-600">{comparisons.length}</div>
+              <div className="text-sm text-muted-foreground">Carriers Compared</div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+>>>>>>> 90ae56cd375ec9a32135989c5f5467490595d96c
 
       {/* Comparison Table */}
       <Card>
@@ -420,3 +457,5 @@ export function InsuranceSummaryComparison({
     </div>
   )
 }
+
+

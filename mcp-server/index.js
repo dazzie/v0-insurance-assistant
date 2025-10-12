@@ -16,6 +16,8 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { PipelinesApi, Configuration } from '@vectorize-io/vectorize-client';
 import dotenv from 'dotenv';
+import pdf from 'pdf-parse';
+import fs from 'fs/promises';
 
 // Load environment variables
 dotenv.config({ path: '../.env.local' });
@@ -111,6 +113,20 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
           },
           required: ['customerProfile'],
+        },
+      },
+      {
+        name: 'parse_pdf_policy',
+        description: 'Extract text from a PDF insurance policy document for analysis',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            filePath: {
+              type: 'string',
+              description: 'Absolute path to the PDF file',
+            },
+          },
+          required: ['filePath'],
         },
       },
     ],
@@ -223,6 +239,30 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                   text: r.text || r.content,
                   score: r.score,
                 })),
+              }, null, 2),
+            },
+          ],
+        };
+      }
+
+      case 'parse_pdf_policy': {
+        const { filePath } = args;
+
+        // Read PDF file
+        const dataBuffer = await fs.readFile(filePath);
+
+        // Parse PDF to extract text
+        const pdfData = await pdf(dataBuffer);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify({
+                filePath,
+                extractedText: pdfData.text,
+                pages: pdfData.numpages,
+                info: pdfData.info,
               }, null, 2),
             },
           ],

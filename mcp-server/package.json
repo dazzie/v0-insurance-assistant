@@ -5,18 +5,26 @@
   "type": "module",
   "main": "index.js",
   "bin": {
-    "vectorize-mcp": "./index.js"
+    "vectorize-mcp": "./index.js",
+    "extract-text-from-image": "./extract-text-from-image.js"
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "node --watch index.js"
+    "dev": "node --watch index.js",
+    "start:extract": "node extract-text-from-image.js"
   },
-  "keywords": ["mcp", "vectorize", "insurance"],
+  "keywords": [
+    "mcp",
+    "vectorize",
+    "insurance"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4",
     "@vectorize-io/vectorize-client": "^0.4.0",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "openai": "^6.1.0",
+    "pdf-parse": "^2.1.7"
   }
 }

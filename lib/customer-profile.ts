@@ -19,6 +19,16 @@ export interface CustomerProfile {
   city?: string
   state?: string
   zipCode?: string
+  addressEnrichment?: {
+    formattedAddress?: string
+    latitude?: number
+    longitude?: number
+    components?: any
+    confidence?: number
+    enriched: boolean
+    enrichmentSource?: string
+    enrichmentError?: string
+  }
 
   // Insurance Needs
   insuranceType?: 'auto' | 'home' | 'life' | 'renters' | 'pet' | 'health' | 'disability' | 'umbrella'
@@ -64,6 +74,7 @@ export interface CustomerProfile {
   homeValue?: string
   yearBuilt?: number
   squareFootage?: number
+  propertyAddress?: string  // Full property/insured address (may differ from mailing address)
 
   // Life Insurance Specific
   lifeInsuranceType?: 'term' | 'whole' | 'universal' | 'not-sure'
@@ -138,13 +149,6 @@ export const profileManager = {
   updateProfile: (updates: Partial<CustomerProfile>): void => {
     const current = profileManager.loadProfile() || {}
     
-    console.log('[Profile Update] Current vehicles:', JSON.stringify(current.vehicles?.map(v => ({ 
-      year: v.year, make: v.make, model: v.model, enriched: v.enriched, bodyClass: v.bodyClass 
-    }))))
-    console.log('[Profile Update] Update vehicles:', JSON.stringify(updates.vehicles?.map(v => ({ 
-      year: v?.year, make: v?.make, model: v?.model, enriched: v?.enriched 
-    }))))
-    
     // Smart merge for vehicles - preserve enriched NHTSA data
     if (current.vehicles && current.vehicles.some(v => v.enriched)) {
       console.log('[Profile Update] ✓ Enriched vehicles detected, applying protection...')
@@ -178,6 +182,24 @@ export const profileManager = {
       console.log('[Profile Update] No enriched vehicles, allowing update')
     }
     
+    // Smart merge for address - preserve OpenCage enriched address data
+    if (current.addressEnrichment?.enriched) {
+      console.log('[Profile Update] ✓ Enriched address detected, applying protection...')
+      // Preserve enriched address fields - don't allow overwriting
+      if (updates.address || updates.city || updates.state || updates.zipCode) {
+        console.log('[Profile Update] ⚠️ Blocking address update to protect OpenCage enrichment')
+        delete updates.address
+        delete updates.city
+        delete updates.state
+        delete updates.zipCode
+      }
+      // ALWAYS preserve the existing enrichment (not just when blocking updates)
+      updates.addressEnrichment = current.addressEnrichment
+    } else if (current.addressEnrichment && !updates.addressEnrichment) {
+      // Even if not fully enriched, preserve any existing addressEnrichment data
+      updates.addressEnrichment = current.addressEnrichment
+    }
+    
     // Smart merge for drivers - preserve existing driver data, allow age/DOB updates
     if (current.drivers && current.drivers.length > 0) {
       if (updates.drivers && updates.drivers.length > 0) {
@@ -207,9 +229,6 @@ export const profileManager = {
     
     const updated = { ...current, ...updates }
     profileManager.saveProfile(updated)
-    console.log('[Profile Update] ✅ Profile saved. Final vehicles:', JSON.stringify(updated.vehicles?.map(v => ({ 
-      year: v.year, make: v.make, model: v.model, enriched: v.enriched, bodyClass: v.bodyClass, fuelType: v.fuelType 
-    }))))
   },
 
   // Clear profile from storage
@@ -323,6 +342,7 @@ export function extractProfileFromConversation(messages: any[]): Partial<Custome
   const currentProfile = profileManager.loadProfile()
   const hasEnrichedVehicles = currentProfile?.vehicles?.some(v => v.enriched)
   const hasExistingDrivers = currentProfile?.drivers && currentProfile.drivers.length > 0
+  const hasEnrichedAddress = currentProfile?.addressEnrichment?.enriched
 
   messages.forEach(message => {
     const content = message.content || ''
@@ -335,9 +355,9 @@ export function extractProfileFromConversation(messages: any[]): Partial<Custome
       extracted.age = ageMatch[1]
     }
 
-    // Extract ZIP code
+    // Extract ZIP code - skip if address is already enriched by OpenCage
     const zipMatch = content.match(/\b(\d{5})\b/)
-    if (zipMatch && !extracted.zipCode) {
+    if (zipMatch && !extracted.zipCode && !hasEnrichedAddress) {
       extracted.zipCode = zipMatch[1]
     }
 

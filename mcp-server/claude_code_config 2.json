@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "vectorize-insurance": {
+      "command": "node",
+      "args": [
+        "/Users/daraghmoran/Documents/maven-agentic/v0-insurance-assistant/mcp-server/index.js"
+      ],
+      "env": {
+        "VECTORIZE_IO_API_KEY": "${VECTORIZE_IO_API_KEY}",
+        "VECTORIZE_IO_ORG_ID": "${VECTORIZE_IO_ORG_ID}",
+        "VECTORIZE_IO_PIPELINE_ID": "${VECTORIZE_IO_PIPELINE_ID}"
+      }
+    }
+  }
+}

@@ -78,17 +78,33 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
               />
             )}
 
-            {/* Location */}
-            {(profile.location || profile.zipCode) && (
+            {/* Property Information (Insured Address) */}
+            {(profile.address || profile.location || profile.zipCode) && (
               <InfoItem
                 icon={<MapPin className="w-4 h-4" />}
-                label="Location"
+                label="Property Information"
                 value={
-                  <>
-                    {profile.location && <span>{profile.location}</span>}
-                    {profile.location && profile.zipCode && <span className="mx-1">•</span>}
-                    {profile.zipCode && <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded">{profile.zipCode}</span>}
-                  </>
+                  <div className="flex flex-col gap-1 text-sm">
+                    {profile.address && (
+                      <span className="font-medium">{profile.address}</span>
+                    )}
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {profile.city && <span>{profile.city}</span>}
+                      {profile.city && profile.state && <span>,</span>}
+                      {profile.state && <span>{profile.state}</span>}
+                      {(profile.city || profile.state) && profile.zipCode && <span className="mx-1">•</span>}
+                      {profile.zipCode && <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded">{profile.zipCode}</span>}
+                      {profile.addressEnrichment?.enriched && profile.addressEnrichment.enrichmentSource && (
+                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800 ml-1">
+                          <Check className="w-2.5 h-2.5 mr-1" />
+                          {profile.addressEnrichment.enrichmentSource} Verified
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Insured property location
+                    </p>
+                  </div>
                 }
               />
             )}

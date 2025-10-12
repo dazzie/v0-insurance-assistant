@@ -41,12 +41,8 @@ export default function InsuranceAssistant() {
   }, [])
 
   const handleProfileSubmit = (profile: CustomerProfile) => {
-    console.log('[Page] Profile submitted from form:', profile)
-    console.log('[Page] Vehicle count:', profile.vehiclesCount)
-    console.log('[Page] Vehicles array:', profile.vehicles)
-    console.log('[Page] Drivers count:', profile.driversCount)
-    console.log('[Page] Drivers array:', profile.drivers)
-
+    // Save to localStorage so enrichment persists
+    profileManager.saveProfile(profile)
     setCustomerProfile(profile)
     setCurrentView("chat")
   }

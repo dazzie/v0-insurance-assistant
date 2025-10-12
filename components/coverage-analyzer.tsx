@@ -689,13 +689,10 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType }: Coverage
                 )}
 
                 {/* Home Insurance: Property Details */}
-                {(extractedData.propertyAddress || extractedData.propertyType || extractedData.yearBuilt) && (
+                {(extractedData.propertyType || extractedData.yearBuilt) && (
                   <div className="space-y-3">
                     <h4 className="font-medium text-sm">Property Information</h4>
                     <div className="grid grid-cols-2 gap-3">
-                      {extractedData.propertyAddress && (
-                        <InfoItem label="Property Address" value={extractedData.propertyAddress} />
-                      )}
                       {extractedData.propertyType && (
                         <InfoItem label="Property Type" value={extractedData.propertyType} />
                       )}

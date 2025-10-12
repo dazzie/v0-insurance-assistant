@@ -338,8 +338,8 @@ export function getCarriersByState(state: string): InsuranceCarrier[] {
   return INSURANCE_CARRIERS.filter(
     (carrier) =>
       carrier.coverage.nationwide ||
-      carrier.coverage.states.includes("ALL") ||
-      carrier.coverage.states.includes(state.toUpperCase()),
+      (carrier.coverage.states && carrier.coverage.states.includes("ALL")) ||
+      (carrier.coverage.states && carrier.coverage.states.includes(state.toUpperCase())),
   )
 }
 

@@ -23,8 +23,10 @@ export function CustomerProfileCard() {
   const [editedProfile, setEditedProfile] = useState<CustomerProfile>({})
   const [completeness, setCompleteness] = useState(0)
 
-  // Load profile on component mount
+  // Load profile on component mount (client-side only)
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     const loaded = profileManager.loadProfile()
     if (loaded) {
       setProfile(loaded)

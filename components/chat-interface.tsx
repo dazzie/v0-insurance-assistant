@@ -16,6 +16,7 @@ import { buildQuoteProfile } from "@/lib/quote-profile"
 import type { CustomerProfile } from "@/app/page"
 import { ProfileSummaryCard } from "@/components/profile-summary-card"
 import { profileManager, extractProfileFromConversation } from "@/lib/customer-profile"
+import { CoverageAnalyzer } from "@/components/coverage-analyzer"
 
 interface ChatInterfaceProps {
   customerProfile: CustomerProfile
@@ -29,18 +30,18 @@ interface Message {
 }
 
 export function ChatInterface({ customerProfile }: ChatInterfaceProps) {
-  const isAutoInsurance = customerProfile.needs.includes("auto")
-  
+  const isAutoInsurance = customerProfile?.needs?.includes("auto") || false
+
   const initialGreeting = isAutoInsurance
     ? `Welcome! I'll help you get accurate auto insurance quotes quickly.
 
 **Quick questions to get started:**
 How many drivers will be on this policy?`
-    : `Welcome! I'm your personal insurance coverage coach. I've reviewed your profile (${customerProfile.location}, age ${customerProfile.age}, focusing on ${customerProfile.needs.join(", ")}), and I'm here to guide you toward the optimal insurance strategy for your unique situation. 
+    : `Welcome! I'm your personal insurance coverage coach. I've reviewed your profile (${customerProfile?.location || 'your location'}, age ${customerProfile?.age || 'N/A'}, focusing on ${customerProfile?.needs?.join(", ") || 'your insurance needs'}), and I'm here to guide you toward the optimal insurance strategy for your unique situation.
 
 Think of me as your trusted advisor who will help you navigate coverage options, understand what protection you truly need, and find the best value for your specific circumstances. What aspect of your insurance coverage would you like to explore first?`
 
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<Message[]>(() => [
     {
       id: "1",
       role: "assistant",
@@ -54,6 +55,7 @@ Think of me as your trusted advisor who will help you navigate coverage options,
   const [gatheredInformation, setGatheredInformation] = useState<any>(null)
   const [showQuoteResults, setShowQuoteResults] = useState(false)
   const [quoteData, setQuoteData] = useState<any>(null)
+  const [showCoverageAnalyzer, setShowCoverageAnalyzer] = useState(false)
   const scrollAreaRef = useRef<HTMLDivElement>(null)
 
   // Track live profile updates from conversation
@@ -278,6 +280,43 @@ Think of me as your trusted advisor who will help you navigate coverage options,
     setShowQuoteResults(false)
     setQuoteData(null)
     setShowInformationGatherer(true)
+  }
+
+  const handleCoverageAnalysisComplete = (coverage: any) => {
+    // Update profile with extracted coverage information
+    const profileUpdates: Partial<CustomerProfile> = {}
+
+    if (coverage.vehicles && coverage.vehicles.length > 0) {
+      profileUpdates.vehicles = coverage.vehicles
+      profileUpdates.vehiclesCount = coverage.vehicles.length
+    }
+
+    if (coverage.coverageType) {
+      profileUpdates.needs = [coverage.coverageType]
+    }
+
+    // Save to profile
+    profileManager.updateProfile(profileUpdates)
+
+    // Add a message to the chat about the analyzed coverage
+    const analysisMessage: Message = {
+      id: Date.now().toString(),
+      role: "assistant",
+      content: `I've analyzed your current ${coverage.coverageType || 'insurance'} policy with ${coverage.carrier || 'your carrier'}.
+
+**Current Coverage:**
+${coverage.coverages?.map((c: any) => `- ${c.type}: ${c.limit || 'N/A'} (Deductible: ${c.deductible || 'N/A'})`).join('\n') || 'Coverage details extracted'}
+
+${coverage.gaps && coverage.gaps.length > 0 ? `\n**Coverage Gaps Identified:**\n${coverage.gaps.map((g: string) => `⚠️ ${g}`).join('\n')}` : ''}
+
+${coverage.recommendations && coverage.recommendations.length > 0 ? `\n**Recommendations:**\n${coverage.recommendations.map((r: string) => `✓ ${r}`).join('\n')}` : ''}
+
+How would you like to proceed? I can help you find better coverage or address these gaps.`,
+      createdAt: new Date(),
+    }
+
+    setMessages((prev) => [...prev, analysisMessage])
+    setShowCoverageAnalyzer(false)
   }
 
   const handleSubmitWithInformation = async (information: any) => {
@@ -506,6 +545,26 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
   }
 
 
+  // Show coverage analyzer if requested
+  if (showCoverageAnalyzer) {
+    const insuranceType = customerProfile.needs?.[0] as any
+    return (
+      <div className="space-y-4">
+        <CoverageAnalyzer
+          onAnalysisComplete={handleCoverageAnalysisComplete}
+          insuranceType={insuranceType}
+        />
+        <Button
+          variant="outline"
+          onClick={() => setShowCoverageAnalyzer(false)}
+          className="w-full"
+        >
+          Back to Chat
+        </Button>
+      </div>
+    )
+  }
+
   // Show information gatherer if needed
   if (showInformationGatherer) {
     return (
@@ -601,6 +660,19 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
             )}
           </div>
         </ScrollArea>
+
+        {/* Coverage Analyzer - Show on first page */}
+        {messages.length === 1 && (
+          <div className="px-4 pb-2 space-y-2">
+            <div className="text-xs text-muted-foreground text-center mb-2">
+              Skip manual entry - upload your current policy
+            </div>
+            <CoverageAnalyzer
+              onAnalysisComplete={handleCoverageAnalysisComplete}
+              insuranceType={customerProfile.needs?.[0] as any}
+            />
+          </div>
+        )}
 
         {/* Suggested Prompts */}
         <SuggestedPrompts

@@ -213,10 +213,10 @@ export function generateInsuranceComparisons(
   
   // Filter carriers that serve the location and offer the insurance type
   const relevantCarriers = carriers
-    .filter(carrier => 
-      carrier.states.includes(customerProfile.location.split(",")[0].trim()) &&
-      carrier.products.some(product => 
-        product.toLowerCase().includes(insuranceType.toLowerCase().split(" ")[0])
+    .filter(carrier =>
+      (carrier.coverage?.states && carrier.coverage.states.includes(customerProfile.location.split(",")[0].trim())) &&
+      carrier.types.some(type =>
+        type.toLowerCase().includes(insuranceType.toLowerCase().split(" ")[0])
       )
     )
     .slice(0, count)
@@ -309,3 +309,5 @@ export function getInsuranceTypeConfig(insuranceType: string): InsuranceTypeConf
 export function getAllInsuranceTypes(): string[] {
   return Object.keys(insuranceTypeConfigs)
 }
+
+

@@ -4,6 +4,7 @@ import { useState, useRef, useCallback, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Upload, FileText, Image, CheckCircle, AlertCircle, Loader2, X, Camera, RotateCcw } from "lucide-react"
 
 interface ExtractedCoverage {
@@ -189,9 +190,6 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType }: Coverage
       setExtractedData(result.coverage)
       console.log('[Client] Extracted data set successfully')
 
-      // Force alert to confirm data is here
-      alert(`✅ Successfully extracted ${Object.keys(result.coverage).length} fields!\n\nCarrier: ${result.coverage.carrier || 'N/A'}\nPolicy: ${result.coverage.policyNumber || 'N/A'}\nCustomer: ${result.coverage.customerName || 'N/A'}`)
-
       // Show success confirmation
       const fieldsExtracted = Object.keys(result.coverage).filter(key => result.coverage[key] != null).length
       console.log(`✅ Policy analyzed successfully! ${fieldsExtracted} fields extracted.`)
@@ -204,9 +202,10 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType }: Coverage
         })
       }
 
-      if (onAnalysisComplete) {
-        onAnalysisComplete(result.coverage)
-      }
+      // Don't auto-submit - let user review and click "Use This Coverage"
+      // if (onAnalysisComplete) {
+      //   onAnalysisComplete(result.coverage)
+      // }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Failed to analyze document'
       setError(errorMsg)
@@ -300,9 +299,10 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType }: Coverage
 
               setExtractedData(result.coverage)
               
-              if (onAnalysisComplete) {
-                onAnalysisComplete(result.coverage)
-              }
+              // Don't auto-submit - let user review and click "Use This Coverage"
+              // if (onAnalysisComplete) {
+              //   onAnalysisComplete(result.coverage)
+              // }
             } catch (err) {
               const errorMsg = err instanceof Error ? err.message : 'Failed to analyze document'
               setError(errorMsg)

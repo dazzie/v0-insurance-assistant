@@ -16,12 +16,13 @@ export default function InsuranceAssistant() {
   const [customerProfile, setCustomerProfile] = useState<CustomerProfile | null>(null)
   const [currentView, setCurrentView] = useState<ViewType>("profile")
 
-  // Load profile from localStorage on mount
+  // Load profile from localStorage on mount (but don't auto-switch to chat)
   useEffect(() => {
     const loaded = profileManager.loadProfile()
     if (loaded) {
       setCustomerProfile(loaded)
-      setCurrentView("chat")
+      // Don't auto-switch to chat - let user stay on profile form
+      // setCurrentView("chat")
     }
   }, [])
 

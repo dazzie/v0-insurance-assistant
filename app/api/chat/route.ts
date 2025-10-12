@@ -26,12 +26,10 @@ export async function POST(req: Request) {
     })
   }
 
-  // Save updated profile immediately
+  // Save updated profile immediately using the smart merge
   if (Object.keys(extractedProfile).length > 0) {
-    const currentProfile = profileManager.loadProfile() || {}
-    const updatedProfile = { ...currentProfile, ...extractedProfile }
-    profileManager.saveProfile(updatedProfile)
-    console.log("[v0] Profile updated in real-time:", updatedProfile)
+    profileManager.updateProfile(extractedProfile)
+    console.log("[v0] Profile updated in real-time:", profileManager.loadProfile())
   }
 
   // Check if mock mode is enabled
@@ -190,10 +188,18 @@ CRITICAL RULES FOR AUTO INSURANCE QUOTES:
 - Marital Status: ${mergedProfile?.maritalStatus || "Not specified"} ${mergedProfile?.maritalStatus ? "(✓ SAVED)" : ""}
 - Drivers Count: ${mergedProfile?.driversCount || "Not specified"} ${mergedProfile?.driversCount ? "(✓ SAVED)" : ""}
 - Vehicles Count: ${mergedProfile?.vehiclesCount || "Not specified"} ${mergedProfile?.vehiclesCount ? "(✓ SAVED)" : ""}
-${mergedProfile?.vehicles && mergedProfile.vehicles.length > 0 ? `- Vehicles: ${mergedProfile.vehicles.map((v: any) => `${v.year} ${v.make} ${v.model}`).join(', ')} (✓ SAVED)` : ""}
+${mergedProfile?.vehicles && mergedProfile.vehicles.length > 0 ? `- Vehicles: ${mergedProfile.vehicles.map((v: any) => {
+  let vehicleStr = `${v.year} ${v.make} ${v.model}`
+  if (v.enriched && v.enrichmentSource === 'NHTSA') {
+    vehicleStr += ` (NHTSA-verified: ${v.bodyClass || ''}, ${v.fuelType || ''}, ${v.manufacturer || ''})`
+  }
+  return vehicleStr
+}).join(', ')} (✓ SAVED)` : ""}
 ${mergedProfile?.homeType ? `- Home Type: ${mergedProfile.homeType} (✓ SAVED)` : ""}
 ${mergedProfile?.homeValue ? `- Home Value: $${mergedProfile.homeValue} (✓ SAVED)` : ""}
 ${mergedProfile?.coverageAmount ? `- Coverage Amount: $${mergedProfile.coverageAmount} (✓ SAVED)` : ""}
+
+**IMPORTANT: When displaying vehicle information to the user, ALWAYS include the NHTSA-verified details if available (bodyClass, fuelType, manufacturer, etc.). This shows accuracy and builds trust.**
 
 **INFORMATION PERSISTENCE RULES:**
 - ALL information from previous messages is remembered

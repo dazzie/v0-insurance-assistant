@@ -81,12 +81,14 @@ export function InsuranceSummaryComparison({
   }
 
   const getBestValueCarrier = () => {
+    if (comparisons.length === 0) return null
     return comparisons.reduce((best, current) => 
       current.monthlyPremium < best.monthlyPremium ? current : best
     )
   }
 
   const getHighestRatedCarrier = () => {
+    if (comparisons.length === 0) return null
     return comparisons.reduce((best, current) => 
       current.rating > best.rating ? current : best
     )
@@ -114,18 +116,22 @@ export function InsuranceSummaryComparison({
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-green-600">${bestValue.monthlyPremium}/mo</div>
-            <div className="text-sm text-muted-foreground">Best Value: {bestValue.carrierName}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-blue-600">{highestRated.rating}★</div>
-            <div className="text-sm text-muted-foreground">Highest Rated: {highestRated.carrierName}</div>
-          </CardContent>
-        </Card>
+        {bestValue && (
+          <Card>
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-green-600">${bestValue.monthlyPremium}/mo</div>
+              <div className="text-sm text-muted-foreground">Best Value: {bestValue.carrierName}</div>
+            </CardContent>
+          </Card>
+        )}
+        {highestRated && (
+          <Card>
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-blue-600">{highestRated.rating}★</div>
+              <div className="text-sm text-muted-foreground">Highest Rated: {highestRated.carrierName}</div>
+            </CardContent>
+          </Card>
+        )}
         <Card>
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-purple-600">{comparisons.length}</div>

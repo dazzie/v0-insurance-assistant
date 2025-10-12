@@ -23,7 +23,8 @@ export default function InsuranceAssistant() {
     const loaded = profileManager.loadProfile()
     if (loaded) {
       setCustomerProfile(loaded)
-      setCurrentView("chat")
+      // Don't auto-switch to chat - let user stay on profile form
+      // setCurrentView("chat")
     }
   }, [])
 

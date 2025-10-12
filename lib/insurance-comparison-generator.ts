@@ -213,12 +213,18 @@ export function generateInsuranceComparisons(
   
   // Filter carriers that serve the location and offer the insurance type
   const relevantCarriers = carriers
-    .filter(carrier =>
-      (carrier.coverage?.states && carrier.coverage.states.includes(customerProfile.location.split(",")[0].trim())) &&
-      carrier.types.some(type =>
-        type.toLowerCase().includes(insuranceType.toLowerCase().split(" ")[0])
-      )
-    )
+    .filter(carrier => {
+      // Check if carrier has states and location is available
+      if (!carrier.states || !customerProfile.location) return true
+      
+      const locationState = customerProfile.location.split(",")[0]?.trim()
+      if (!locationState) return true
+      
+      return carrier.states.includes(locationState) &&
+        carrier.types?.some(type => 
+          type.toLowerCase().includes(insuranceType.toLowerCase().split(" ")[0])
+        )
+    })
     .slice(0, count)
 
   return relevantCarriers.map((carrier, index) => {
@@ -263,16 +269,28 @@ export function generateInsuranceComparisons(
       ]
     }
 
+    // Convert letter rating to numeric rating (A++ = 5.0, A+ = 4.5, A = 4.0, etc.)
+    const ratingMap: Record<string, number> = {
+      'A++': 5.0,
+      'A+': 4.5,
+      'A': 4.0,
+      'A-': 3.5,
+      'B++': 3.0,
+      'B+': 2.5,
+      'B': 2.0
+    }
+    const numericRating = ratingMap[carrier.rating.amBest] || 4.0
+
     return {
       carrierName: carrier.name,
-      rating: carrier.rating,
+      rating: numericRating,
       monthlyPremium,
       annualPremium,
       coverageAmount: config.coverageOptions[Math.floor(Math.random() * config.coverageOptions.length)],
       deductible: insuranceType === "Health" ? "$500-$2,000" : "$1,000",
       features: config.features.slice(0, 4),
       strengths: [
-        carrier.rating >= 4.5 ? "Excellent Customer Service" : "Competitive Pricing",
+        numericRating >= 4.5 ? "Excellent Customer Service" : "Competitive Pricing",
         "Digital Tools & Mobile App",
         "Fast Claims Processing",
         "Flexible Payment Options"

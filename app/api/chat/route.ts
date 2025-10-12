@@ -26,12 +26,10 @@ export async function POST(req: Request) {
     })
   }
 
-  // Save updated profile immediately
+  // Save updated profile immediately using the smart merge
   if (Object.keys(extractedProfile).length > 0) {
-    const currentProfile = profileManager.loadProfile() || {}
-    const updatedProfile = { ...currentProfile, ...extractedProfile }
-    profileManager.saveProfile(updatedProfile)
-    console.log("[v0] Profile updated in real-time:", updatedProfile)
+    profileManager.updateProfile(extractedProfile)
+    console.log("[v0] Profile updated in real-time:", profileManager.loadProfile())
   }
 
   // Check if mock mode is enabled
@@ -195,6 +193,9 @@ ${mergedProfile?.vehicles && mergedProfile.vehicles.length > 0 ? `- Vehicles Det
 ${mergedProfile.vehicles.map((v: any) => {
   const parts = [`  • ${v.year} ${v.make} ${v.model}`]
   if (v.vin) parts.push(`VIN: ${v.vin}`)
+  if (v.enriched && v.enrichmentSource === 'NHTSA') {
+    parts.push(`NHTSA-verified: ${v.bodyClass || ''}, ${v.fuelType || ''}, ${v.manufacturer || ''}`)
+  }
   if (v.primaryUse) parts.push(`Primary Use: ${v.primaryUse}`)
   if (v.annualMileage) parts.push(`Annual Mileage: ${v.annualMileage}`)
   return parts.join(', ')
@@ -207,6 +208,8 @@ ${mergedProfile?.homeValue ? `- Home Value: $${mergedProfile.homeValue} (✓ SAV
 ${mergedProfile?.yearBuilt ? `- Year Built: ${mergedProfile.yearBuilt} (✓ SAVED)` : ""}
 ${mergedProfile?.squareFootage ? `- Square Footage: ${mergedProfile.squareFootage} (✓ SAVED)` : ""}
 ${mergedProfile?.coverageAmount ? `- Coverage Amount: $${mergedProfile.coverageAmount} (✓ SAVED)` : ""}
+
+**IMPORTANT: When displaying vehicle information to the user, ALWAYS include the NHTSA-verified details if available (bodyClass, fuelType, manufacturer, etc.). This shows accuracy and builds trust.**
 
 **INFORMATION PERSISTENCE RULES:**
 - ALL information from previous messages is remembered

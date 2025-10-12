@@ -137,8 +137,79 @@ export const profileManager = {
   // Update specific fields in profile
   updateProfile: (updates: Partial<CustomerProfile>): void => {
     const current = profileManager.loadProfile() || {}
+    
+    console.log('[Profile Update] Current vehicles:', JSON.stringify(current.vehicles?.map(v => ({ 
+      year: v.year, make: v.make, model: v.model, enriched: v.enriched, bodyClass: v.bodyClass 
+    }))))
+    console.log('[Profile Update] Update vehicles:', JSON.stringify(updates.vehicles?.map(v => ({ 
+      year: v?.year, make: v?.make, model: v?.model, enriched: v?.enriched 
+    }))))
+    
+    // Smart merge for vehicles - preserve enriched NHTSA data
+    if (current.vehicles && current.vehicles.some(v => v.enriched)) {
+      console.log('[Profile Update] ✓ Enriched vehicles detected, applying protection...')
+      // If we have enriched vehicles, protect them
+      if (updates.vehicles && updates.vehicles.length > 0) {
+        console.log('[Profile Update] Merging vehicle updates...')
+        // Merge with enriched data
+        updates.vehicles = updates.vehicles.map((updatedVehicle, index) => {
+          const currentVehicle = current.vehicles?.[index]
+          
+          // If vehicle was enriched, preserve all enriched fields
+          if (currentVehicle?.enriched) {
+            console.log(`[Profile Update] Vehicle ${index}: Preserving enriched data`)
+            return {
+              ...currentVehicle, // Keep all enriched data (locked)
+              primaryUse: updatedVehicle.primaryUse ?? currentVehicle.primaryUse, // ✏️ Editable
+              annualMileage: updatedVehicle.annualMileage ?? currentVehicle.annualMileage, // ✏️ Editable
+            }
+          }
+          
+          // Otherwise, use the new vehicle data as-is
+          console.log(`[Profile Update] Vehicle ${index}: Using new data (not enriched)`)
+          return updatedVehicle
+        })
+      } else {
+        // Don't overwrite enriched vehicles with empty/undefined vehicles
+        console.log('[Profile Update] ⚠️ Deleting empty vehicles from update')
+        delete updates.vehicles
+      }
+    } else {
+      console.log('[Profile Update] No enriched vehicles, allowing update')
+    }
+    
+    // Smart merge for drivers - preserve existing driver data, allow age/DOB updates
+    if (current.drivers && current.drivers.length > 0) {
+      if (updates.drivers && updates.drivers.length > 0) {
+        // Merge driver updates
+        updates.drivers = updates.drivers.map((updatedDriver, index) => {
+          const currentDriver = current.drivers?.[index]
+          
+          if (currentDriver) {
+            return {
+              ...currentDriver, // Keep existing driver data
+              age: updatedDriver.age ?? currentDriver.age, // ✏️ Editable
+              dateOfBirth: updatedDriver.dateOfBirth ?? currentDriver.dateOfBirth, // ✏️ Editable
+              yearsLicensed: updatedDriver.yearsLicensed ?? currentDriver.yearsLicensed, // ✏️ Editable
+              violations: updatedDriver.violations ?? currentDriver.violations, // ✏️ Editable
+              accidents: updatedDriver.accidents ?? currentDriver.accidents, // ✏️ Editable
+            }
+          }
+          
+          // New driver, use as-is
+          return updatedDriver
+        })
+      } else {
+        // Don't overwrite existing drivers with empty/undefined drivers
+        delete updates.drivers
+      }
+    }
+    
     const updated = { ...current, ...updates }
     profileManager.saveProfile(updated)
+    console.log('[Profile Update] ✅ Profile saved. Final vehicles:', JSON.stringify(updated.vehicles?.map(v => ({ 
+      year: v.year, make: v.make, model: v.model, enriched: v.enriched, bodyClass: v.bodyClass, fuelType: v.fuelType 
+    }))))
   },
 
   // Clear profile from storage
@@ -247,6 +318,11 @@ export function getProfileSummary(profile: CustomerProfile): string {
 // Extract profile from conversation with enhanced insurance data capture
 export function extractProfileFromConversation(messages: any[]): Partial<CustomerProfile> {
   const extracted: Partial<CustomerProfile> = {}
+  
+  // Load current profile once at the start to check for enriched data
+  const currentProfile = profileManager.loadProfile()
+  const hasEnrichedVehicles = currentProfile?.vehicles?.some(v => v.enriched)
+  const hasExistingDrivers = currentProfile?.drivers && currentProfile.drivers.length > 0
 
   messages.forEach(message => {
     const content = message.content || ''
@@ -305,8 +381,10 @@ export function extractProfileFromConversation(messages: any[]): Partial<Custome
     }
 
     // Extract vehicle information
+    // NOTE: Skip extraction if vehicles are already enriched - we don't want to overwrite NHTSA data
     const vehicleMatch = content.match(/(\d{4})\s+([A-Za-z]+)\s+([A-Za-z0-9\-]+)/i)
-    if (vehicleMatch) {
+    if (vehicleMatch && !hasEnrichedVehicles) {
+      // Only extract if no enriched vehicles exist
       if (!extracted.vehicles) {
         extracted.vehicles = []
       }
@@ -317,8 +395,8 @@ export function extractProfileFromConversation(messages: any[]): Partial<Custome
       // Check if this vehicle isn't already in the array (case-insensitive)
       const exists = extracted.vehicles.some(v =>
         v.year === year &&
-        v.make.toLowerCase() === make.toLowerCase() &&
-        v.model.toLowerCase() === model.toLowerCase()
+        v.make?.toLowerCase() === make.toLowerCase() &&
+        v.model?.toLowerCase() === model.toLowerCase()
       )
 
       if (!exists && year > 1990 && year <= new Date().getFullYear() + 1) {

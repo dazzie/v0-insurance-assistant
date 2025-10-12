@@ -31,15 +31,32 @@ interface Message {
 
 export function ChatInterface({ customerProfile }: ChatInterfaceProps) {
   const isAutoInsurance = customerProfile?.needs?.includes("auto") || false
-
-  const initialGreeting = isAutoInsurance
-    ? `Welcome! I'll help you get accurate auto insurance quotes quickly.
+  
+  // Build a better greeting based on what profile data we have
+  const getInitialGreeting = () => {
+    if (isAutoInsurance) {
+      return `Welcome! I'll help you get accurate auto insurance quotes quickly.
 
 **Quick questions to get started:**
 How many drivers will be on this policy?`
-    : `Welcome! I'm your personal insurance coverage coach. I've reviewed your profile (${customerProfile?.location || 'your location'}, age ${customerProfile?.age || 'N/A'}, focusing on ${customerProfile?.needs?.join(", ") || 'your insurance needs'}), and I'm here to guide you toward the optimal insurance strategy for your unique situation.
+    }
+    
+    // Build profile summary only if we have data
+    const profileParts = []
+    if (customerProfile?.location) profileParts.push(customerProfile.location)
+    if (customerProfile?.age) profileParts.push(`age ${customerProfile.age}`)
+    if (customerProfile?.needs?.length) profileParts.push(`focusing on ${customerProfile.needs.join(", ")}`)
+    
+    const profileSummary = profileParts.length > 0 
+      ? `I've reviewed your profile (${profileParts.join(', ')}), and I'm` 
+      : `I'm`
+    
+    return `Welcome! I'm your personal insurance coverage coach. ${profileSummary} here to guide you toward the optimal insurance strategy for your unique situation. 
 
 Think of me as your trusted advisor who will help you navigate coverage options, understand what protection you truly need, and find the best value for your specific circumstances. What aspect of your insurance coverage would you like to explore first?`
+  }
+  
+  const initialGreeting = getInitialGreeting()
 
   const [messages, setMessages] = useState<Message[]>(() => [
     {
@@ -60,9 +77,24 @@ Think of me as your trusted advisor who will help you navigate coverage options,
 
   // Track live profile updates from conversation
   const [liveProfile, setLiveProfile] = useState(() => {
-    const saved = profileManager.loadProfile() || {}
-    return { ...saved, ...customerProfile }
+    // Use fresh profile from localStorage - don't merge with customerProfile prop
+    // which might have stale data without enrichment
+    return profileManager.loadProfile() || customerProfile || {}
   })
+
+  // Update liveProfile when customerProfile prop changes (e.g., after policy scan)
+  useEffect(() => {
+    if (customerProfile && Object.keys(customerProfile).length > 0) {
+      console.log('[ChatInterface] customerProfile prop changed:', JSON.stringify({
+        vehicles: customerProfile.vehicles?.map(v => ({
+          year: v.year, make: v.make, model: v.model, enriched: v.enriched, bodyClass: v.bodyClass
+        }))
+      }))
+      
+      // Just update local state - don't save to localStorage (parent already did that)
+      setLiveProfile(customerProfile)
+    }
+  }, [customerProfile])
 
   // Build quote profile from messages for auto insurance
   const quoteProfile = useMemo(() => {
@@ -77,14 +109,23 @@ Think of me as your trusted advisor who will help you navigate coverage options,
       content: m.content
     })))
     if (Object.keys(extractedProfile).length > 0) {
-      const currentProfile = profileManager.loadProfile() || {}
-      const updatedProfile = { ...currentProfile, ...customerProfile, ...extractedProfile }
+      // Use smart merge to preserve enriched data
+      profileManager.updateProfile(extractedProfile)
+      const updatedProfile = profileManager.loadProfile() || {}
+      // Don't merge with customerProfile - it might have stale data!
+      // Just use the freshly loaded profile from localStorage
       setLiveProfile(updatedProfile)
     }
-  }, [messages, customerProfile])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages]) // Only run when messages change, not when customerProfile changes
 
-  // Auto-scroll to bottom when new messages are added
+  // Auto-scroll to bottom when new messages are added (but not on initial load)
+  const isInitialMount = useRef(true)
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+      return
+    }
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight
     }
@@ -335,6 +376,20 @@ Think of me as your trusted advisor who will help you navigate coverage options,
     // Save to profile
     profileManager.updateProfile(profileUpdates)
 
+    // Format coverages for display
+    let coverageDisplay = ''
+    if (coverage.coverages && coverage.coverages.length > 0) {
+      coverageDisplay = coverage.coverages.map((c: any, idx: number) => {
+        let line = `${idx + 1}. **${c.type}**`
+        if (c.limit) line += `\n   • Limit: ${c.limit}`
+        if (c.deductible) line += `\n   • Deductible: ${c.deductible}`
+        if (c.premium) line += `\n   • Premium: ${c.premium}`
+        return line
+      }).join('\n\n')
+    } else {
+      coverageDisplay = '_Coverage details not fully extracted_'
+    }
+
     // Add a message to the chat about the analyzed coverage
     const analysisMessage: Message = {
       id: Date.now().toString(),
@@ -343,14 +398,26 @@ Think of me as your trusted advisor who will help you navigate coverage options,
 
 I've analyzed your current ${coverage.coverageType || 'insurance'} policy with **${coverage.carrier || 'your carrier'}**.
 
-**Current Coverage:**
-${coverage.coverages?.map((c: any) => `- ${c.type}: ${c.limit || 'N/A'} (Deductible: ${c.deductible || 'N/A'})`).join('\n') || 'Coverage details extracted'}
+**Your Current Coverages:**
 
-${coverage.gaps && coverage.gaps.length > 0 ? `\n⚠️ **Coverage Gaps Identified:**\n${coverage.gaps.map((g: string) => `• ${g}`).join('\n')}` : ''}
+${coverageDisplay}
 
-${coverage.recommendations && coverage.recommendations.length > 0 ? `\n💡 **Recommendations:**\n${coverage.recommendations.map((r: string) => `• ${r}`).join('\n')}` : ''}
+${coverage.totalPremium ? `\n💰 **Total Premium:** ${coverage.totalPremium}${coverage.paymentFrequency ? ` (${coverage.paymentFrequency})` : ''}` : ''}
 
-🎯 **Ready to compare quotes from top carriers?** I can show you better options right now!`,
+${coverage.gaps && coverage.gaps.length > 0 ? `\n\n⚠️ **Coverage Gaps I've Identified:**\n${coverage.gaps.map((g: string) => `• ${g}`).join('\n')}` : ''}
+
+${coverage.recommendations && coverage.recommendations.length > 0 ? `\n\n💡 **My Recommendations:**\n${coverage.recommendations.map((r: string) => `• ${r}`).join('\n')}` : ''}
+
+---
+
+📋 **Would you like to:**
+
+1) **Keep the same coverages** - I'll find you better rates with identical protection
+2) **Increase coverage** - Get better protection (recommended if you have gaps)
+3) **Adjust specific coverages** - Tell me what you'd like to change
+4) **Get minimum required coverage** - Lower cost, state minimum protection
+
+Please select an option (1-4) or tell me what you'd like to change!`,
       createdAt: new Date(),
     }
 

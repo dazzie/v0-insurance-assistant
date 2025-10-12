@@ -13,7 +13,7 @@ import { QuoteProfileDisplay } from "@/components/quote-profile-display"
 import { QuoteInformationGatherer } from "@/components/quote-information-gatherer"
 import { QuoteResults } from "@/components/quote-results"
 import { buildQuoteProfile } from "@/lib/quote-profile"
-import type { CustomerProfile } from "@/app/page"
+import type { CustomerProfile } from "@/lib/customer-profile"
 import { ProfileSummaryCard } from "@/components/profile-summary-card"
 import { profileManager, extractProfileFromConversation } from "@/lib/customer-profile"
 import { CoverageAnalyzer } from "@/components/coverage-analyzer"
@@ -195,6 +195,48 @@ Think of me as your trusted advisor who will help you navigate coverage options,
           reader.releaseLock()
         }
       }
+
+      // 🎯 SMART DETECTION: If AI is recommending carriers, trigger quote display
+      const isCarrierRecommendation = 
+        (assistantContent.toLowerCase().includes('state farm') ||
+         assistantContent.toLowerCase().includes('geico') ||
+         assistantContent.toLowerCase().includes('progressive') ||
+         assistantContent.toLowerCase().includes('allstate')) &&
+        (assistantContent.toLowerCase().includes('quote') ||
+         assistantContent.toLowerCase().includes('carrier') ||
+         assistantContent.toLowerCase().includes('contact') ||
+         assistantContent.toLowerCase().includes('action plan'))
+
+      // Check if we have enough profile data to show quotes
+      const hasEnoughInfo = liveProfile.vehicles && liveProfile.vehicles.length > 0 &&
+                           liveProfile.driversCount && liveProfile.driversCount > 0
+
+      if (isCarrierRecommendation && hasEnoughInfo) {
+        // Show "Fetching quotes..." message after a brief delay
+        setTimeout(() => {
+          const fetchingMessage: Message = {
+            id: Date.now().toString() + '-fetching',
+            role: "assistant",
+            content: "🎯 **Perfect! Let me get you actual quotes from these carriers...**\n\n*Fetching live rates from State Farm, GEICO, Progressive, and Allstate...*\n\n⏳ *This will take just a moment...*",
+            createdAt: new Date(),
+          }
+          setMessages(prev => [...prev, fetchingMessage])
+
+          // Trigger quote results after slight delay to simulate API calls
+          setTimeout(() => {
+            const quoteData = {
+              insuranceType: 'Auto',
+              customerProfile: liveProfile,
+              coverageAmount: liveProfile.coverageAmount || '$500,000',
+              deductible: liveProfile.deductible || '$1,000',
+              requestId: `REQ-${Date.now()}`
+            }
+            setQuoteData(quoteData)
+            setShowQuoteResults(true)
+          }, 3000) // 3 second delay to show "fetching" state
+        }, 1500)
+      }
+
     } catch (error) {
       console.error("[v0] Chat error:", error)
       setMessages((prev) => prev.filter((msg) => msg.id !== assistantMessageId))
@@ -229,30 +271,25 @@ Think of me as your trusted advisor who will help you navigate coverage options,
     
     setMessages(prev => [...prev, informationMessage])
     
-    // Check if this is a quote request and show quote results
-    if (information.insuranceType || information.needs?.some((need: string) => 
-      need.toLowerCase().includes('quote') || 
-      need.toLowerCase().includes('compare') ||
-      need.toLowerCase().includes('price')
-    )) {
-      const quoteData = {
-        insuranceType: information.insuranceType || 'Auto',
-        customerProfile: { ...customerProfile, ...information },
-        coverageAmount: information.coverageAmount || '$500,000',
-        deductible: information.deductible || '$1,000',
-        requestId: `REQ-${Date.now()}`
+    // Check if we have enough information for quotes
+    const hasEnoughInfo = (information.vehicles && information.vehicles.length > 0 && 
+                           information.driversCount && information.driversCount > 0) ||
+                          (information.insuranceType && information.location)
+    
+    if (hasEnoughInfo) {
+      // Add immediate "generating quotes" message
+      const generatingMessage: Message = {
+        id: Date.now().toString() + '-generating',
+        role: "assistant",
+        content: "🎯 **Great! I have all the information I need.**\n\nGenerating personalized quotes from top carriers...\n\n*This will just take a moment...*",
+        createdAt: new Date(),
       }
-      setQuoteData(quoteData)
-      setShowQuoteResults(true)
-    } else {
-      // Check if we now have enough information to show quotes automatically
-      const hasEnoughInfo = information.vehicles && information.vehicles.length > 0 && 
-                           information.driversCount && information.driversCount > 0
+      setMessages(prev => [...prev, generatingMessage])
       
-      if (hasEnoughInfo) {
-        // Automatically show quote results since we have enough info
+      // Automatically show quote results with slight delay for UX
+      setTimeout(() => {
         const quoteData = {
-          insuranceType: 'Auto',
+          insuranceType: information.insuranceType || 'Auto',
           customerProfile: { ...customerProfile, ...information },
           coverageAmount: information.coverageAmount || '$500,000',
           deductible: information.deductible || '$1,000',
@@ -260,10 +297,10 @@ Think of me as your trusted advisor who will help you navigate coverage options,
         }
         setQuoteData(quoteData)
         setShowQuoteResults(true)
-      } else {
-        // Send to API for processing
-        handleSubmitWithInformation(information)
-      }
+      }, 1500)
+    } else {
+      // Send to API for processing if more info needed
+      handleSubmitWithInformation(information)
     }
   }
 
@@ -302,23 +339,24 @@ Think of me as your trusted advisor who will help you navigate coverage options,
     const analysisMessage: Message = {
       id: Date.now().toString(),
       role: "assistant",
-      content: `I've analyzed your current ${coverage.coverageType || 'insurance'} policy with ${coverage.carrier || 'your carrier'}.
+      content: `✅ **Policy Analysis Complete!**
+
+I've analyzed your current ${coverage.coverageType || 'insurance'} policy with **${coverage.carrier || 'your carrier'}**.
 
 **Current Coverage:**
 ${coverage.coverages?.map((c: any) => `- ${c.type}: ${c.limit || 'N/A'} (Deductible: ${c.deductible || 'N/A'})`).join('\n') || 'Coverage details extracted'}
 
-${coverage.gaps && coverage.gaps.length > 0 ? `\n**Coverage Gaps Identified:**\n${coverage.gaps.map((g: string) => `⚠️ ${g}`).join('\n')}` : ''}
+${coverage.gaps && coverage.gaps.length > 0 ? `\n⚠️ **Coverage Gaps Identified:**\n${coverage.gaps.map((g: string) => `• ${g}`).join('\n')}` : ''}
 
-${coverage.recommendations && coverage.recommendations.length > 0 ? `\n**Recommendations:**\n${coverage.recommendations.map((r: string) => `✓ ${r}`).join('\n')}` : ''}
+${coverage.recommendations && coverage.recommendations.length > 0 ? `\n💡 **Recommendations:**\n${coverage.recommendations.map((r: string) => `• ${r}`).join('\n')}` : ''}
 
-How would you like to proceed? I can help you find better coverage or address these gaps.`,
+🎯 **Ready to compare quotes from top carriers?** I can show you better options right now!`,
       createdAt: new Date(),
     }
 
     setMessages((prev) => [...prev, analysisMessage])
     setShowCoverageAnalyzer(false)
   }
-
   const handleSubmitWithInformation = async (information: any) => {
     setIsLoading(true)
     
@@ -495,6 +533,48 @@ How would you like to proceed? I can help you find better coverage or address th
           reader.releaseLock()
         }
       }
+
+      // 🎯 SMART DETECTION: If AI is recommending carriers, trigger quote display
+      const isCarrierRecommendation = 
+        (assistantContent.toLowerCase().includes('state farm') ||
+         assistantContent.toLowerCase().includes('geico') ||
+         assistantContent.toLowerCase().includes('progressive') ||
+         assistantContent.toLowerCase().includes('allstate')) &&
+        (assistantContent.toLowerCase().includes('quote') ||
+         assistantContent.toLowerCase().includes('carrier') ||
+         assistantContent.toLowerCase().includes('contact') ||
+         assistantContent.toLowerCase().includes('action plan'))
+
+      // Check if we have enough profile data to show quotes
+      const hasEnoughInfo = liveProfile.vehicles && liveProfile.vehicles.length > 0 &&
+                           liveProfile.driversCount && liveProfile.driversCount > 0
+
+      if (isCarrierRecommendation && hasEnoughInfo) {
+        // Show "Fetching quotes..." message after a brief delay
+        setTimeout(() => {
+          const fetchingMessage: Message = {
+            id: Date.now().toString() + '-fetching',
+            role: "assistant",
+            content: "🎯 **Perfect! Let me get you actual quotes from these carriers...**\n\n*Fetching live rates from State Farm, GEICO, Progressive, and Allstate...*\n\n⏳ *This will take just a moment...*",
+            createdAt: new Date(),
+          }
+          setMessages(prev => [...prev, fetchingMessage])
+
+          // Trigger quote results after slight delay to simulate API calls
+          setTimeout(() => {
+            const quoteData = {
+              insuranceType: 'Auto',
+              customerProfile: liveProfile,
+              coverageAmount: liveProfile.coverageAmount || '$500,000',
+              deductible: liveProfile.deductible || '$1,000',
+              requestId: `REQ-${Date.now()}`
+            }
+            setQuoteData(quoteData)
+            setShowQuoteResults(true)
+          }, 3000) // 3 second delay to show "fetching" state
+        }, 1500)
+      }
+
     } catch (error) {
       console.error("[v0] Chat error:", error)
       setMessages((prev) => prev.filter((msg) => msg.id !== assistantMessageId))

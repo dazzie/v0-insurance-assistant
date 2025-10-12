@@ -36,6 +36,20 @@ export interface CustomerProfile {
     vin?: string
     primaryUse?: string
     annualMileage?: number
+    // NHTSA enriched fields
+    bodyClass?: string
+    fuelType?: string
+    doors?: number
+    manufacturer?: string
+    plantCity?: string
+    plantState?: string
+    vehicleType?: string
+    gvwr?: string
+    abs?: boolean
+    esc?: boolean
+    enriched?: boolean
+    enrichmentSource?: string
+    enrichmentError?: string
   }>
   drivers?: Array<{
     age?: number

@@ -71,18 +71,18 @@ export default function InsuranceAssistant() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
         {currentView === "profile" && <CustomerProfileForm onSubmit={handleProfileSubmit} />}
 
         {currentView === "chat" && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Customer Profile Card - Left side on desktop */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 order-2 lg:order-1">
               <CustomerProfileCard />
             </div>
 
             {/* Chat Interface - Right side on desktop */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 order-1 lg:order-2">
               <ChatInterface customerProfile={customerProfile!} />
             </div>
           </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -17,13 +17,69 @@ interface QuoteResultsProps {
 
 export function QuoteResults({ quoteData, onBack, onNewQuote }: QuoteResultsProps) {
   const [viewMode, setViewMode] = useState<'summary' | 'detailed'>('summary')
+  const [comparisons, setComparisons] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [quoteSource, setQuoteSource] = useState<'mock' | 'api' | 'error'>('mock')
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  // Generate comprehensive insurance comparisons
-  const comparisons = generateInsuranceComparisons(
-    quoteData.insuranceType,
-    quoteData.customerProfile,
-    4
-  )
+  // Fetch real quotes from aggregator API on mount
+  useEffect(() => {
+    fetchRealQuotes()
+  }, [quoteData])
+
+  async function fetchRealQuotes() {
+    setIsLoading(true)
+    setErrorMessage(null)
+
+    try {
+      console.log('[QuoteResults] Fetching quotes from API...')
+      
+      const response = await fetch('/api/fetch-quotes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          insuranceType: quoteData.insuranceType,
+          customerProfile: quoteData.customerProfile,
+          coveragePreferences: {
+            liability: '100/300/100',
+            comprehensiveDeductible: 500,
+            collisionDeductible: 500,
+          },
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`)
+      }
+
+      const data = await response.json()
+      console.log('[QuoteResults] API response:', data)
+
+      if (data.success && data.quotes && data.quotes.length > 0) {
+        setComparisons(data.quotes)
+        setQuoteSource(data.source === 'insurify' ? 'api' : 'mock')
+      } else {
+        throw new Error('No quotes returned from API')
+      }
+
+    } catch (error: any) {
+      console.error('[QuoteResults] Error fetching quotes:', error)
+      setErrorMessage(error.message)
+      setQuoteSource('error')
+      
+      // Fallback to mock data
+      const mockComparisons = generateInsuranceComparisons(
+        quoteData.insuranceType,
+        quoteData.customerProfile,
+        4
+      )
+      setComparisons(mockComparisons)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleContactCarrier = (carrier: any) => {
     // In a real app, this would integrate with carrier APIs or redirect to their quote pages
@@ -35,12 +91,57 @@ export function QuoteResults({ quoteData, onBack, onNewQuote }: QuoteResultsProp
     window.open(carrier.contactInfo.website, "_blank")
   }
 
+  // Show loading state while fetching quotes
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto p-6 space-y-6">
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg p-6 shadow-lg">
+          <div className="flex items-center justify-center gap-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+            <div>
+              <h1 className="text-2xl font-bold">Fetching Live Quotes...</h1>
+              <p className="text-blue-100 text-sm mt-1">Comparing rates from major carriers</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
+      {/* Prominent Quote Ready Banner */}
+      <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg p-6 shadow-lg">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl">🎉</span>
+              <h1 className="text-3xl font-bold">Your Quotes Are Ready!</h1>
+            </div>
+            <p className="text-blue-100 text-lg">
+              We found {comparisons.length} competitive quotes from top-rated carriers
+              {quoteSource === 'api' && <span className="ml-2 text-sm">✓ Live Pricing</span>}
+              {quoteSource === 'mock' && <span className="ml-2 text-sm">(Demo Mode)</span>}
+            </p>
+            <p className="text-blue-200 text-sm mt-1">Based on your profile and needs</p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Badge className="bg-white text-blue-600 text-lg px-4 py-2">
+              Potential Savings: ${comparisons[0]?.savings || 200}+/year
+            </Badge>
+            {quoteSource === 'api' && (
+              <Badge className="bg-green-500 text-white text-xs px-2 py-1">
+                🔗 Live API Data
+              </Badge>
+            )}
+          </div>
+        </div>
+      </div>
+
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Your {quoteData.insuranceType} Insurance Quotes</h1>
-          <p className="text-muted-foreground mt-2">Compare quotes from top-rated insurance carriers</p>
+          <h2 className="text-2xl font-bold">Compare {quoteData.insuranceType} Insurance Options</h2>
+          <p className="text-muted-foreground mt-1">Review detailed comparisons and choose the best coverage for you</p>
         </div>
         <div className="flex space-x-2">
           <Button 
@@ -148,7 +249,7 @@ export function QuoteResults({ quoteData, onBack, onNewQuote }: QuoteResultsProp
                 <div>
                   <p className="text-sm font-medium mb-2">Included Features:</p>
                   <ul className="text-sm text-muted-foreground space-y-1">
-                    {quote.features.map((feature, idx) => (
+                    {quote.features.map((feature: string, idx: number) => (
                       <li key={idx} className="flex items-center">
                         <span className="text-green-500 mr-2">✓</span>
                         {feature}

@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { CoverageAnalyzer } from "@/components/coverage-analyzer"
-import type { CustomerProfile } from "@/app/page"
+import type { CustomerProfile } from "@/lib/customer-profile"
 
 interface CustomerProfileFormProps {
   onSubmit: (profile: CustomerProfile) => void
@@ -48,7 +48,7 @@ export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto px-2 sm:px-0">
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Insurance Research Agent</CardTitle>
@@ -58,50 +58,42 @@ export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Personal Information */}
             <div className="space-y-2">
-              <Label htmlFor="location" className="text-sm font-medium">
-                Location <span className="text-destructive">*</span>
-              </Label>
+              <Label htmlFor="location">Your Location (City, State or ZIP)</Label>
               <Input
                 id="location"
-                type="text"
+                placeholder="e.g., San Francisco, CA or 94103"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="e.g. California, US"
-                className={errors.location ? "border-destructive" : ""}
+                className={errors.location ? "border-red-500" : ""}
               />
-              {errors.location && <p className="text-sm text-destructive">{errors.location}</p>}
+              {errors.location && (
+                <p className="text-red-500 text-xs">{errors.location}</p>
+              )}
             </div>
 
-            {/* Age field matches config */}
             <div className="space-y-2">
-              <Label htmlFor="age" className="text-sm font-medium">
-                Age <span className="text-destructive">*</span>
-              </Label>
+              <Label htmlFor="age">Your Age</Label>
               <Input
                 id="age"
                 type="number"
-                min="18"
-                max="100"
+                placeholder="e.g., 30"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
-                placeholder="e.g. 42"
-                className={errors.age ? "border-destructive" : ""}
+                className={errors.age ? "border-red-500" : ""}
               />
-              {errors.age && <p className="text-sm text-destructive">{errors.age}</p>}
+              {errors.age && <p className="text-red-500 text-xs">{errors.age}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="needs" className="text-sm font-medium">
-                Insurance Needs <span className="text-destructive">*</span>
-              </Label>
+              <Label htmlFor="needs">What insurance are you looking for?</Label>
               <Textarea
                 id="needs"
+                placeholder="e.g., auto, home, life, renters, pet, health, disability, umbrella"
                 value={needs}
                 onChange={(e) => setNeeds(e.target.value)}
-                placeholder="e.g. life insurance, disability, auto"
-                className={errors.needs ? "border-destructive" : ""}
-                rows={3}
+                className={errors.needs ? "border-red-500" : ""}
               />
               <p className="text-xs text-muted-foreground">Separate multiple needs with commas</p>
               {errors.needs && <p className="text-sm text-destructive">{errors.needs}</p>}
@@ -160,7 +152,20 @@ export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
                       model: v.model,
                       vin: v.vin,
                       primaryUse: v.usage || v.primaryUse,
-                      annualMileage: v.annualMileage
+                      annualMileage: v.annualMileage,
+                      // Include NHTSA enriched fields
+                      bodyClass: v.bodyClass,
+                      fuelType: v.fuelType,
+                      doors: v.doors,
+                      manufacturer: v.manufacturer,
+                      plantCity: v.plantCity,
+                      plantState: v.plantState,
+                      vehicleType: v.vehicleType,
+                      gvwr: v.gvwr,
+                      abs: v.abs,
+                      esc: v.esc,
+                      enriched: v.enriched,
+                      enrichmentSource: v.enrichmentSource
                     }))
                   }
 

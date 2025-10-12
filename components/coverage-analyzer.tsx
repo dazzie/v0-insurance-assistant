@@ -1,11 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Upload, FileText, Image, CheckCircle, AlertCircle, Loader2, X } from "lucide-react"
+import { Upload, FileText, Image, CheckCircle, AlertCircle, Loader2, X, Camera, RotateCcw } from "lucide-react"
 
 interface ExtractedCoverage {
   carrier?: string
@@ -96,6 +95,18 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType }: Coverage
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [extractedData, setExtractedData] = useState<ExtractedCoverage | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isScanning, setIsScanning] = useState(false)
+  const [showCamera, setShowCamera] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+  
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const streamRef = useRef<MediaStream | null>(null)
+
+  // Fix hydration error by only rendering camera button on client
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const getInsuranceTypeLabel = () => {
     if (!insuranceType) return 'insurance'
@@ -210,7 +221,100 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType }: Coverage
     setPreviewUrl(null)
     setExtractedData(null)
     setError(null)
+    setShowCamera(false)
+    stopCamera()
   }
+
+  const startCamera = useCallback(async () => {
+    try {
+      setIsScanning(true)
+      setShowCamera(true)
+      setError(null)
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'environment', // Use back camera on mobile
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        }
+      })
+
+      streamRef.current = stream
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream
+      }
+    } catch (err) {
+      setError('Camera access denied. Please allow camera permissions or use file upload instead.')
+      setIsScanning(false)
+      setShowCamera(false)
+    }
+  }, [])
+
+  const stopCamera = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop())
+      streamRef.current = null
+    }
+    setIsScanning(false)
+    setShowCamera(false)
+  }, [])
+
+  const capturePhoto = useCallback(async () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current
+      const canvas = canvasRef.current
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
+      const context = canvas.getContext('2d')
+      if (context) {
+        context.drawImage(video, 0, 0, canvas.width, canvas.height)
+        canvas.toBlob(async (blob) => {
+          if (blob) {
+            const file = new File([blob], 'policy-photo.jpg', { type: 'image/jpeg' })
+            setUploadedFile(file)
+            const imageUrl = URL.createObjectURL(blob)
+            setPreviewUrl(imageUrl)
+            stopCamera()
+            
+            // Automatically analyze the captured photo
+            setIsAnalyzing(true)
+            try {
+              const formData = new FormData()
+              formData.append('file', file)
+              if (insuranceType) {
+                formData.append('insuranceType', insuranceType)
+              }
+
+              const response = await fetch('/api/analyze-coverage', {
+                method: 'POST',
+                body: formData,
+              })
+
+              const result = await response.json()
+
+              if (!response.ok) {
+                const errorMessage = result.message || result.error || result.details || 'Failed to analyze document'
+                const suggestion = result.suggestion ? `\n\n${result.suggestion}` : ''
+                throw new Error(errorMessage + suggestion)
+              }
+
+              setExtractedData(result.coverage)
+              
+              if (onAnalysisComplete) {
+                onAnalysisComplete(result.coverage)
+              }
+            } catch (err) {
+              const errorMsg = err instanceof Error ? err.message : 'Failed to analyze document'
+              setError(errorMsg)
+              console.error('Analysis error:', err)
+            } finally {
+              setIsAnalyzing(false)
+            }
+          }
+        }, 'image/jpeg', 0.8)
+      }
+    }
+  }, [insuranceType, onAnalysisComplete, stopCamera])
 
   return (
     <Card>
@@ -220,34 +324,74 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType }: Coverage
           Upload Current {getInsuranceTypeLabel()} Policy
         </CardTitle>
         <CardDescription>
-          Upload your current {getInsuranceTypeLabel().toLowerCase()} policy document (image or PDF) and we'll analyze your coverage to identify gaps and opportunities
+          Take a photo or upload your current {getInsuranceTypeLabel().toLowerCase()} policy document and we'll analyze your coverage to identify gaps and opportunities
         </CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {/* Upload Section */}
-        {!uploadedFile && (
-          <div className="border-2 border-dashed border-muted rounded-lg p-8">
-            <label htmlFor="file-upload" className="cursor-pointer">
-              <div className="flex flex-col items-center gap-4">
-                <div className="p-4 bg-muted rounded-full">
+        {/* Camera View */}
+        {showCamera && !uploadedFile && (
+          <div className="relative w-full rounded-lg overflow-hidden bg-black">
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              className="w-full h-auto max-h-[400px] object-cover"
+            />
+            <canvas ref={canvasRef} className="hidden" />
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3">
+              <Button
+                onClick={capturePhoto}
+                size="lg"
+                className="rounded-full w-16 h-16 p-0 bg-white hover:bg-gray-100"
+              >
+                <Camera className="w-6 h-6 text-black" />
+              </Button>
+              <Button
+                onClick={stopCamera}
+                size="lg"
+                variant="secondary"
+                className="rounded-full w-16 h-16 p-0"
+              >
+                <X className="w-6 h-6" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Upload/Camera Section */}
+        {!uploadedFile && !showCamera && (
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Camera Button */}
+              {isMounted && typeof navigator !== 'undefined' && navigator.mediaDevices && (
+                <Button
+                  onClick={startCamera}
+                  variant="outline"
+                  className="h-32 flex flex-col gap-2"
+                >
+                  <Camera className="w-8 h-8" />
+                  <span className="font-medium">Take Photo</span>
+                  <span className="text-xs text-muted-foreground">Use camera</span>
+                </Button>
+              )}
+              
+              {/* Upload Button */}
+              <label htmlFor="file-upload" className="cursor-pointer">
+                <div className="h-32 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-muted rounded-lg hover:bg-muted/50 transition-colors">
                   <Upload className="w-8 h-8 text-muted-foreground" />
+                  <span className="font-medium">Upload File</span>
+                  <span className="text-xs text-muted-foreground">PDF, JPG, PNG up to 10MB</span>
                 </div>
-                <div className="text-center">
-                  <p className="text-sm font-medium">Click to upload or drag and drop</p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    PDF, JPG, PNG up to 10MB
-                  </p>
-                </div>
-              </div>
-              <input
-                id="file-upload"
-                type="file"
-                className="hidden"
-                accept="image/jpeg,image/png,image/jpg,application/pdf"
-                onChange={handleFileUpload}
-              />
-            </label>
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="hidden"
+                  accept="image/jpeg,image/png,image/jpg,application/pdf"
+                  onChange={handleFileUpload}
+                />
+              </label>
+            </div>
           </div>
         )}
 

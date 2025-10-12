@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { spawn } from 'child_process'
+import path from 'path'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
@@ -8,6 +10,156 @@ export const maxDuration = 60
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 })
+
+/**
+ * Call MCP server to enrich data
+ */
+async function callMCPServer(
+  serverPath: string,
+  toolName: string,
+  args: Record<string, any>
+): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const serverIndexPath = path.join(process.cwd(), serverPath, 'index.js')
+    
+    const child = spawn('node', [serverIndexPath], {
+      cwd: path.join(process.cwd(), serverPath),
+    })
+
+    let stdout = ''
+    let stderr = ''
+
+    child.stdout.on('data', (data) => {
+      stdout += data.toString()
+    })
+
+    child.stderr.on('data', (data) => {
+      stderr += data.toString()
+    })
+
+    child.on('close', (code) => {
+      if (code !== 0) {
+        console.error(`[MCP] Server exited with code ${code}`)
+        console.error(`[MCP] stderr:`, stderr)
+        reject(new Error(`MCP server failed with code ${code}`))
+        return
+      }
+
+      try {
+        // Parse the JSON-RPC response
+        const lines = stdout.split('\n')
+        const resultLine = lines.find((line) => line.includes('"result"'))
+        
+        if (resultLine) {
+          const response = JSON.parse(resultLine)
+          const content = response.result?.content?.[0]?.text
+          
+          if (content) {
+            const result = JSON.parse(content)
+            resolve(result)
+          } else {
+            reject(new Error('No content in MCP response'))
+          }
+        } else {
+          reject(new Error('No result in MCP output'))
+        }
+      } catch (error) {
+        console.error('[MCP] Failed to parse response:', error)
+        reject(error)
+      }
+    })
+
+    // Send the JSON-RPC request
+    const request = {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'tools/call',
+      params: {
+        name: toolName,
+        arguments: args,
+      },
+    }
+
+    child.stdin.write(JSON.stringify(request) + '\n')
+    child.stdin.end()
+  })
+}
+
+/**
+ * Enrich vehicle data using NHTSA VIN decoder
+ */
+async function enrichVehicleData(vehicles: any[]): Promise<any[]> {
+  if (!vehicles || vehicles.length === 0) {
+    return vehicles
+  }
+
+  console.log('[Coverage] Enriching vehicle data with NHTSA VIN decoder...')
+
+  const enrichedVehicles = await Promise.all(
+    vehicles.map(async (vehicle) => {
+      if (!vehicle.vin) {
+        console.log('[Coverage] Vehicle missing VIN, skipping enrichment')
+        return vehicle
+      }
+
+      try {
+        console.log(`[Coverage] Decoding VIN: ${vehicle.vin}`)
+        const vinData = await callMCPServer(
+          'mcp-server/nhtsa-server',
+          'decode_vin',
+          { vin: vehicle.vin }
+        )
+
+        if (vinData.success) {
+          console.log(`[Coverage] ✓ VIN decoded: ${vinData.year} ${vinData.make} ${vinData.model}`)
+          
+          // Merge NHTSA data with existing vehicle data
+          return {
+            ...vehicle,
+            // Use NHTSA data as authoritative source
+            year: vinData.year || vehicle.year,
+            make: vinData.make || vehicle.make,
+            model: vinData.model || vehicle.model,
+            // Add enriched data
+            bodyClass: vinData.bodyClass,
+            fuelType: vinData.fuelType,
+            doors: vinData.doors,
+            manufacturer: vinData.manufacturer,
+            plantCity: vinData.plantCity,
+            plantState: vinData.plantState,
+            vehicleType: vinData.vehicleType,
+            gvwr: vinData.gvwr,
+            // Safety features
+            abs: vinData.abs,
+            esc: vinData.esc,
+            // Mark as enriched
+            enriched: true,
+            enrichmentSource: 'NHTSA',
+          }
+        } else {
+          console.log(`[Coverage] ⚠️  VIN decode failed: ${vinData.error}`)
+          return {
+            ...vehicle,
+            enrichmentError: vinData.error,
+            enriched: false,
+          }
+        }
+      } catch (error) {
+        console.error(`[Coverage] Error enriching vehicle:`, error)
+        return {
+          ...vehicle,
+          enrichmentError: error instanceof Error ? error.message : 'Unknown error',
+          enriched: false,
+        }
+      }
+    })
+  )
+
+  const successCount = enrichedVehicles.filter((v) => v.enriched).length
+  console.log(`[Coverage] ✓ Enriched ${successCount}/${vehicles.length} vehicles`)
+
+  return enrichedVehicles
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -237,6 +389,18 @@ Be thorough and extract all visible information from the policy document.`,
         rawAnalysis: extractedText,
         gaps: ['Unable to perform automated analysis'],
         recommendations: ['Please review your policy manually or upload a clearer image'],
+      }
+    }
+
+    // Enrich vehicle data with NHTSA VIN decoder (for auto insurance)
+    if (coverage.vehicles && Array.isArray(coverage.vehicles) && coverage.vehicles.length > 0) {
+      try {
+        console.log('[Coverage] Found vehicles, attempting NHTSA enrichment...')
+        coverage.vehicles = await enrichVehicleData(coverage.vehicles)
+        coverage.enrichmentPerformed = true
+      } catch (enrichError) {
+        console.error('[Coverage] Vehicle enrichment failed:', enrichError)
+        coverage.enrichmentError = enrichError instanceof Error ? enrichError.message : 'Unknown error'
       }
     }
 

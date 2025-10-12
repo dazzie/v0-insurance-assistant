@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "OPENAI_API_KEY": "@openai-api-key",
+    "VECTORIZE_IO_API_KEY": "@vectorize-api-key",
+    "VECTORIZE_IO_PIPELINE_ID": "@vectorize-pipeline-id"
+  },
+  "build": {
+    "env": {
+      "OPENAI_API_KEY": "@openai-api-key",
+      "VECTORIZE_IO_API_KEY": "@vectorize-api-key",
+      "VECTORIZE_IO_PIPELINE_ID": "@vectorize-pipeline-id"
+    }
+  }
+}
+

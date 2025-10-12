@@ -317,8 +317,6 @@ Think of me as your trusted advisor who will help you navigate coverage options,
     setShowInformationGatherer(true)
   }
 
-<<<<<<< Updated upstream
-=======
   const handleCoverageAnalysisComplete = (coverage: any) => {
     // Update profile with extracted coverage information
     const profileUpdates: Partial<CustomerProfile> = {}
@@ -356,38 +354,7 @@ ${coverage.recommendations && coverage.recommendations.length > 0 ? `\n💡 **Re
 
     setMessages((prev) => [...prev, analysisMessage])
     setShowCoverageAnalyzer(false)
-    
-    // Auto-trigger quotes if we have enough information
-    const hasEnoughInfo = coverage.vehicles && coverage.vehicles.length > 0 && coverage.driversCount > 0
-    
-    if (hasEnoughInfo) {
-      // Add immediate "generating quotes" message after a short delay
-      setTimeout(() => {
-        const generatingMessage: Message = {
-          id: Date.now().toString() + '-generating',
-          role: "assistant",
-          content: "🎯 **Perfect! I have everything I need.**\n\nGenerating personalized quotes from top carriers based on your current policy...\n\n*Analyzing best options...*",
-          createdAt: new Date(),
-        }
-        setMessages(prev => [...prev, generatingMessage])
-        
-        // Show quote results
-        setTimeout(() => {
-          const quoteData = {
-            insuranceType: coverage.coverageType || 'Auto',
-            customerProfile: { ...customerProfile, ...profileUpdates },
-            coverageAmount: coverage.dwellingCoverage || '$500,000',
-            deductible: coverage.comprehensiveDeductible || coverage.collisionDeductible || '$1,000',
-            requestId: `REQ-${Date.now()}`
-          }
-          setQuoteData(quoteData)
-          setShowQuoteResults(true)
-        }, 1500)
-      }, 2000)
-    }
   }
-
->>>>>>> Stashed changes
   const handleSubmitWithInformation = async (information: any) => {
     setIsLoading(true)
     

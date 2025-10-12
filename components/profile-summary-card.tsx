@@ -142,43 +142,111 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
               />
             )}
 
-            {/* Vehicle Details */}
+            {/* Vehicle Details with Full NHTSA Registry Info */}
             {profile.vehicles && profile.vehicles.length > 0 && (
               <InfoItem
-                icon={<Calendar className="w-4 h-4" />}
+                icon={<Car className="w-4 h-4" />}
                 label="Vehicles"
                 value={
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-3">
                     {profile.vehicles.map((vehicle, idx) => (
-                      <div key={idx} className="text-sm space-y-1">
-                        <div className="font-medium">
+                      <div key={idx} className="text-sm space-y-1.5 pb-2 border-b border-border/50 last:border-0 last:pb-0">
+                        {/* Primary Vehicle Info */}
+                        <div className="font-semibold text-base">
                           {vehicle.year} {vehicle.make} {vehicle.model}
                         </div>
-                        {vehicle.enriched && (
-                          <div className="text-xs text-muted-foreground space-y-0.5 ml-2">
-                            {vehicle.bodyClass && (
-                              <div>• {vehicle.bodyClass}</div>
+                        
+                        {/* VIN with Registry Badge */}
+                        {vehicle.vin && (
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-xs font-mono text-muted-foreground bg-muted px-2 py-0.5 rounded">
+                              VIN: {vehicle.vin}
+                            </span>
+                            {vehicle.enriched && vehicle.enrichmentSource && (
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800">
+                                <Check className="w-2.5 h-2.5 mr-1" />
+                                {vehicle.enrichmentSource} Registry
+                              </Badge>
                             )}
-                            {vehicle.fuelType && (
-                              <div>• Fuel: {vehicle.fuelType}</div>
-                            )}
-                            {vehicle.doors && (
-                              <div>• {vehicle.doors} doors</div>
-                            )}
-                            {vehicle.manufacturer && (
-                              <div>• Made by {vehicle.manufacturer}</div>
-                            )}
-                            {vehicle.plantCity && vehicle.plantState && (
-                              <div>• Built in {vehicle.plantCity}, {vehicle.plantState}</div>
-                            )}
-                            <div className="text-[10px] text-green-600 dark:text-green-400 mt-1">
-                              ✓ Verified by NHTSA
-                            </div>
                           </div>
                         )}
-                        {vehicle.vin && (
-                          <div className="text-xs text-muted-foreground ml-2">
-                            VIN: {vehicle.vin}
+
+                        {/* Enriched Details */}
+                        {vehicle.enriched && (
+                          <div className="text-xs text-muted-foreground space-y-0.5 ml-0 mt-2">
+                            <div className="font-medium text-foreground/80 mb-1">Vehicle Specifications:</div>
+                            
+                            {vehicle.bodyClass && (
+                              <div className="flex items-start">
+                                <span className="text-muted-foreground/60 mr-1">•</span>
+                                <span><span className="font-medium">Type:</span> {vehicle.bodyClass}</span>
+                              </div>
+                            )}
+                            
+                            {vehicle.vehicleType && (
+                              <div className="flex items-start">
+                                <span className="text-muted-foreground/60 mr-1">•</span>
+                                <span><span className="font-medium">Category:</span> {vehicle.vehicleType}</span>
+                              </div>
+                            )}
+                            
+                            {vehicle.fuelType && (
+                              <div className="flex items-start">
+                                <span className="text-muted-foreground/60 mr-1">•</span>
+                                <span><span className="font-medium">Fuel:</span> {vehicle.fuelType}</span>
+                              </div>
+                            )}
+                            
+                            {vehicle.doors && (
+                              <div className="flex items-start">
+                                <span className="text-muted-foreground/60 mr-1">•</span>
+                                <span><span className="font-medium">Doors:</span> {vehicle.doors}</span>
+                              </div>
+                            )}
+
+                            {vehicle.gvwr && (
+                              <div className="flex items-start">
+                                <span className="text-muted-foreground/60 mr-1">•</span>
+                                <span><span className="font-medium">GVWR:</span> {vehicle.gvwr}</span>
+                              </div>
+                            )}
+                            
+                            {vehicle.manufacturer && (
+                              <div className="flex items-start mt-1.5">
+                                <span className="text-muted-foreground/60 mr-1">•</span>
+                                <span><span className="font-medium">Manufacturer:</span> {vehicle.manufacturer}</span>
+                              </div>
+                            )}
+                            
+                            {vehicle.plantCity && vehicle.plantState && (
+                              <div className="flex items-start">
+                                <span className="text-muted-foreground/60 mr-1">•</span>
+                                <span><span className="font-medium">Built in:</span> {vehicle.plantCity}, {vehicle.plantState}</span>
+                              </div>
+                            )}
+
+                            {/* Safety Features */}
+                            {(vehicle.abs || vehicle.esc) && (
+                              <div className="flex items-start mt-1.5">
+                                <span className="text-muted-foreground/60 mr-1">•</span>
+                                <span><span className="font-medium">Safety:</span> {[
+                                  vehicle.abs && 'ABS',
+                                  vehicle.esc && 'ESC'
+                                ].filter(Boolean).join(', ')}</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Usage Info */}
+                        {(vehicle.primaryUse || vehicle.annualMileage) && (
+                          <div className="text-xs text-muted-foreground mt-1.5">
+                            {vehicle.primaryUse && (
+                              <div>Usage: {vehicle.primaryUse}</div>
+                            )}
+                            {vehicle.annualMileage && (
+                              <div>Annual Mileage: {vehicle.annualMileage.toLocaleString()} miles</div>
+                            )}
                           </div>
                         )}
                       </div>

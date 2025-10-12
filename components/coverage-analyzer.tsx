@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -97,10 +97,16 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType }: Coverage
   const [error, setError] = useState<string | null>(null)
   const [isScanning, setIsScanning] = useState(false)
   const [showCamera, setShowCamera] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
+
+  // Fix hydration error by only rendering camera button on client
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const getInsuranceTypeLabel = () => {
     if (!insuranceType) return 'insurance'
@@ -358,7 +364,7 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType }: Coverage
           <div className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {/* Camera Button */}
-              {typeof navigator !== 'undefined' && navigator.mediaDevices && (
+              {isMounted && typeof navigator !== 'undefined' && navigator.mediaDevices && (
                 <Button
                   onClick={startCamera}
                   variant="outline"

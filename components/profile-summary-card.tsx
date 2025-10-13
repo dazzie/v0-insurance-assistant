@@ -109,6 +109,96 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
               />
             )}
 
+            {/* Risk Assessment (Proactive Agent) */}
+            {profile.riskAssessment?.floodRisk && (
+              <InfoItem
+                icon={<Shield className="w-4 h-4 text-blue-600" />}
+                label="Flood Risk Assessment"
+                value={
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Badge 
+                        variant="outline" 
+                        className={`text-xs px-2 py-1 ${
+                          profile.riskAssessment.floodRisk.riskLevel === 'Minimal' || profile.riskAssessment.floodRisk.riskLevel === 'Minor'
+                            ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
+                            : profile.riskAssessment.floodRisk.riskLevel === 'Moderate'
+                            ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800'
+                            : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800'
+                        }`}
+                      >
+                        🌊 {profile.riskAssessment.floodRisk.riskLevel} Risk (Factor: {profile.riskAssessment.floodRisk.floodFactor}/10)
+                      </Badge>
+                      {profile.riskAssessment.floodRisk.floodInsuranceRequired && (
+                        <Badge variant="destructive" className="text-xs px-2 py-1">
+                          ⚠️ Flood Insurance Recommended
+                        </Badge>
+                      )}
+                    </div>
+                    {profile.riskAssessment.floodRisk.description && (
+                      <p className="text-xs text-muted-foreground">
+                        {profile.riskAssessment.floodRisk.description}
+                      </p>
+                    )}
+                    {profile.riskAssessment.floodRisk.climateChange30Year && (
+                      <p className="text-xs text-muted-foreground">
+                        30-year climate projection: <span className="font-medium">{profile.riskAssessment.floodRisk.climateChange30Year}</span>
+                      </p>
+                    )}
+                    <p className="text-xs text-muted-foreground italic">
+                      Source: {profile.riskAssessment.floodRisk.enrichmentSource}
+                    </p>
+                  </div>
+                }
+              />
+            )}
+
+            {/* Crime Risk Assessment (Proactive Agent) */}
+            {profile.riskAssessment?.crimeRisk && (
+              <InfoItem
+                icon={<Shield className="w-4 h-4 text-red-600" />}
+                label="Crime Risk Assessment"
+                value={
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Badge 
+                        variant="outline" 
+                        className={`text-xs px-2 py-1 ${
+                          profile.riskAssessment.crimeRisk.riskLevel === 'Low'
+                            ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
+                            : profile.riskAssessment.crimeRisk.riskLevel === 'Moderate'
+                            ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800'
+                            : profile.riskAssessment.crimeRisk.riskLevel === 'High'
+                            ? 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
+                            : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800'
+                        }`}
+                      >
+                        🚨 {profile.riskAssessment.crimeRisk.riskLevel} Risk (Index: {profile.riskAssessment.crimeRisk.crimeIndex})
+                      </Badge>
+                      {(profile.riskAssessment.crimeRisk.riskLevel === 'High' || profile.riskAssessment.crimeRisk.riskLevel === 'Very High') && (
+                        <Badge variant="destructive" className="text-xs px-2 py-1">
+                          ⚠️ Security System Recommended
+                        </Badge>
+                      )}
+                    </div>
+                    {profile.riskAssessment.crimeRisk.description && (
+                      <p className="text-xs text-muted-foreground">
+                        {profile.riskAssessment.crimeRisk.description}
+                      </p>
+                    )}
+                    <div className="flex gap-3 text-xs text-muted-foreground">
+                      <span>Violent: {profile.riskAssessment.crimeRisk.violentCrime}/1K</span>
+                      <span>Property: {profile.riskAssessment.crimeRisk.propertyCrime}/1K</span>
+                      <span className="text-muted-foreground/70">US Avg: 35.4</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground italic">
+                      Source: {profile.riskAssessment.crimeRisk.enrichmentSource}
+                    </p>
+                  </div>
+                }
+              />
+            )}
+
             {/* Contact */}
             {profile.email && (
               <InfoItem

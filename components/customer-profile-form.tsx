@@ -209,6 +209,15 @@ export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
                     console.log('[Profile] ✓ OpenCage enrichment transferred:', coverage.addressEnrichment)
                   }
 
+                  // 🌊 Transfer Risk Assessment (Proactive Agent)
+                  if (coverage.riskAssessment) {
+                    profile.riskAssessment = coverage.riskAssessment
+                    console.log('[Profile] ✓ Risk assessment transferred:', coverage.riskAssessment)
+                    if (coverage.riskAssessment.floodRisk) {
+                      console.log('[Profile] 🌊 Flood risk:', coverage.riskAssessment.floodRisk.riskLevel)
+                    }
+                  }
+
                   console.log('[Profile] Auto-populated from policy:', profile)
 
                   // Submit with comprehensive extracted data

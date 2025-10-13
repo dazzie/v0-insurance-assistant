@@ -129,6 +129,88 @@ async function enrichAddressData(address: string, city: string, state: string, z
 }
 
 /**
+ * Assess flood risk using First Street Foundation API
+ */
+async function assessFloodRisk(latitude: number, longitude: number): Promise<any> {
+  if (!latitude || !longitude) {
+    console.log('[Coverage] Missing coordinates, skipping flood risk assessment')
+    return null
+  }
+
+  console.log('[Coverage] Assessing flood risk for coordinates:', latitude, longitude)
+
+  try {
+    const floodData = await callMCPServer(
+      'mcp-server/fema-server',
+      'check_flood_zone',
+      { latitude, longitude }
+    )
+
+    console.log('[Coverage] First Street response:', JSON.stringify(floodData, null, 2))
+
+    if (floodData && floodData.success) {
+      console.log(`[Coverage] ✓ Flood risk assessed: ${floodData.riskLevel} (Factor: ${floodData.floodFactor}/10)`)
+      
+      return {
+        floodFactor: floodData.floodFactor,
+        riskLevel: floodData.riskLevel,
+        floodInsuranceRequired: floodData.floodInsuranceRequired,
+        climateChange30Year: floodData.climateChange30Year,
+        description: floodData.description || `${floodData.riskLevel} flood risk`,
+        enrichmentSource: 'First Street Foundation'
+      }
+    } else {
+      console.log('[Coverage] ⚠️  Flood risk assessment failed')
+      return null
+    }
+  } catch (error) {
+    console.error('[Coverage] Error assessing flood risk:', error)
+    return null
+  }
+}
+
+/**
+ * Assess crime risk using FBI Crime Data
+ */
+async function assessCrimeRisk(city: string, state: string): Promise<any> {
+  if (!city || !state) {
+    console.log('[Coverage] Missing city/state, skipping crime risk assessment')
+    return null
+  }
+
+  console.log('[Coverage] Assessing crime risk for:', city, state)
+
+  try {
+    const crimeData = await callMCPServer(
+      'mcp-server/fbi-crime-server',
+      'assess_crime_risk',
+      { city, state }
+    )
+
+    console.log('[Coverage] FBI Crime response:', JSON.stringify(crimeData, null, 2))
+
+    if (crimeData && crimeData.success) {
+      console.log(`[Coverage] ✓ Crime risk assessed: ${crimeData.riskLevel} (Index: ${crimeData.crimeIndex})`)
+      
+      return {
+        crimeIndex: crimeData.crimeIndex,
+        riskLevel: crimeData.riskLevel,
+        violentCrime: crimeData.violentCrime,
+        propertyCrime: crimeData.propertyCrime,
+        description: crimeData.description,
+        enrichmentSource: 'FBI Crime Data'
+      }
+    } else {
+      console.log('[Coverage] ⚠️  Crime risk assessment failed')
+      return null
+    }
+  } catch (error) {
+    console.error('[Coverage] Error assessing crime risk:', error)
+    return null
+  }
+}
+
+/**
  * Enrich vehicle data using NHTSA VIN decoder
  */
 async function enrichVehicleData(vehicles: any[]): Promise<any[]> {
@@ -467,6 +549,60 @@ Be thorough and extract all visible information from the policy document.`,
         if (addressEnrichment) {
           coverage.addressEnrichment = addressEnrichment
           console.log('[Coverage] ✓ Address enriched successfully')
+
+          // 🌊 PROACTIVE AGENT: Assess flood risk using coordinates from OpenCage
+          if (addressEnrichment.latitude && addressEnrichment.longitude) {
+            try {
+              console.log('[Coverage] 🌊 Proactively assessing flood risk...')
+              const floodRisk = await assessFloodRisk(
+                addressEnrichment.latitude,
+                addressEnrichment.longitude
+              )
+              if (floodRisk) {
+                // Initialize riskAssessment if it doesn't exist
+                if (!coverage.riskAssessment) {
+                  coverage.riskAssessment = {}
+                }
+                coverage.riskAssessment.floodRisk = floodRisk
+                coverage.riskAssessment.lastAssessed = new Date().toISOString()
+                console.log('[Coverage] ✓ Flood risk assessed successfully')
+                
+                // 🎯 Proactive recommendation
+                if (floodRisk.floodInsuranceRequired) {
+                  console.log('[Coverage] 🎯 PROACTIVE ALERT: Flood insurance recommended!')
+                }
+              }
+            } catch (floodError) {
+              console.error('[Coverage] Flood risk assessment failed:', floodError)
+            }
+          }
+
+          // 🚨 PROACTIVE AGENT: Assess crime risk using city/state
+          if (coverage.city && coverage.state) {
+            try {
+              console.log('[Coverage] 🚨 Proactively assessing crime risk...')
+              const crimeRisk = await assessCrimeRisk(
+                coverage.city,
+                coverage.state
+              )
+              if (crimeRisk) {
+                // Initialize riskAssessment if it doesn't exist
+                if (!coverage.riskAssessment) {
+                  coverage.riskAssessment = {}
+                }
+                coverage.riskAssessment.crimeRisk = crimeRisk
+                coverage.riskAssessment.lastAssessed = new Date().toISOString()
+                console.log('[Coverage] ✓ Crime risk assessed successfully')
+                
+                // 🎯 Proactive recommendation
+                if (crimeRisk.riskLevel === 'High' || crimeRisk.riskLevel === 'Very High') {
+                  console.log('[Coverage] 🎯 PROACTIVE ALERT: High crime area - security system recommended!')
+                }
+              }
+            } catch (crimeError) {
+              console.error('[Coverage] Crime risk assessment failed:', crimeError)
+            }
+          }
         }
       } catch (enrichError) {
         console.error('[Coverage] Address enrichment failed:', enrichError)

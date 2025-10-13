@@ -41,6 +41,34 @@ export interface CustomerProfile {
     enrichmentError?: string
   }
 
+  // Risk Assessment (Proactive Agent)
+  riskAssessment?: {
+    floodRisk?: {
+      floodFactor: number  // 1-10 scale
+      riskLevel: string    // Minimal, Minor, Moderate, Major, Extreme
+      floodInsuranceRequired: boolean
+      climateChange30Year?: string
+      description?: string
+      enrichmentSource: 'First Street Foundation'
+    }
+    crimeRisk?: {
+      crimeIndex: number   // 0-100 scale (100 = highest crime)
+      riskLevel: string    // Low, Moderate, High, Very High
+      violentCrime: number
+      propertyCrime: number
+      enrichmentSource: 'FBI Crime Data'
+    }
+    weatherRisk?: {
+      hurricaneRisk: number     // 0-10 scale
+      tornadoRisk: number       // 0-10 scale
+      earthquakeRisk: number    // 0-10 scale
+      wildfireRisk: number      // 0-10 scale
+      overallRisk: string       // Low, Moderate, High, Extreme
+      enrichmentSource: 'NOAA Weather Data'
+    }
+    lastAssessed?: string
+  }
+
   // Insurance Needs
   insuranceType?: 'auto' | 'home' | 'life' | 'renters' | 'pet' | 'health' | 'disability' | 'umbrella'
   needs?: string[]

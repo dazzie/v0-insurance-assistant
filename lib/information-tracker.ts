@@ -251,6 +251,30 @@ export function extractCollectedInfo(messages: Array<{ role: string; content: st
     }
   }
   
+  // If customer profile has enriched vehicles (from policy scan), use them
+  if (customerProfile?.vehicles && customerProfile.vehicles.length > 0) {
+    const enrichedVehicles = customerProfile.vehicles.filter((v: any) => v.enriched)
+    
+    // If we have enriched vehicles, use them instead of conversation-extracted data
+    if (enrichedVehicles.length > 0) {
+      // Set vehicle count if not already set
+      if (!info.numberOfVehicles) {
+        info.numberOfVehicles = customerProfile.vehiclesCount || enrichedVehicles.length
+      }
+      
+      // Use enriched vehicle data
+      info.vehicles = enrichedVehicles.map((v: any) => ({
+        year: v.year,
+        make: v.make,
+        model: v.model,
+        mileage: v.annualMileage,
+        primaryUse: v.primaryUse,
+      }))
+      
+      console.log('[Info Tracker] Using enriched vehicles from profile:', info.vehicles)
+    }
+  }
+  
   return info
 }
 

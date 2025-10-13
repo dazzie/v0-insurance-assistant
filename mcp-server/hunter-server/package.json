@@ -1,0 +1,25 @@
+{
+  "name": "hunter-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for Hunter.io email verification and validation",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "mcp",
+    "hunter",
+    "email",
+    "verification",
+    "validation",
+    "deliverability"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.5.0",
+    "dotenv": "^16.3.1"
+  }
+}
+

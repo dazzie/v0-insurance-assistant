@@ -136,9 +136,6 @@ export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
                   if (coverage.state) profile.state = coverage.state
                   if (coverage.zipCode) profile.zipCode = coverage.zipCode
                   profile.location = coverage.city && coverage.state ? `${coverage.city}, ${coverage.state}` : coverage.zipCode || 'Unknown'
-                  
-                  // Address enrichment from OpenCage
-                  if (coverage.addressEnrichment) profile.addressEnrichment = coverage.addressEnrichment
 
                   // Insurance Details
                   profile.insuranceType = coverage.coverageType || 'auto'
@@ -182,8 +179,7 @@ export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
                     }))
                   }
 
-                  // Home Insurance / Property Information
-                  if (coverage.propertyAddress) profile.propertyAddress = coverage.propertyAddress
+                  // Home Insurance
                   if (coverage.propertyType) profile.homeType = coverage.propertyType
                   if (coverage.yearBuilt) profile.yearBuilt = coverage.yearBuilt
                   if (coverage.squareFootage) profile.squareFootage = coverage.squareFootage

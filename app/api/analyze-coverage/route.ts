@@ -86,58 +86,6 @@ async function callMCPServer(
 }
 
 /**
- * Enrich address data using OpenCage geocoding
- */
-async function enrichAddressData(address: string, city?: string, state?: string, zipCode?: string): Promise<any> {
-  try {
-    // Build full address string for geocoding
-    const fullAddress = [address, city, state, zipCode].filter(Boolean).join(', ')
-    
-    console.log(`[Coverage] Geocoding address: ${fullAddress}`)
-    
-    const addressData = await callMCPServer(
-      'mcp-server/opencage-server',
-      'geocode_address',
-      { address: fullAddress }
-    )
-
-    console.log(`[Coverage] OpenCage response:`, JSON.stringify(addressData, null, 2))
-
-    if (addressData && addressData.success && addressData.formatted) {
-      console.log(`[Coverage] ✓ Address geocoded: ${addressData.formatted}`)
-      console.log(`[Coverage] ✓ Address enriched with confidence: ${addressData.confidence}/10`)
-      
-      return {
-        formattedAddress: addressData.formatted,
-        latitude: addressData.latitude,
-        longitude: addressData.longitude,
-        street: addressData.street,
-        city: addressData.city,
-        state: addressData.state,
-        zipCode: addressData.zipCode,
-        country: addressData.country,
-        confidence: addressData.confidence,
-        enriched: true,
-        enrichmentSource: 'OpenCage',
-      }
-    } else {
-      const errorMsg = addressData?.error || 'Unknown geocoding error'
-      console.log(`[Coverage] ⚠️  Address geocoding failed: ${errorMsg}`)
-      return {
-        enriched: false,
-        enrichmentError: errorMsg,
-      }
-    }
-  } catch (error) {
-    console.error(`[Coverage] Error enriching address:`, error)
-    return {
-      enriched: false,
-      enrichmentError: error instanceof Error ? error.message : 'Unknown error',
-    }
-  }
-}
-
-/**
  * Enrich vehicle data using NHTSA VIN decoder
  */
 async function enrichVehicleData(vehicles: any[]): Promise<any[]> {
@@ -453,32 +401,6 @@ Be thorough and extract all visible information from the policy document.`,
       } catch (enrichError) {
         console.error('[Coverage] Vehicle enrichment failed:', enrichError)
         coverage.enrichmentError = enrichError instanceof Error ? enrichError.message : 'Unknown error'
-      }
-    }
-
-    // Enrich address data with OpenCage geocoding
-    if (coverage.address || coverage.city || coverage.state || coverage.zipCode) {
-      try {
-        console.log('[Coverage] Found address, attempting OpenCage geocoding...')
-        const addressEnrichment = await enrichAddressData(
-          coverage.address,
-          coverage.city,
-          coverage.state,
-          coverage.zipCode
-        )
-        
-        if (addressEnrichment.enriched) {
-          coverage.addressEnrichment = addressEnrichment
-          console.log(`[Coverage] ✓ Address enriched with confidence: ${addressEnrichment.confidence}/10`)
-        } else {
-          coverage.addressEnrichment = { enriched: false, error: addressEnrichment.enrichmentError }
-        }
-      } catch (enrichError) {
-        console.error('[Coverage] Address enrichment failed:', enrichError)
-        coverage.addressEnrichment = { 
-          enriched: false, 
-          error: enrichError instanceof Error ? enrichError.message : 'Unknown error' 
-        }
       }
     }
 

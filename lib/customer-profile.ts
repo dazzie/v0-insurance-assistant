@@ -5,6 +5,17 @@ export interface CustomerProfile {
   firstName?: string
   lastName?: string
   email?: string
+  emailEnrichment?: {
+    verified: boolean
+    status?: string  // valid, invalid, accept_all, webmail, disposable, unknown
+    result?: string  // deliverable, undeliverable, risky, unknown
+    score?: number   // 0-100
+    risk?: string    // low, medium, high, unknown
+    disposable?: boolean
+    webmail?: boolean
+    enrichmentSource?: string
+    enrichmentError?: string
+  }
   phone?: string
 
   // Demographics
@@ -200,6 +211,21 @@ export const profileManager = {
       updates.addressEnrichment = current.addressEnrichment
     }
     
+    // Smart merge for email - preserve Hunter.io enriched email data
+    if (current.emailEnrichment?.verified) {
+      console.log('[Profile Update] ✓ Enriched email detected, applying protection...')
+      // Preserve enriched email - don't allow overwriting
+      if (updates.email) {
+        console.log('[Profile Update] ⚠️ Blocking email update to protect Hunter.io enrichment')
+        delete updates.email
+      }
+      // ALWAYS preserve the existing enrichment
+      updates.emailEnrichment = current.emailEnrichment
+    } else if (current.emailEnrichment && !updates.emailEnrichment) {
+      // Preserve any existing emailEnrichment data
+      updates.emailEnrichment = current.emailEnrichment
+    }
+    
     // Smart merge for drivers - preserve existing driver data, allow age/DOB updates
     if (current.drivers && current.drivers.length > 0) {
       if (updates.drivers && updates.drivers.length > 0) {
@@ -343,6 +369,7 @@ export function extractProfileFromConversation(messages: any[]): Partial<Custome
   const hasEnrichedVehicles = currentProfile?.vehicles?.some(v => v.enriched)
   const hasExistingDrivers = currentProfile?.drivers && currentProfile.drivers.length > 0
   const hasEnrichedAddress = currentProfile?.addressEnrichment?.enriched
+  const hasEnrichedEmail = currentProfile?.emailEnrichment?.verified
 
   messages.forEach(message => {
     const content = message.content || ''
@@ -361,10 +388,12 @@ export function extractProfileFromConversation(messages: any[]): Partial<Custome
       extracted.zipCode = zipMatch[1]
     }
 
-    // Extract email
+    // Extract email - skip if already enriched by Hunter.io
     const emailMatch = content.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/i)
-    if (emailMatch && !extracted.email) {
+    if (emailMatch && !extracted.email && !hasEnrichedEmail) {
       extracted.email = emailMatch[0]
+      // Mark for verification (will be handled in chat API)
+      extracted._emailNeedsVerification = true
     }
 
     // Extract phone

@@ -114,7 +114,26 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
               <InfoItem
                 icon={<Check className="w-4 h-4" />}
                 label="Email"
-                value={<span className="text-sm">{profile.email}</span>}
+                value={
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-sm">{profile.email}</span>
+                    {profile.emailEnrichment?.verified && profile.emailEnrichment.enrichmentSource && (
+                      <Badge 
+                        variant="outline" 
+                        className={`text-[10px] px-1.5 py-0 h-5 ${
+                          profile.emailEnrichment.risk === 'low' 
+                            ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
+                            : profile.emailEnrichment.risk === 'medium'
+                            ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800'
+                            : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800'
+                        }`}
+                      >
+                        <Check className="w-2.5 h-2.5 mr-1" />
+                        {profile.emailEnrichment.enrichmentSource} ({profile.emailEnrichment.score}/100)
+                      </Badge>
+                    )}
+                  </div>
+                }
               />
             )}
 

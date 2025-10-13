@@ -58,13 +58,21 @@ export interface CustomerProfile {
       propertyCrime: number
       enrichmentSource: 'FBI Crime Data'
     }
-    weatherRisk?: {
-      hurricaneRisk: number     // 0-10 scale
-      tornadoRisk: number       // 0-10 scale
+    earthquakeRisk?: {
       earthquakeRisk: number    // 0-10 scale
+      riskLevel: string         // Low, Moderate, High, Very High
+      peakGroundAcceleration?: number  // PGA in g
+      seismicZone: number       // 1-4
+      description?: string
+      enrichmentSource: 'USGS Earthquake Hazards Program'
+    }
+    wildfireRisk?: {
       wildfireRisk: number      // 0-10 scale
-      overallRisk: string       // Low, Moderate, High, Extreme
-      enrichmentSource: 'NOAA Weather Data'
+      riskLevel: string         // Low, Moderate, High, Very High
+      wuiZone: string          // Wildland-Urban Interface zone
+      fireDangerIndex: number   // 0-100
+      description?: string
+      enrichmentSource: 'USGS Wildfire Risk to Communities'
     }
     lastAssessed?: string
   }

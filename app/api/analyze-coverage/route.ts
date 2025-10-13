@@ -211,6 +211,88 @@ async function assessCrimeRisk(city: string, state: string): Promise<any> {
 }
 
 /**
+ * Assess earthquake risk using USGS data
+ */
+async function assessEarthquakeRisk(latitude: number, longitude: number, state: string): Promise<any> {
+  if (!latitude || !longitude || !state) {
+    console.log('[Coverage] Missing coordinates/state, skipping earthquake risk assessment')
+    return null
+  }
+
+  console.log('[Coverage] Assessing earthquake risk for:', latitude, longitude, state)
+
+  try {
+    const earthquakeData = await callMCPServer(
+      'mcp-server/usgs-earthquake-server',
+      'assess_earthquake_risk',
+      { latitude, longitude, state }
+    )
+
+    console.log('[Coverage] USGS Earthquake response:', JSON.stringify(earthquakeData, null, 2))
+
+    if (earthquakeData && earthquakeData.success) {
+      console.log(`[Coverage] ✓ Earthquake risk assessed: ${earthquakeData.riskLevel} (Score: ${earthquakeData.earthquakeRisk}/10)`)
+      
+      return {
+        earthquakeRisk: earthquakeData.earthquakeRisk,
+        riskLevel: earthquakeData.riskLevel,
+        peakGroundAcceleration: earthquakeData.peakGroundAcceleration,
+        seismicZone: earthquakeData.seismicZone,
+        description: earthquakeData.description,
+        enrichmentSource: 'USGS Earthquake Hazards Program'
+      }
+    } else {
+      console.log('[Coverage] ⚠️  Earthquake risk assessment failed')
+      return null
+    }
+  } catch (error) {
+    console.error('[Coverage] Error assessing earthquake risk:', error)
+    return null
+  }
+}
+
+/**
+ * Assess wildfire risk using USGS data
+ */
+async function assessWildfireRisk(latitude: number, longitude: number, state: string): Promise<any> {
+  if (!latitude || !longitude || !state) {
+    console.log('[Coverage] Missing coordinates/state, skipping wildfire risk assessment')
+    return null
+  }
+
+  console.log('[Coverage] Assessing wildfire risk for:', latitude, longitude, state)
+
+  try {
+    const wildfireData = await callMCPServer(
+      'mcp-server/usgs-wildfire-server',
+      'assess_wildfire_risk',
+      { latitude, longitude, state }
+    )
+
+    console.log('[Coverage] USGS Wildfire response:', JSON.stringify(wildfireData, null, 2))
+
+    if (wildfireData && wildfireData.success) {
+      console.log(`[Coverage] ✓ Wildfire risk assessed: ${wildfireData.riskLevel} (Score: ${wildfireData.wildfireRisk}/10)`)
+      
+      return {
+        wildfireRisk: wildfireData.wildfireRisk,
+        riskLevel: wildfireData.riskLevel,
+        wuiZone: wildfireData.wuiZone,
+        fireDangerIndex: wildfireData.fireDangerIndex,
+        description: wildfireData.description,
+        enrichmentSource: 'USGS Wildfire Risk to Communities'
+      }
+    } else {
+      console.log('[Coverage] ⚠️  Wildfire risk assessment failed')
+      return null
+    }
+  } catch (error) {
+    console.error('[Coverage] Error assessing wildfire risk:', error)
+    return null
+  }
+}
+
+/**
  * Enrich vehicle data using NHTSA VIN decoder
  */
 async function enrichVehicleData(vehicles: any[]): Promise<any[]> {
@@ -305,7 +387,7 @@ export async function POST(request: NextRequest) {
     // Generate insurance-type-specific extraction prompt
     const getExtractionPrompt = (type: string | null) => {
       const baseFields = `
-1. CUSTOMER INFORMATION: Full name, date of birth, address (street, city, state, ZIP), email, phone number
+1. CUSTOMER INFORMATION: Full name, date of birth, INSURED'S MAILING ADDRESS (street, city, state, ZIP - NOT lienholder address), email, phone number
 2. POLICY DETAILS: Carrier name, policy number, effective date, expiration date, agent name/contact
 3. COVERAGE INFORMATION: Types of coverage, limits, deductibles, premiums (monthly/annual)
 4. TOTAL PREMIUM: Total cost and payment frequency (monthly, semi-annual, annual)
@@ -316,9 +398,12 @@ export async function POST(request: NextRequest) {
         auto: `${baseFields}
 7. VEHICLE DETAILS: For each vehicle - Year, make, model, VIN, usage (personal/business/commute), annual mileage
 8. DRIVER INFORMATION: For each driver - Full name, date of birth, relationship to policyholder, license number, years licensed
-9. GARAGING ADDRESS: Where vehicles are primarily kept (if different from mailing address)
-10. COVERAGE TYPES: Liability (bodily injury/property damage limits), Collision (deductible), Comprehensive (deductible), Uninsured/Underinsured Motorist, Personal Injury Protection, Medical Payments, Rental Reimbursement, Roadside Assistance
-11. DISCOUNTS: Multi-car, good driver, safety features, bundling, etc.`,
+9. GARAGING ADDRESS: Where vehicles are primarily kept (use INSURED'S address if not explicitly stated as different - DO NOT use lienholder address)
+10. LIENHOLDER: If present, extract lienholder name and address separately (this is NOT the customer's address)
+11. COVERAGE TYPES: Liability (bodily injury/property damage limits), Collision (deductible), Comprehensive (deductible), Uninsured/Underinsured Motorist, Personal Injury Protection, Medical Payments, Rental Reimbursement, Roadside Assistance
+12. DISCOUNTS: Multi-car, good driver, safety features, bundling, etc.
+
+IMPORTANT: The INSURED'S address (where the policyholder lives) is typically at the top of the policy. The LIENHOLDER address (bank/finance company) is a separate entity and should NOT be used as the customer's address or garaging address unless explicitly stated.`,
 
         home: `${baseFields}
 7. PROPERTY DETAILS: Full property address, property type (single-family, condo, townhouse), year built, square footage, construction type
@@ -601,6 +686,60 @@ Be thorough and extract all visible information from the policy document.`,
               }
             } catch (crimeError) {
               console.error('[Coverage] Crime risk assessment failed:', crimeError)
+            }
+          }
+
+          // 🏚️ PROACTIVE AGENT: Assess earthquake risk using coordinates
+          if (addressEnrichment.latitude && addressEnrichment.longitude && coverage.state) {
+            try {
+              console.log('[Coverage] 🏚️ Proactively assessing earthquake risk...')
+              const earthquakeRisk = await assessEarthquakeRisk(
+                addressEnrichment.latitude,
+                addressEnrichment.longitude,
+                coverage.state
+              )
+              if (earthquakeRisk) {
+                if (!coverage.riskAssessment) {
+                  coverage.riskAssessment = {}
+                }
+                coverage.riskAssessment.earthquakeRisk = earthquakeRisk
+                coverage.riskAssessment.lastAssessed = new Date().toISOString()
+                console.log('[Coverage] ✓ Earthquake risk assessed successfully')
+                
+                // 🎯 Proactive recommendation
+                if (earthquakeRisk.riskLevel === 'High' || earthquakeRisk.riskLevel === 'Very High') {
+                  console.log('[Coverage] 🎯 PROACTIVE ALERT: High seismic risk - earthquake insurance recommended!')
+                }
+              }
+            } catch (earthquakeError) {
+              console.error('[Coverage] Earthquake risk assessment failed:', earthquakeError)
+            }
+          }
+
+          // 🔥 PROACTIVE AGENT: Assess wildfire risk using coordinates
+          if (addressEnrichment.latitude && addressEnrichment.longitude && coverage.state) {
+            try {
+              console.log('[Coverage] 🔥 Proactively assessing wildfire risk...')
+              const wildfireRisk = await assessWildfireRisk(
+                addressEnrichment.latitude,
+                addressEnrichment.longitude,
+                coverage.state
+              )
+              if (wildfireRisk) {
+                if (!coverage.riskAssessment) {
+                  coverage.riskAssessment = {}
+                }
+                coverage.riskAssessment.wildfireRisk = wildfireRisk
+                coverage.riskAssessment.lastAssessed = new Date().toISOString()
+                console.log('[Coverage] ✓ Wildfire risk assessed successfully')
+                
+                // 🎯 Proactive recommendation
+                if (wildfireRisk.riskLevel === 'High' || wildfireRisk.riskLevel === 'Very High') {
+                  console.log('[Coverage] 🎯 PROACTIVE ALERT: High wildfire risk - extended replacement cost recommended!')
+                }
+              }
+            } catch (wildfireError) {
+              console.error('[Coverage] Wildfire risk assessment failed:', wildfireError)
             }
           }
         }

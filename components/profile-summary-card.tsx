@@ -199,6 +199,96 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
               />
             )}
 
+            {/* Earthquake Risk Assessment (Proactive Agent) */}
+            {profile.riskAssessment?.earthquakeRisk && (
+              <InfoItem
+                icon={<Shield className="w-4 h-4 text-purple-600" />}
+                label="Earthquake Risk Assessment"
+                value={
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Badge 
+                        variant="outline" 
+                        className={`text-xs px-2 py-1 ${
+                          profile.riskAssessment.earthquakeRisk.riskLevel === 'Low'
+                            ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
+                            : profile.riskAssessment.earthquakeRisk.riskLevel === 'Moderate'
+                            ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800'
+                            : profile.riskAssessment.earthquakeRisk.riskLevel === 'High'
+                            ? 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
+                            : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800'
+                        }`}
+                      >
+                        🏚️ {profile.riskAssessment.earthquakeRisk.riskLevel} Risk (Zone {profile.riskAssessment.earthquakeRisk.seismicZone})
+                      </Badge>
+                      {(profile.riskAssessment.earthquakeRisk.riskLevel === 'High' || profile.riskAssessment.earthquakeRisk.riskLevel === 'Very High') && (
+                        <Badge variant="destructive" className="text-xs px-2 py-1">
+                          ⚠️ Earthquake Insurance Recommended
+                        </Badge>
+                      )}
+                    </div>
+                    {profile.riskAssessment.earthquakeRisk.description && (
+                      <p className="text-xs text-muted-foreground">
+                        {profile.riskAssessment.earthquakeRisk.description}
+                      </p>
+                    )}
+                    {profile.riskAssessment.earthquakeRisk.peakGroundAcceleration && (
+                      <p className="text-xs text-muted-foreground">
+                        Peak Ground Acceleration: <span className="font-medium">{profile.riskAssessment.earthquakeRisk.peakGroundAcceleration.toFixed(2)}g</span>
+                      </p>
+                    )}
+                    <p className="text-xs text-muted-foreground italic">
+                      Source: {profile.riskAssessment.earthquakeRisk.enrichmentSource}
+                    </p>
+                  </div>
+                }
+              />
+            )}
+
+            {/* Wildfire Risk Assessment (Proactive Agent) */}
+            {profile.riskAssessment?.wildfireRisk && (
+              <InfoItem
+                icon={<Shield className="w-4 h-4 text-orange-600" />}
+                label="Wildfire Risk Assessment"
+                value={
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Badge 
+                        variant="outline" 
+                        className={`text-xs px-2 py-1 ${
+                          profile.riskAssessment.wildfireRisk.riskLevel === 'Low'
+                            ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
+                            : profile.riskAssessment.wildfireRisk.riskLevel === 'Moderate'
+                            ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800'
+                            : profile.riskAssessment.wildfireRisk.riskLevel === 'High'
+                            ? 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
+                            : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800'
+                        }`}
+                      >
+                        🔥 {profile.riskAssessment.wildfireRisk.riskLevel} Risk (WUI: {profile.riskAssessment.wildfireRisk.wuiZone})
+                      </Badge>
+                      {(profile.riskAssessment.wildfireRisk.riskLevel === 'High' || profile.riskAssessment.wildfireRisk.riskLevel === 'Very High') && (
+                        <Badge variant="destructive" className="text-xs px-2 py-1">
+                          ⚠️ Extended Coverage Recommended
+                        </Badge>
+                      )}
+                    </div>
+                    {profile.riskAssessment.wildfireRisk.description && (
+                      <p className="text-xs text-muted-foreground">
+                        {profile.riskAssessment.wildfireRisk.description}
+                      </p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Fire Danger Index: <span className="font-medium">{profile.riskAssessment.wildfireRisk.fireDangerIndex}/100</span>
+                    </p>
+                    <p className="text-xs text-muted-foreground italic">
+                      Source: {profile.riskAssessment.wildfireRisk.enrichmentSource}
+                    </p>
+                  </div>
+                }
+              />
+            )}
+
             {/* Contact */}
             {profile.email && (
               <InfoItem

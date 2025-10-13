@@ -116,6 +116,13 @@ export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
             {/* Coverage Analyzer */}
             <div className="pt-2">
               <CoverageAnalyzer
+                customerProfile={{
+                  location: location.trim() || 'Unknown',
+                  state: location.split(',')[1]?.trim() || 'CA',  // Extract state from location
+                  age: age || '30',
+                  needs: needs.split(',').map(n => n.trim()).filter(Boolean),
+                  insuranceType: 'auto'
+                } as CustomerProfile}
                 onAnalysisComplete={(coverage) => {
                   // Build comprehensive profile from extracted policy data
                   const profile: any = {}

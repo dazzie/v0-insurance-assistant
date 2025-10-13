@@ -6,6 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Upload, FileText, Image, CheckCircle, AlertCircle, Loader2, X, Camera, RotateCcw } from "lucide-react"
+import { PolicyHealthCard } from "@/components/policy-health-card"
+import { analyzePolicy, type PolicyAnalysis } from "@/lib/policy-analyzer"
+import type { CustomerProfile } from "@/lib/customer-profile"
 
 interface ExtractedCoverage {
   carrier?: string
@@ -88,13 +91,15 @@ interface ExtractedCoverage {
 interface CoverageAnalyzerProps {
   onAnalysisComplete?: (coverage: ExtractedCoverage) => void
   insuranceType?: 'auto' | 'home' | 'life' | 'renters' | 'pet' | 'health' | 'disability' | 'umbrella'
+  customerProfile?: CustomerProfile  // For policy health analysis
 }
 
-export function CoverageAnalyzer({ onAnalysisComplete, insuranceType }: CoverageAnalyzerProps) {
+export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerProfile }: CoverageAnalyzerProps) {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [extractedData, setExtractedData] = useState<ExtractedCoverage | null>(null)
+  const [policyAnalysis, setPolicyAnalysis] = useState<PolicyAnalysis | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isScanning, setIsScanning] = useState(false)
   const [showCamera, setShowCamera] = useState(false)
@@ -189,6 +194,19 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType }: Coverage
       console.log('[Client] Setting extracted data...', result.coverage)
       setExtractedData(result.coverage)
       console.log('[Client] Extracted data set successfully')
+
+      // Run autonomous policy analysis if customer profile is available
+      if (customerProfile && result.coverage) {
+        console.log('[Policy Analyzer] Running autonomous analysis...')
+        try {
+          const analysis = analyzePolicy(result.coverage, customerProfile)
+          setPolicyAnalysis(analysis)
+          console.log('[Policy Analyzer] ✓ Analysis complete:', analysis)
+        } catch (analysisError) {
+          console.error('[Policy Analyzer] Analysis failed:', analysisError)
+          // Don't block the flow if analysis fails
+        }
+      }
 
       // Show success confirmation
       const fieldsExtracted = Object.keys(result.coverage).filter(key => result.coverage[key] != null).length
@@ -478,6 +496,17 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType }: Coverage
                 {extractedData.policyNumber && ` - Policy #${extractedData.policyNumber}`}
               </p>
             </div>
+
+            {/* Policy Health Score - Autonomous Analysis */}
+            {policyAnalysis && (
+              <PolicyHealthCard 
+                analysis={policyAnalysis}
+                onFixGap={(gapId) => {
+                  console.log('[Coverage Analyzer] User wants to fix gap:', gapId)
+                  // TODO: Trigger quote flow to address this gap
+                }}
+              />
+            )}
 
             {/* Raw Data Display (Debug) */}
             <details className="border rounded-lg p-4 bg-gray-50">

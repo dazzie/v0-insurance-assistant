@@ -42,3 +42,6 @@ next-env.d.ts
 
 # OS files
 .DS_Store
+
+# Documentation archive
+docs-archive/

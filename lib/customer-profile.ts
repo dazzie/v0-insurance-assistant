@@ -160,6 +160,22 @@ export const profileManager = {
   updateProfile: (updates: Partial<CustomerProfile>): void => {
     const current = profileManager.loadProfile() || {}
     
+    // 🔍 DEBUG: Log current profile state
+    console.log('[Profile Update] Current profile from localStorage:', {
+      hasVehicles: !!current.vehicles,
+      vehiclesEnriched: current.vehicles?.some(v => v.enriched),
+      hasAddressEnrichment: !!current.addressEnrichment,
+      addressEnriched: current.addressEnrichment?.enriched,
+      hasEmailEnrichment: !!current.emailEnrichment,
+      emailVerified: current.emailEnrichment?.verified
+    })
+    console.log('[Profile Update] Incoming updates:', {
+      hasVehicles: !!updates.vehicles,
+      hasAddress: !!(updates.address || updates.city || updates.state || updates.zipCode),
+      hasEmail: !!updates.email,
+      driversCount: updates.driversCount
+    })
+    
     // Smart merge for vehicles - preserve enriched NHTSA data
     if (current.vehicles && current.vehicles.some(v => v.enriched)) {
       console.log('[Profile Update] ✓ Enriched vehicles detected, applying protection...')
@@ -185,9 +201,10 @@ export const profileManager = {
           return updatedVehicle
         })
       } else {
-        // Don't overwrite enriched vehicles with empty/undefined vehicles
-        console.log('[Profile Update] ⚠️ Deleting empty vehicles from update')
-        delete updates.vehicles
+        // 🔒 CRITICAL: Don't let empty updates wipe out enriched vehicles!
+        // Explicitly preserve the existing enriched vehicles
+        console.log('[Profile Update] ⚠️ No vehicles in update, preserving existing enriched vehicles')
+        updates.vehicles = current.vehicles
       }
     } else {
       console.log('[Profile Update] No enriched vehicles, allowing update')
@@ -196,15 +213,14 @@ export const profileManager = {
     // Smart merge for address - preserve OpenCage enriched address data
     if (current.addressEnrichment?.enriched) {
       console.log('[Profile Update] ✓ Enriched address detected, applying protection...')
-      // Preserve enriched address fields - don't allow overwriting
-      if (updates.address || updates.city || updates.state || updates.zipCode) {
-        console.log('[Profile Update] ⚠️ Blocking address update to protect OpenCage enrichment')
-        delete updates.address
-        delete updates.city
-        delete updates.state
-        delete updates.zipCode
-      }
-      // ALWAYS preserve the existing enrichment (not just when blocking updates)
+      // 🔒 CRITICAL: Explicitly preserve enriched address fields
+      // Don't allow ANY updates to overwrite OpenCage-verified address
+      console.log('[Profile Update] ⚠️ Preserving OpenCage-verified address fields')
+      updates.address = current.address
+      updates.city = current.city
+      updates.state = current.state
+      updates.zipCode = current.zipCode
+      // ALWAYS preserve the existing enrichment
       updates.addressEnrichment = current.addressEnrichment
     } else if (current.addressEnrichment && !updates.addressEnrichment) {
       // Even if not fully enriched, preserve any existing addressEnrichment data
@@ -214,11 +230,9 @@ export const profileManager = {
     // Smart merge for email - preserve Hunter.io enriched email data
     if (current.emailEnrichment?.verified) {
       console.log('[Profile Update] ✓ Enriched email detected, applying protection...')
-      // Preserve enriched email - don't allow overwriting
-      if (updates.email) {
-        console.log('[Profile Update] ⚠️ Blocking email update to protect Hunter.io enrichment')
-        delete updates.email
-      }
+      // 🔒 CRITICAL: Explicitly preserve Hunter.io-verified email
+      console.log('[Profile Update] ⚠️ Preserving Hunter.io-verified email')
+      updates.email = current.email
       // ALWAYS preserve the existing enrichment
       updates.emailEnrichment = current.emailEnrichment
     } else if (current.emailEnrichment && !updates.emailEnrichment) {

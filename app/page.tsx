@@ -46,6 +46,16 @@ export default function InsuranceAssistant() {
     console.log('[Page] Vehicles array:', profile.vehicles)
     console.log('[Page] Drivers count:', profile.driversCount)
     console.log('[Page] Drivers array:', profile.drivers)
+    
+    // 🔒 CRITICAL: Check for enriched data before saving
+    console.log('[Page] Checking for enrichments...')
+    console.log('[Page] - Vehicles enriched?', profile.vehicles?.some(v => v.enriched))
+    console.log('[Page] - Address enriched?', profile.addressEnrichment?.enriched)
+    console.log('[Page] - Email enriched?', profile.emailEnrichment?.verified)
+
+    // Save profile to localStorage IMMEDIATELY to preserve all enrichments
+    profileManager.saveProfile(profile)
+    console.log('[Page] ✅ Profile saved to localStorage with all enrichments')
 
     setCustomerProfile(profile)
     setCurrentView("chat")

@@ -108,13 +108,30 @@ Think of me as your trusted advisor who will help you navigate coverage options,
       role: m.role,
       content: m.content
     })))
-    if (Object.keys(extractedProfile).length > 0) {
+    
+    // 🔒 CRITICAL FIX: Only update profile if we have MEANINGFUL new data
+    // Don't overwrite with empty or minimal extractions
+    const hasMeaningfulData = 
+      extractedProfile.vehicles?.length > 0 ||
+      extractedProfile.driversCount ||
+      extractedProfile.customerName ||
+      extractedProfile.address ||
+      extractedProfile.city ||
+      extractedProfile.state ||
+      extractedProfile.zipCode ||
+      extractedProfile.email ||
+      extractedProfile.needs?.length > 0
+    
+    if (hasMeaningfulData) {
+      console.log('[ChatInterface] Updating profile with meaningful data:', extractedProfile)
       // Use smart merge to preserve enriched data
       profileManager.updateProfile(extractedProfile)
       const updatedProfile = profileManager.loadProfile() || {}
       // Don't merge with customerProfile - it might have stale data!
       // Just use the freshly loaded profile from localStorage
       setLiveProfile(updatedProfile)
+    } else {
+      console.log('[ChatInterface] Skipping profile update - no meaningful new data')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]) // Only run when messages change, not when customerProfile changes

@@ -196,6 +196,12 @@ export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
                     }
                   }
 
+                  // 🔒 Transfer OpenCage address enrichment
+                  if (coverage.addressEnrichment) {
+                    profile.addressEnrichment = coverage.addressEnrichment
+                    console.log('[Profile] ✓ OpenCage enrichment transferred:', coverage.addressEnrichment)
+                  }
+
                   console.log('[Profile] Auto-populated from policy:', profile)
 
                   // Submit with comprehensive extracted data

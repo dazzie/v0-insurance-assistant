@@ -86,6 +86,49 @@ async function callMCPServer(
 }
 
 /**
+ * Enrich address data using OpenCage geocoding
+ */
+async function enrichAddressData(address: string, city: string, state: string, zipCode: string): Promise<any> {
+  if (!address || !city || !state || !zipCode) {
+    console.log('[Coverage] Incomplete address, skipping OpenCage enrichment')
+    return null
+  }
+
+  const fullAddress = `${address}, ${city}, ${state} ${zipCode}, USA`
+  console.log('[Coverage] Enriching address with OpenCage geocoding:', fullAddress)
+
+  try {
+    const geocodeData = await callMCPServer(
+      'mcp-server/opencage-server',
+      'geocode_address',
+      { address: fullAddress }
+    )
+
+    console.log('[Coverage] OpenCage response:', JSON.stringify(geocodeData, null, 2))
+
+    if (geocodeData && geocodeData.formatted) {
+      console.log(`[Coverage] ✓ Address verified: ${geocodeData.formatted}`)
+      
+      return {
+        enriched: true,
+        enrichmentSource: 'OpenCage',
+        formattedAddress: geocodeData.formatted,
+        latitude: geocodeData.latitude,
+        longitude: geocodeData.longitude,
+        confidence: geocodeData.confidence,
+        components: geocodeData.components
+      }
+    } else {
+      console.log('[Coverage] ⚠️  Address geocoding failed')
+      return null
+    }
+  } catch (error) {
+    console.error('[Coverage] Error enriching address:', error)
+    return null
+  }
+}
+
+/**
  * Enrich vehicle data using NHTSA VIN decoder
  */
 async function enrichVehicleData(vehicles: any[]): Promise<any[]> {
@@ -402,6 +445,34 @@ Be thorough and extract all visible information from the policy document.`,
         console.error('[Coverage] Vehicle enrichment failed:', enrichError)
         coverage.enrichmentError = enrichError instanceof Error ? enrichError.message : 'Unknown error'
       }
+    }
+
+    // Enrich address data with OpenCage geocoding
+    console.log('[Coverage] Checking address fields:', {
+      address: coverage.address,
+      city: coverage.city,
+      state: coverage.state,
+      zipCode: coverage.zipCode
+    })
+    
+    if (coverage.address && coverage.city && coverage.state && coverage.zipCode) {
+      try {
+        console.log('[Coverage] Found address, attempting OpenCage enrichment...')
+        const addressEnrichment = await enrichAddressData(
+          coverage.address,
+          coverage.city,
+          coverage.state,
+          coverage.zipCode
+        )
+        if (addressEnrichment) {
+          coverage.addressEnrichment = addressEnrichment
+          console.log('[Coverage] ✓ Address enriched successfully')
+        }
+      } catch (enrichError) {
+        console.error('[Coverage] Address enrichment failed:', enrichError)
+      }
+    } else {
+      console.log('[Coverage] ⚠️  Skipping OpenCage enrichment - missing address fields')
     }
 
     return NextResponse.json({

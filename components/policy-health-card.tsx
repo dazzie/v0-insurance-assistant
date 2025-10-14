@@ -9,9 +9,10 @@ import type { PolicyAnalysis, PolicyGap } from "@/lib/policy-analyzer"
 interface PolicyHealthCardProps {
   analysis: PolicyAnalysis
   onFixGap?: (gapId: string) => void
+  requestedCoverages?: Array<{ gapId: string; coverageType: string; title: string; requestedAt: string }>
 }
 
-export function PolicyHealthCard({ analysis, onFixGap }: PolicyHealthCardProps) {
+export function PolicyHealthCard({ analysis, onFixGap, requestedCoverages = [] }: PolicyHealthCardProps) {
   const { healthScore, gaps, summary, citations } = analysis
 
   const getScoreColor = (score: number) => {
@@ -102,7 +103,12 @@ export function PolicyHealthCard({ analysis, onFixGap }: PolicyHealthCardProps) 
           <ScrollArea className="h-[400px] pr-4">
             <div className="space-y-4">
               {gaps.map((gap) => (
-                <GapCard key={gap.id} gap={gap} onFix={onFixGap} />
+                <GapCard 
+                  key={gap.id} 
+                  gap={gap} 
+                  onFix={onFixGap}
+                  isRequested={requestedCoverages.some(r => r.gapId === gap.id)}
+                />
               ))}
             </div>
           </ScrollArea>
@@ -129,15 +135,20 @@ export function PolicyHealthCard({ analysis, onFixGap }: PolicyHealthCardProps) 
   )
 }
 
-function GapCard({ gap, onFix }: { gap: PolicyGap; onFix?: (gapId: string) => void }) {
+function GapCard({ gap, onFix, isRequested }: { gap: PolicyGap; onFix?: (gapId: string) => void; isRequested?: boolean }) {
   return (
-    <div className="border rounded-lg p-4 space-y-3">
+    <div className={`border rounded-lg p-4 space-y-3 ${isRequested ? 'bg-green-50/50 dark:bg-green-950/20 border-green-500' : ''}`}>
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <span className="text-lg">{getGapIcon(gap.type)}</span>
             <h4 className="font-semibold text-sm">{gap.title}</h4>
+            {isRequested && (
+              <Badge className="text-xs bg-green-600 hover:bg-green-700">
+                ✓ Added to Quote
+              </Badge>
+            )}
           </div>
           <div className="flex gap-2 mb-2">
             <Badge variant={getGapBadgeVariant(gap.type)} className="text-xs">
@@ -186,11 +197,16 @@ function GapCard({ gap, onFix }: { gap: PolicyGap; onFix?: (gapId: string) => vo
       {onFix && (
         <Button 
           size="sm" 
-          variant="outline" 
+          variant={isRequested ? "default" : "outline"}
           className="w-full"
           onClick={() => onFix(gap.id)}
+          disabled={isRequested}
         >
-          Get Quotes to Fix This
+          {isRequested ? (
+            <>✓ Added to New Policy</>
+          ) : (
+            <>Add as Additional Coverage on New Policy</>
+          )}
         </Button>
       )}
     </div>

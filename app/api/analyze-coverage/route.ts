@@ -602,29 +602,33 @@ Be thorough and extract all visible information from the policy document.`,
       }
     }
 
-    // Enrich vehicle data with NHTSA VIN decoder (for auto insurance)
+    // 🚗 Enrich vehicle data with NHTSA VIN decoder (for auto insurance)
     if (coverage.vehicles && Array.isArray(coverage.vehicles) && coverage.vehicles.length > 0) {
       try {
-        console.log('[Coverage] Found vehicles, attempting NHTSA enrichment...')
+        console.log('[Coverage] 🚗 Step 1/5: Enriching vehicles with NHTSA VIN decoder...')
         coverage.vehicles = await enrichVehicleData(coverage.vehicles)
         coverage.enrichmentPerformed = true
+        console.log('[Coverage] ✅ Step 1/5 complete: Vehicle data enriched')
       } catch (enrichError) {
-        console.error('[Coverage] Vehicle enrichment failed:', enrichError)
+        console.error('[Coverage] ⚠️  Step 1/5 skipped: Vehicle enrichment failed:', enrichError)
         coverage.enrichmentError = enrichError instanceof Error ? enrichError.message : 'Unknown error'
       }
+    } else {
+      console.log('[Coverage] ⏭️  Step 1/5 skipped: No vehicles to enrich')
     }
 
-    // Enrich address data with OpenCage geocoding
-    console.log('[Coverage] Checking address fields:', {
-      address: coverage.address,
-      city: coverage.city,
-      state: coverage.state,
-      zipCode: coverage.zipCode
+    // 🏠 Enrich address data with OpenCage geocoding  
+    console.log('[Coverage] 🏠 Step 2/5: Checking address data...')
+    console.log('[Coverage] Address fields:', {
+      address: coverage.address ? '✓' : '✗',
+      city: coverage.city ? '✓' : '✗',
+      state: coverage.state ? '✓' : '✗',
+      zipCode: coverage.zipCode ? '✓' : '✗'
     })
     
     if (coverage.address && coverage.city && coverage.state && coverage.zipCode) {
       try {
-        console.log('[Coverage] Found address, attempting OpenCage enrichment...')
+        console.log('[Coverage] 🏠 Step 2/5: Geocoding address with OpenCage...')
         const addressEnrichment = await enrichAddressData(
           coverage.address,
           coverage.city,
@@ -633,66 +637,70 @@ Be thorough and extract all visible information from the policy document.`,
         )
         if (addressEnrichment) {
           coverage.addressEnrichment = addressEnrichment
-          console.log('[Coverage] ✓ Address enriched successfully')
+          console.log('[Coverage] ✅ Step 2/5 complete: Address geocoded')
 
-          // 🌊 PROACTIVE AGENT: Assess flood risk using coordinates from OpenCage
+          // 🌊 Step 3: Assess flood risk (only if we have coordinates)
           if (addressEnrichment.latitude && addressEnrichment.longitude) {
             try {
-              console.log('[Coverage] 🌊 Proactively assessing flood risk...')
+              console.log('[Coverage] 🌊 Step 3/5: Assessing flood risk...')
               const floodRisk = await assessFloodRisk(
                 addressEnrichment.latitude,
                 addressEnrichment.longitude
               )
               if (floodRisk) {
-                // Initialize riskAssessment if it doesn't exist
                 if (!coverage.riskAssessment) {
                   coverage.riskAssessment = {}
                 }
                 coverage.riskAssessment.floodRisk = floodRisk
                 coverage.riskAssessment.lastAssessed = new Date().toISOString()
-                console.log('[Coverage] ✓ Flood risk assessed successfully')
+                console.log('[Coverage] ✅ Step 3/5 complete: Flood risk assessed - ' + floodRisk.riskLevel)
                 
-                // 🎯 Proactive recommendation
                 if (floodRisk.floodInsuranceRequired) {
-                  console.log('[Coverage] 🎯 PROACTIVE ALERT: Flood insurance recommended!')
+                  console.log('[Coverage] 🎯 ALERT: Flood insurance required!')
                 }
+              } else {
+                console.log('[Coverage] ⏭️  Step 3/5 skipped: Flood risk data unavailable')
               }
             } catch (floodError) {
-              console.error('[Coverage] Flood risk assessment failed:', floodError)
+              console.error('[Coverage] ⚠️  Step 3/5 failed: Flood risk assessment error')
             }
+          } else {
+            console.log('[Coverage] ⏭️  Step 3/5 skipped: No coordinates for flood assessment')
           }
 
-          // 🚨 PROACTIVE AGENT: Assess crime risk using city/state
+          // 🚨 Step 4: Assess crime risk using city/state
           if (coverage.city && coverage.state) {
             try {
-              console.log('[Coverage] 🚨 Proactively assessing crime risk...')
+              console.log('[Coverage] 🚨 Step 4/5: Assessing crime risk...')
               const crimeRisk = await assessCrimeRisk(
                 coverage.city,
                 coverage.state
               )
               if (crimeRisk) {
-                // Initialize riskAssessment if it doesn't exist
                 if (!coverage.riskAssessment) {
                   coverage.riskAssessment = {}
                 }
                 coverage.riskAssessment.crimeRisk = crimeRisk
                 coverage.riskAssessment.lastAssessed = new Date().toISOString()
-                console.log('[Coverage] ✓ Crime risk assessed successfully')
+                console.log('[Coverage] ✅ Step 4/5 complete: Crime risk assessed - ' + crimeRisk.riskLevel)
                 
-                // 🎯 Proactive recommendation
                 if (crimeRisk.riskLevel === 'High' || crimeRisk.riskLevel === 'Very High') {
-                  console.log('[Coverage] 🎯 PROACTIVE ALERT: High crime area - security system recommended!')
+                  console.log('[Coverage] 🎯 ALERT: High crime area - security system recommended!')
                 }
+              } else {
+                console.log('[Coverage] ⏭️  Step 4/5 skipped: Crime data unavailable')
               }
             } catch (crimeError) {
-              console.error('[Coverage] Crime risk assessment failed:', crimeError)
+              console.error('[Coverage] ⚠️  Step 4/5 failed: Crime risk assessment error')
             }
+          } else {
+            console.log('[Coverage] ⏭️  Step 4/5 skipped: Missing city/state for crime assessment')
           }
 
-          // 🏚️ PROACTIVE AGENT: Assess earthquake risk using coordinates
+          // 🏚️ Step 5a: Assess earthquake risk using coordinates
           if (addressEnrichment.latitude && addressEnrichment.longitude && coverage.state) {
             try {
-              console.log('[Coverage] 🏚️ Proactively assessing earthquake risk...')
+              console.log('[Coverage] 🏚️ Step 5/5a: Assessing earthquake risk...')
               const earthquakeRisk = await assessEarthquakeRisk(
                 addressEnrichment.latitude,
                 addressEnrichment.longitude,
@@ -704,22 +712,25 @@ Be thorough and extract all visible information from the policy document.`,
                 }
                 coverage.riskAssessment.earthquakeRisk = earthquakeRisk
                 coverage.riskAssessment.lastAssessed = new Date().toISOString()
-                console.log('[Coverage] ✓ Earthquake risk assessed successfully')
+                console.log('[Coverage] ✅ Step 5/5a complete: Earthquake risk assessed - ' + earthquakeRisk.riskLevel)
                 
-                // 🎯 Proactive recommendation
                 if (earthquakeRisk.riskLevel === 'High' || earthquakeRisk.riskLevel === 'Very High') {
-                  console.log('[Coverage] 🎯 PROACTIVE ALERT: High seismic risk - earthquake insurance recommended!')
+                  console.log('[Coverage] 🎯 ALERT: High seismic risk - earthquake insurance recommended!')
                 }
+              } else {
+                console.log('[Coverage] ⏭️  Step 5/5a skipped: Earthquake data unavailable')
               }
             } catch (earthquakeError) {
-              console.error('[Coverage] Earthquake risk assessment failed:', earthquakeError)
+              console.error('[Coverage] ⚠️  Step 5/5a failed: Earthquake risk assessment error')
             }
+          } else {
+            console.log('[Coverage] ⏭️  Step 5/5a skipped: Missing coordinates/state for earthquake assessment')
           }
 
-          // 🔥 PROACTIVE AGENT: Assess wildfire risk using coordinates
+          // 🔥 Step 5b: Assess wildfire risk using coordinates
           if (addressEnrichment.latitude && addressEnrichment.longitude && coverage.state) {
             try {
-              console.log('[Coverage] 🔥 Proactively assessing wildfire risk...')
+              console.log('[Coverage] 🔥 Step 5/5b: Assessing wildfire risk...')
               const wildfireRisk = await assessWildfireRisk(
                 addressEnrichment.latitude,
                 addressEnrichment.longitude,
@@ -731,29 +742,63 @@ Be thorough and extract all visible information from the policy document.`,
                 }
                 coverage.riskAssessment.wildfireRisk = wildfireRisk
                 coverage.riskAssessment.lastAssessed = new Date().toISOString()
-                console.log('[Coverage] ✓ Wildfire risk assessed successfully')
+                console.log('[Coverage] ✅ Step 5/5b complete: Wildfire risk assessed - ' + wildfireRisk.riskLevel)
                 
-                // 🎯 Proactive recommendation
                 if (wildfireRisk.riskLevel === 'High' || wildfireRisk.riskLevel === 'Very High') {
-                  console.log('[Coverage] 🎯 PROACTIVE ALERT: High wildfire risk - extended replacement cost recommended!')
+                  console.log('[Coverage] 🎯 ALERT: High wildfire risk - extended replacement cost recommended!')
                 }
+              } else {
+                console.log('[Coverage] ⏭️  Step 5/5b skipped: Wildfire data unavailable')
               }
             } catch (wildfireError) {
-              console.error('[Coverage] Wildfire risk assessment failed:', wildfireError)
+              console.error('[Coverage] ⚠️  Step 5/5b failed: Wildfire risk assessment error')
             }
+          } else {
+            console.log('[Coverage] ⏭️  Step 5/5b skipped: Missing coordinates/state for wildfire assessment')
           }
+        } else {
+          console.log('[Coverage] ⏭️  Steps 3-5 skipped: Address geocoding failed')
         }
       } catch (enrichError) {
-        console.error('[Coverage] Address enrichment failed:', enrichError)
+        console.error('[Coverage] ⚠️  Step 2 failed: Address enrichment error:', enrichError)
       }
     } else {
-      console.log('[Coverage] ⚠️  Skipping OpenCage enrichment - missing address fields')
+      console.log('[Coverage] ⏭️  Steps 2-5 skipped: Incomplete address data')
+      console.log('[Coverage] Missing: ' + [
+        !coverage.address && 'street address',
+        !coverage.city && 'city',
+        !coverage.state && 'state',
+        !coverage.zipCode && 'ZIP code'
+      ].filter(Boolean).join(', '))
     }
+
+    // 📊 Generate enrichment summary
+    const enrichmentSummary = {
+      vehiclesEnriched: coverage.vehicles?.some(v => v.enriched) || false,
+      addressEnriched: coverage.addressEnrichment?.enriched || false,
+      floodRiskAssessed: !!coverage.riskAssessment?.floodRisk,
+      crimeRiskAssessed: !!coverage.riskAssessment?.crimeRisk,
+      earthquakeRiskAssessed: !!coverage.riskAssessment?.earthquakeRisk,
+      wildfireRiskAssessed: !!coverage.riskAssessment?.wildfireRisk,
+    }
+
+    const totalSteps = 5
+    const completedSteps = [
+      enrichmentSummary.vehiclesEnriched,
+      enrichmentSummary.addressEnriched,
+      enrichmentSummary.floodRiskAssessed,
+      enrichmentSummary.crimeRiskAssessed,
+      enrichmentSummary.earthquakeRiskAssessed || enrichmentSummary.wildfireRiskAssessed
+    ].filter(Boolean).length
+
+    console.log(`[Coverage] 📊 Enrichment complete: ${completedSteps}/${totalSteps} steps completed`)
+    console.log('[Coverage] Summary:', enrichmentSummary)
 
     return NextResponse.json({
       success: true,
       coverage,
-      message: 'Document analyzed successfully',
+      enrichmentSummary,
+      message: `Document analyzed successfully (${completedSteps}/${totalSteps} enrichments completed)`,
     })
   } catch (error) {
     console.error('Coverage analysis error:', error)

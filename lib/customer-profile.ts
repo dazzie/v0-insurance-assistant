@@ -81,6 +81,9 @@ export interface CustomerProfile {
   insuranceType?: 'auto' | 'home' | 'life' | 'renters' | 'pet' | 'health' | 'disability' | 'umbrella'
   needs?: string[]
 
+  // Conversation
+  initialMessage?: string  // Initial voice message from audio recording
+
   // Auto Insurance Specific
   driversCount?: number
   vehiclesCount?: number
@@ -133,6 +136,14 @@ export interface CustomerProfile {
   occupation?: string
   homeOwnership?: 'own' | 'rent' | 'other'
   creditRange?: 'excellent' | 'good' | 'fair' | 'poor' | 'prefer-not-to-say'
+
+  // Requested Additional Coverages (from policy analysis)
+  requestedCoverages?: Array<{
+    gapId: string
+    coverageType: string
+    title: string
+    requestedAt: string
+  }>
 
   // Metadata
   createdAt?: string

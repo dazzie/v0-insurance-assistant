@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { CoverageDetailCard } from "@/components/coverage-detail-card"
 // import { Separator } from "@/components/ui/separator" // Commented out - using hr instead
 import { ChevronDown, ChevronUp, ExternalLink, Phone, Globe } from "lucide-react"
 
@@ -271,9 +272,19 @@ export function InsuranceSummaryComparison({
               </div>
             </div>
 
+            {/* Detailed Coverage Breakdown */}
+            <div>
+              <h4 className="font-semibold mb-3">Coverage Details</h4>
+              <div className="space-y-2">
+                {generateDetailedCoverages(insuranceType, carrier).map((coverage, idx) => (
+                  <CoverageDetailCard key={idx} coverage={coverage} />
+                ))}
+              </div>
+            </div>
+
             {/* Key Features */}
             <div>
-              <h4 className="font-semibold mb-2">Key Features</h4>
+              <h4 className="font-semibold mb-2">Additional Features</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {carrier.features.map((feature, idx) => (
                   <div key={idx} className="flex items-center gap-2 text-sm">
@@ -423,4 +434,131 @@ export function InsuranceSummaryComparison({
   )
 }
 
+// Helper function to generate detailed coverage breakdowns
+function generateDetailedCoverages(insuranceType: string, carrier: CarrierComparison) {
+  const monthlyPremium = carrier.monthlyPremium
+  
+  if (insuranceType === 'Auto') {
+    return [
+      {
+        name: 'Bodily Injury Liability',
+        premium: Math.round(monthlyPremium * 0.31),
+        limit: '$100,000 / $300,000',
+      },
+      {
+        name: 'Property Damage Liability',
+        premium: Math.round(monthlyPremium * 0.14),
+        limit: '$50,000',
+      },
+      {
+        name: 'Comprehensive',
+        premium: Math.round(monthlyPremium * 0.18),
+        limit: 'Actual Cash Value',
+        deductible: '$500',
+      },
+      {
+        name: 'Collision',
+        premium: Math.round(monthlyPremium * 0.35),
+        limit: 'Actual Cash Value',
+        deductible: '$1,000',
+      },
+      {
+        name: 'Uninsured / Underinsured Motorist',
+        premium: Math.round(monthlyPremium * 0.09),
+        limit: '$100,000 / $300,000',
+      },
+      {
+        name: 'Medical Payments',
+        premium: Math.round(monthlyPremium * 0.05),
+        limit: '$5,000',
+      },
+      {
+        name: 'Roadside Assistance',
+        premium: Math.round(monthlyPremium * 0.02),
+        limit: 'Included',
+      },
+      {
+        name: 'Rental Reimbursement',
+        premium: Math.round(monthlyPremium * 0.03),
+        limit: '$40/day up to $1,200',
+      },
+    ]
+  } else if (insuranceType === 'Renters') {
+    return [
+      {
+        name: 'Personal Property',
+        premium: Math.round(monthlyPremium * 0.60),
+        limit: '$50,000',
+        deductible: '$500',
+      },
+      {
+        name: 'Liability',
+        premium: Math.round(monthlyPremium * 0.25),
+        limit: '$300,000',
+      },
+      {
+        name: 'Additional Living Expenses',
+        premium: Math.round(monthlyPremium * 0.10),
+        limit: '$15,000',
+      },
+      {
+        name: 'Medical Payments to Others',
+        premium: Math.round(monthlyPremium * 0.05),
+        limit: '$5,000',
+      },
+    ]
+  } else if (insuranceType === 'Home') {
+    return [
+      {
+        name: 'Dwelling Coverage',
+        premium: Math.round(monthlyPremium * 0.50),
+        limit: '$500,000',
+      },
+      {
+        name: 'Other Structures',
+        premium: Math.round(monthlyPremium * 0.10),
+        limit: '$50,000',
+      },
+      {
+        name: 'Personal Property',
+        premium: Math.round(monthlyPremium * 0.20),
+        limit: '$250,000',
+        deductible: '$1,000',
+      },
+      {
+        name: 'Liability',
+        premium: Math.round(monthlyPremium * 0.10),
+        limit: '$500,000',
+      },
+      {
+        name: 'Additional Living Expenses',
+        premium: Math.round(monthlyPremium * 0.10),
+        limit: '$100,000',
+      },
+    ]
+  } else if (insuranceType === 'Life') {
+    return [
+      {
+        name: 'Death Benefit',
+        premium: monthlyPremium,
+        limit: '$500,000',
+      },
+    ]
+  } else if (insuranceType === 'Disability') {
+    return [
+      {
+        name: 'Monthly Benefit',
+        premium: monthlyPremium,
+        limit: '60% of Income (up to $5,000/month)',
+      },
+      {
+        name: 'Elimination Period',
+        premium: 0,
+        limit: '90 days',
+      },
+    ]
+  }
+  
+  return []
+}
 

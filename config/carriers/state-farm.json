@@ -1,0 +1,82 @@
+{
+  "id": "state-farm",
+  "name": "State Farm",
+  "displayName": "State Farm Insurance",
+  "logo": "/carriers/state-farm.png",
+  "marketShare": 16.9,
+  "rating": "A++",
+  "enabled": true,
+  "website": "https://www.statefarm.com",
+  "phone": "1-800-STATE-FARM",
+  
+  "adjustments": {
+    "profileTypes": {
+      "youngDriver": 0.92,
+      "seniorDriver": 1.05,
+      "goodCredit": 0.88,
+      "bundled": 0.85,
+      "cleanRecord": 0.90,
+      "standard": 1.00
+    },
+    "regions": {
+      "midwest": 0.93,
+      "south": 0.97,
+      "west": 1.05,
+      "northeast": 1.08
+    }
+  },
+  
+  "discounts": [
+    {
+      "type": "multiPolicy",
+      "value": 0.15,
+      "description": "Bundle & Save - Auto + Home",
+      "applies": ["auto", "home", "renters"]
+    },
+    {
+      "type": "goodStudent",
+      "value": 0.10,
+      "description": "Good Student Discount",
+      "applies": ["auto"],
+      "requirements": ["age < 25", "gpa >= 3.0"]
+    },
+    {
+      "type": "defensiveDriving",
+      "value": 0.05,
+      "description": "Safe Driver Course",
+      "applies": ["auto"]
+    },
+    {
+      "type": "antiTheft",
+      "value": 0.03,
+      "description": "Anti-Theft Device",
+      "applies": ["auto"]
+    },
+    {
+      "type": "homeownerDiscount",
+      "value": 0.08,
+      "description": "Homeowner Discount on Auto",
+      "applies": ["auto"]
+    }
+  ],
+  
+  "variance": {
+    "enabled": true,
+    "range": 0.05
+  },
+  
+  "strengths": [
+    "Local Agent Network",
+    "Excellent Customer Service",
+    "Wide Coverage Options",
+    "Strong Financial Rating"
+  ],
+  
+  "bestFor": [
+    "Families",
+    "Multi-policy Bundling",
+    "Midwest Residents",
+    "Traditional Insurance Seekers"
+  ]
+}
+

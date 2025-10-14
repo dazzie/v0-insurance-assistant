@@ -1,0 +1,76 @@
+{
+  "id": "geico",
+  "name": "GEICO",
+  "displayName": "GEICO Insurance",
+  "logo": "/carriers/geico.png",
+  "marketShare": 14.4,
+  "rating": "A++",
+  "enabled": true,
+  "website": "https://www.geico.com",
+  "phone": "1-800-947-AUTO",
+  
+  "adjustments": {
+    "profileTypes": {
+      "youngDriver": 1.05,
+      "seniorDriver": 0.92,
+      "goodCredit": 0.90,
+      "bundled": 0.88,
+      "cleanRecord": 0.87,
+      "standard": 1.00
+    },
+    "regions": {
+      "midwest": 0.95,
+      "south": 0.92,
+      "west": 0.98,
+      "northeast": 1.02
+    }
+  },
+  
+  "discounts": [
+    {
+      "type": "militaryDiscount",
+      "value": 0.15,
+      "description": "Military & Federal Employee",
+      "applies": ["auto", "home", "renters"]
+    },
+    {
+      "type": "multiPolicy",
+      "value": 0.13,
+      "description": "Multi-Policy Discount",
+      "applies": ["auto", "home", "renters"]
+    },
+    {
+      "type": "goodDriver",
+      "value": 0.12,
+      "description": "Good Driver Discount",
+      "applies": ["auto"]
+    },
+    {
+      "type": "emergencyDeployment",
+      "value": 0.25,
+      "description": "Emergency Deployment Discount",
+      "applies": ["auto"],
+      "requirements": ["military", "deployed"]
+    }
+  ],
+  
+  "variance": {
+    "enabled": true,
+    "range": 0.06
+  },
+  
+  "strengths": [
+    "Low Rates",
+    "Digital-First Experience",
+    "Quick Claims",
+    "Military Specialist"
+  ],
+  
+  "bestFor": [
+    "Military Personnel",
+    "Budget-Conscious Drivers",
+    "Tech-Savvy Users",
+    "Clean Driving Records"
+  ]
+}
+

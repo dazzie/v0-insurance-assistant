@@ -1,0 +1,93 @@
+{
+  "profiles": [
+    {
+      "id": "ny-tesla-2015-standard-clean",
+      "name": "NYC Standard Mid-Age Tesla",
+      "location": "New York, NY",
+      "state": "NY",
+      "coverage": "Standard",
+      "yearsLicensed": "10+",
+      "mileage": "10,001-15,000 miles/year",
+      "drivingRecord": "Clean (no violations)",
+      "vehicle": "2015 Tesla Model S",
+      "priority": 1,
+      "rates": {
+        "Progressive": { "annual": 0, "monthly": 0 },
+        "GEICO": { "annual": 0, "monthly": 0 },
+        "State Farm": { "annual": 0, "monthly": 0 },
+        "Allstate": { "annual": 0, "monthly": 0 },
+        "Liberty Mutual": { "annual": 0, "monthly": 0 }
+      }
+    },
+    {
+      "id": "ny-civic-2018-standard-clean",
+      "name": "NYC Standard Young Honda",
+      "location": "New York, NY",
+      "state": "NY",
+      "coverage": "Standard",
+      "yearsLicensed": "3-5",
+      "mileage": "10,001-15,000 miles/year",
+      "drivingRecord": "Clean",
+      "vehicle": "2018 Honda Civic",
+      "priority": 2,
+      "rates": {
+        "Progressive": { "annual": 0, "monthly": 0 },
+        "GEICO": { "annual": 0, "monthly": 0 },
+        "State Farm": { "annual": 0, "monthly": 0 },
+        "Allstate": { "annual": 0, "monthly": 0 }
+      }
+    },
+    {
+      "id": "ny-camry-2020-basic-clean",
+      "name": "Buffalo Basic Mid-Age Toyota",
+      "location": "Buffalo, NY",
+      "state": "NY",
+      "coverage": "Basic",
+      "yearsLicensed": "10+",
+      "mileage": "5,001-10,000 miles/year",
+      "drivingRecord": "Clean",
+      "vehicle": "2020 Toyota Camry",
+      "priority": 3,
+      "rates": {
+        "Progressive": { "annual": 0, "monthly": 0 },
+        "GEICO": { "annual": 0, "monthly": 0 },
+        "State Farm": { "annual": 0, "monthly": 0 }
+      }
+    },
+    {
+      "id": "ny-f150-2019-standard-1violation",
+      "name": "Albany Standard Mid-Age Truck (1 Violation)",
+      "location": "Albany, NY",
+      "state": "NY",
+      "coverage": "Standard",
+      "yearsLicensed": "10+",
+      "mileage": "15,001-20,000 miles/year",
+      "drivingRecord": "1 violation",
+      "vehicle": "2019 Ford F-150",
+      "priority": 4,
+      "rates": {
+        "Progressive": { "annual": 0, "monthly": 0 },
+        "GEICO": { "annual": 0, "monthly": 0 },
+        "State Farm": { "annual": 0, "monthly": 0 }
+      }
+    },
+    {
+      "id": "ny-model3-2021-premium-clean",
+      "name": "NYC Premium Young Tesla",
+      "location": "New York, NY",
+      "state": "NY",
+      "coverage": "Premium",
+      "yearsLicensed": "3-5",
+      "mileage": "5,001-10,000 miles/year",
+      "drivingRecord": "Clean",
+      "vehicle": "2021 Tesla Model 3",
+      "priority": 5,
+      "rates": {
+        "Progressive": { "annual": 0, "monthly": 0 },
+        "GEICO": { "annual": 0, "monthly": 0 },
+        "State Farm": { "annual": 0, "monthly": 0 }
+      }
+    }
+  ]
+}
+

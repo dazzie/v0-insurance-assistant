@@ -1,0 +1,308 @@
+{
+  "source": "California Department of Insurance",
+  "sourceUrl": "https://interactive.web.insurance.ca.gov/apex_extprd/f?p=111:11:::NO:::",
+  "lastUpdated": "2025-10-14T07:26:43.571Z",
+  "profiles": [
+    {
+      "id": "sf-tesla-2015-standard-clean",
+      "name": "SF Standard Mid-Age Tesla (CURRENT PROFILE)",
+      "location": "San Francisco, CA (94122)",
+      "coverage": "Standard",
+      "yearsLicensed": "10+",
+      "mileage": "10,001-15,000 miles/year",
+      "drivingRecord": "Clean (no violations)",
+      "vehicle": "2015 Tesla Model S",
+      "priority": 1,
+      "rates": {
+        "Progressive": {
+          "annual": 1650,
+          "monthly": 138
+        },
+        "GEICO": {
+          "annual": 1720,
+          "monthly": 143
+        },
+        "State Farm": {
+          "annual": 1890,
+          "monthly": 158
+        },
+        "Allstate": {
+          "annual": 2100,
+          "monthly": 175
+        },
+        "Liberty Mutual": {
+          "annual": 1950,
+          "monthly": 163
+        }
+      },
+      "collectedDate": "2025-10-14T07:18:22.140Z"
+    },
+    {
+      "id": "la-civic-2018-standard-clean",
+      "name": "LA Standard Young Honda",
+      "location": "Los Angeles, CA",
+      "coverage": "Standard",
+      "yearsLicensed": "3-5",
+      "mileage": "10,001-15,000 miles/year",
+      "drivingRecord": "Clean",
+      "vehicle": "2018 Honda Civic",
+      "priority": 2,
+      "rates": {
+        "Progressive": {
+          "annual": 1580,
+          "monthly": 132
+        },
+        "GEICO": {
+          "annual": 1650,
+          "monthly": 138
+        },
+        "State Farm": {
+          "annual": 1820,
+          "monthly": 152
+        },
+        "Allstate": {
+          "annual": 2020,
+          "monthly": 168
+        }
+      },
+      "collectedDate": "2025-10-14T07:18:22.140Z"
+    },
+    {
+      "id": "sd-camry-2020-basic-clean",
+      "name": "SD Basic Mid-Age Toyota",
+      "location": "San Diego, CA",
+      "coverage": "Basic",
+      "yearsLicensed": "10+",
+      "mileage": "5,001-10,000 miles/year",
+      "drivingRecord": "Clean",
+      "vehicle": "2020 Toyota Camry",
+      "priority": 3,
+      "rates": {
+        "Progressive": {
+          "annual": 980,
+          "monthly": 82
+        },
+        "GEICO": {
+          "annual": 1020,
+          "monthly": 85
+        },
+        "State Farm": {
+          "annual": 1150,
+          "monthly": 96
+        },
+        "Allstate": {
+          "annual": 1280,
+          "monthly": 107
+        }
+      },
+      "collectedDate": "2025-10-14T07:18:22.140Z"
+    },
+    {
+      "id": "sac-f150-2019-standard-1violation",
+      "name": "SAC Standard Mid-Age Truck (1 Violation)",
+      "location": "Sacramento, CA",
+      "coverage": "Standard",
+      "yearsLicensed": "10+",
+      "mileage": "15,001-20,000 miles/year",
+      "drivingRecord": "1 violation",
+      "vehicle": "2019 Ford F-150",
+      "priority": 4,
+      "rates": {
+        "Progressive": {
+          "annual": 2100,
+          "monthly": 175
+        },
+        "GEICO": {
+          "annual": 2180,
+          "monthly": 182
+        },
+        "State Farm": {
+          "annual": 2450,
+          "monthly": 204
+        },
+        "Allstate": {
+          "annual": 2720,
+          "monthly": 227
+        }
+      },
+      "collectedDate": "2025-10-14T07:18:22.140Z"
+    },
+    {
+      "id": "sf-model3-2021-premium-clean",
+      "name": "SF Premium Young Tesla",
+      "location": "San Francisco, CA",
+      "coverage": "Premium",
+      "yearsLicensed": "3-5",
+      "mileage": "5,001-10,000 miles/year",
+      "drivingRecord": "Clean",
+      "vehicle": "2021 Tesla Model 3",
+      "priority": 5,
+      "rates": {
+        "Progressive": {
+          "annual": 2250,
+          "monthly": 188
+        },
+        "GEICO": {
+          "annual": 2380,
+          "monthly": 198
+        },
+        "State Farm": {
+          "annual": 2650,
+          "monthly": 221
+        },
+        "Allstate": {
+          "annual": 2920,
+          "monthly": 243
+        }
+      },
+      "collectedDate": "2025-10-14T07:18:22.140Z"
+    },
+    {
+      "id": "ny-tesla-2015-standard-clean",
+      "name": "NYC Standard Mid-Age Tesla",
+      "location": "New York, NY",
+      "state": "NY",
+      "coverage": "Standard",
+      "yearsLicensed": "10+",
+      "mileage": "10,001-15,000 miles/year",
+      "drivingRecord": "Clean (no violations)",
+      "vehicle": "2015 Tesla Model S",
+      "priority": 1,
+      "rates": {
+        "Progressive": {
+          "annual": 1850,
+          "monthly": 154
+        },
+        "GEICO": {
+          "annual": 1920,
+          "monthly": 160
+        },
+        "State Farm": {
+          "annual": 2100,
+          "monthly": 175
+        },
+        "Allstate": {
+          "annual": 2350,
+          "monthly": 196
+        },
+        "Liberty Mutual": {
+          "annual": 2180,
+          "monthly": 182
+        }
+      },
+      "collectedDate": "2025-10-14T07:26:43.570Z"
+    },
+    {
+      "id": "ny-civic-2018-standard-clean",
+      "name": "NYC Standard Young Honda",
+      "location": "New York, NY",
+      "state": "NY",
+      "coverage": "Standard",
+      "yearsLicensed": "3-5",
+      "mileage": "10,001-15,000 miles/year",
+      "drivingRecord": "Clean",
+      "vehicle": "2018 Honda Civic",
+      "priority": 2,
+      "rates": {
+        "Progressive": {
+          "annual": 2200,
+          "monthly": 183
+        },
+        "GEICO": {
+          "annual": 2280,
+          "monthly": 190
+        },
+        "State Farm": {
+          "annual": 2450,
+          "monthly": 204
+        },
+        "Allstate": {
+          "annual": 2680,
+          "monthly": 223
+        }
+      },
+      "collectedDate": "2025-10-14T07:26:43.571Z"
+    },
+    {
+      "id": "ny-camry-2020-basic-clean",
+      "name": "Buffalo Basic Mid-Age Toyota",
+      "location": "Buffalo, NY",
+      "state": "NY",
+      "coverage": "Basic",
+      "yearsLicensed": "10+",
+      "mileage": "5,001-10,000 miles/year",
+      "drivingRecord": "Clean",
+      "vehicle": "2020 Toyota Camry",
+      "priority": 3,
+      "rates": {
+        "Progressive": {
+          "annual": 980,
+          "monthly": 82
+        },
+        "GEICO": {
+          "annual": 1050,
+          "monthly": 88
+        },
+        "State Farm": {
+          "annual": 1180,
+          "monthly": 98
+        }
+      },
+      "collectedDate": "2025-10-14T07:26:43.571Z"
+    },
+    {
+      "id": "ny-f150-2019-standard-1violation",
+      "name": "Albany Standard Mid-Age Truck (1 Violation)",
+      "location": "Albany, NY",
+      "state": "NY",
+      "coverage": "Standard",
+      "yearsLicensed": "10+",
+      "mileage": "15,001-20,000 miles/year",
+      "drivingRecord": "1 violation",
+      "vehicle": "2019 Ford F-150",
+      "priority": 4,
+      "rates": {
+        "Progressive": {
+          "annual": 2450,
+          "monthly": 204
+        },
+        "GEICO": {
+          "annual": 2520,
+          "monthly": 210
+        },
+        "State Farm": {
+          "annual": 2800,
+          "monthly": 233
+        }
+      },
+      "collectedDate": "2025-10-14T07:26:43.571Z"
+    },
+    {
+      "id": "ny-model3-2021-premium-clean",
+      "name": "NYC Premium Young Tesla",
+      "location": "New York, NY",
+      "state": "NY",
+      "coverage": "Premium",
+      "yearsLicensed": "3-5",
+      "mileage": "5,001-10,000 miles/year",
+      "drivingRecord": "Clean",
+      "vehicle": "2021 Tesla Model 3",
+      "priority": 5,
+      "rates": {
+        "Progressive": {
+          "annual": 2850,
+          "monthly": 238
+        },
+        "GEICO": {
+          "annual": 2980,
+          "monthly": 248
+        },
+        "State Farm": {
+          "annual": 3250,
+          "monthly": 271
+        }
+      },
+      "collectedDate": "2025-10-14T07:26:43.571Z"
+    }
+  ]
+}

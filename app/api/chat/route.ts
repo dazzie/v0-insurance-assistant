@@ -142,6 +142,7 @@ function generateSystemPrompt(customerProfile: any, messages: any[] = []): strin
   const age = mergedProfile?.age || "Not specified"
   const needs = mergedProfile?.needs ||
     (mergedProfile?.insuranceType ? [mergedProfile.insuranceType] : [])
+  const insuranceType = mergedProfile?.insuranceType || needs[0] || 'insurance'
   
   // Check if policy has been analyzed (rich context exists)
   const hasPolicyAnalysis = !!(mergedProfile?.carrier || mergedProfile?.policyNumber)

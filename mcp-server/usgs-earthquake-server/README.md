@@ -190,3 +190,4 @@ earthquakeRisk: 1 → "Low"
 - **Setup Guide:** `/MCP_SERVERS_STATUS.md`
 - **Integration:** `/app/api/analyze-coverage/route.ts`
 
+

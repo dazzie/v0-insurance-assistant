@@ -14,7 +14,6 @@ import { QuoteInformationGatherer } from "@/components/quote-information-gathere
 import { QuoteResults } from "@/components/quote-results"
 import { buildQuoteProfile } from "@/lib/quote-profile"
 import type { CustomerProfile } from "@/lib/customer-profile"
-import { ProfileSummaryCard } from "@/components/profile-summary-card"
 import { profileManager, extractProfileFromConversation } from "@/lib/customer-profile"
 import { CoverageAnalyzer } from "@/components/coverage-analyzer"
 
@@ -755,9 +754,6 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
 
   return (
     <div className="space-y-4">
-      {/* Dynamic Profile Summary Card */}
-      <ProfileSummaryCard profile={liveProfile} />
-
       {/* Quote Profile Display - Only for Auto Insurance */}
       {isAutoInsurance && quoteProfile && messages.length > 1 && (
         <QuoteProfileDisplay profile={quoteProfile} />
@@ -824,19 +820,6 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
             )}
           </div>
         </ScrollArea>
-
-        {/* Coverage Analyzer - Show on first page */}
-        {messages.length === 1 && (
-          <div className="px-4 pb-2 space-y-2">
-            <div className="text-xs text-muted-foreground text-center mb-2">
-              Skip manual entry - upload your current policy
-            </div>
-            <CoverageAnalyzer
-              onAnalysisComplete={handleCoverageAnalysisComplete}
-              insuranceType={customerProfile.needs?.[0] as any}
-            />
-          </div>
-        )}
 
         {/* Suggested Prompts */}
         <SuggestedPrompts

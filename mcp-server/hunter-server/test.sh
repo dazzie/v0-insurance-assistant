@@ -26,3 +26,4 @@ echo ""
 echo "📝 Note: If you see 'API key not configured', add HUNTER_API_KEY to .env.local"
 echo "   Sign up at https://hunter.io/ for free tier (25 verifications/month)"
 
+

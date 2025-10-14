@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { CustomerProfileForm } from "@/components/customer-profile-form"
 import { ChatInterface } from "@/components/chat-interface"
 import { CustomerProfileCard } from "@/components/customer-profile-card"
+import { ProfileSummaryCard } from "@/components/profile-summary-card"
 import { profileManager } from "@/lib/customer-profile"
 import type { CustomerProfile } from "@/lib/customer-profile"
 
@@ -87,9 +88,10 @@ export default function InsuranceAssistant() {
 
         {currentView === "chat" && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-            {/* Customer Profile Card - Left side on desktop */}
-            <div className="lg:col-span-1 order-2 lg:order-1">
+            {/* Customer Profile Card & Your Profile - Left side on desktop */}
+            <div className="lg:col-span-1 order-2 lg:order-1 space-y-4">
               <CustomerProfileCard />
+              <ProfileSummaryCard profile={customerProfile!} />
             </div>
 
             {/* Chat Interface - Right side on desktop */}

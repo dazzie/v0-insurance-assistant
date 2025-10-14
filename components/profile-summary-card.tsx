@@ -39,8 +39,8 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
   const completeness = calculateCompleteness()
 
   return (
-    <div className="sticky top-4 z-10 mb-4">
-      <Card className="border-2 border-primary/20 shadow-lg bg-gradient-to-br from-background to-muted/30 backdrop-blur-sm">
+    <div>
+      <Card className="border-2 border-primary/20 shadow-lg bg-gradient-to-br from-background to-muted/30 backdrop-blur-sm overflow-hidden">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2">
@@ -61,7 +61,7 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
         </CardHeader>
 
         <CardContent className="space-y-3 pb-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3">
 
             {/* Personal Info */}
             {(profile.firstName || profile.age) && (
@@ -89,9 +89,9 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
                       <span className="font-medium">{profile.address}</span>
                     )}
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      {profile.city && <span>{profile.city}</span>}
-                      {profile.city && profile.state && <span>,</span>}
-                      {profile.state && <span>{profile.state}</span>}
+                      {profile.city && profile.state && <span>{profile.city}, {profile.state}</span>}
+                      {profile.city && !profile.state && <span>{profile.city}</span>}
+                      {!profile.city && profile.state && <span>{profile.state}</span>}
                       {(profile.city || profile.state) && profile.zipCode && <span className="mx-1">•</span>}
                       {profile.zipCode && <span className="font-mono text-xs bg-muted px-2 py-0.5 rounded">{profile.zipCode}</span>}
                       {profile.addressEnrichment?.enriched && profile.addressEnrichment.enrichmentSource && (
@@ -160,27 +160,25 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
                 label="Crime Risk Assessment"
                 value={
                   <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <Badge 
-                        variant="outline" 
-                        className={`text-xs px-2 py-1 ${
-                          profile.riskAssessment.crimeRisk.riskLevel === 'Low'
-                            ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
-                            : profile.riskAssessment.crimeRisk.riskLevel === 'Moderate'
-                            ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800'
-                            : profile.riskAssessment.crimeRisk.riskLevel === 'High'
-                            ? 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
-                            : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800'
-                        }`}
-                      >
-                        🚨 {profile.riskAssessment.crimeRisk.riskLevel} Risk (Index: {profile.riskAssessment.crimeRisk.crimeIndex})
+                    <Badge 
+                      variant="outline" 
+                      className={`text-xs px-2 py-1 w-fit ${
+                        profile.riskAssessment.crimeRisk.riskLevel === 'Low'
+                          ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
+                          : profile.riskAssessment.crimeRisk.riskLevel === 'Moderate'
+                          ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800'
+                          : profile.riskAssessment.crimeRisk.riskLevel === 'High'
+                          ? 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
+                          : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800'
+                      }`}
+                    >
+                      🚨 {profile.riskAssessment.crimeRisk.riskLevel} Risk (Index: {profile.riskAssessment.crimeRisk.crimeIndex})
+                    </Badge>
+                    {(profile.riskAssessment.crimeRisk.riskLevel === 'High' || profile.riskAssessment.crimeRisk.riskLevel === 'Very High') && (
+                      <Badge variant="destructive" className="text-xs px-2 py-1 w-fit">
+                        ⚠️ Security System Recommended
                       </Badge>
-                      {(profile.riskAssessment.crimeRisk.riskLevel === 'High' || profile.riskAssessment.crimeRisk.riskLevel === 'Very High') && (
-                        <Badge variant="destructive" className="text-xs px-2 py-1">
-                          ⚠️ Security System Recommended
-                        </Badge>
-                      )}
-                    </div>
+                    )}
                     {profile.riskAssessment.crimeRisk.description && (
                       <p className="text-xs text-muted-foreground">
                         {profile.riskAssessment.crimeRisk.description}
@@ -206,27 +204,25 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
                 label="Earthquake Risk Assessment"
                 value={
                   <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <Badge 
-                        variant="outline" 
-                        className={`text-xs px-2 py-1 ${
-                          profile.riskAssessment.earthquakeRisk.riskLevel === 'Low'
-                            ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
-                            : profile.riskAssessment.earthquakeRisk.riskLevel === 'Moderate'
-                            ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800'
-                            : profile.riskAssessment.earthquakeRisk.riskLevel === 'High'
-                            ? 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
-                            : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800'
-                        }`}
-                      >
-                        🏚️ {profile.riskAssessment.earthquakeRisk.riskLevel} Risk (Zone {profile.riskAssessment.earthquakeRisk.seismicZone})
+                    <Badge 
+                      variant="outline" 
+                      className={`text-xs px-2 py-1 w-fit ${
+                        profile.riskAssessment.earthquakeRisk.riskLevel === 'Low'
+                          ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
+                          : profile.riskAssessment.earthquakeRisk.riskLevel === 'Moderate'
+                          ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800'
+                          : profile.riskAssessment.earthquakeRisk.riskLevel === 'High'
+                          ? 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
+                          : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800'
+                      }`}
+                    >
+                      🏚️ {profile.riskAssessment.earthquakeRisk.riskLevel} Risk (Zone {profile.riskAssessment.earthquakeRisk.seismicZone})
+                    </Badge>
+                    {(profile.riskAssessment.earthquakeRisk.riskLevel === 'High' || profile.riskAssessment.earthquakeRisk.riskLevel === 'Very High') && (
+                      <Badge variant="destructive" className="text-xs px-2 py-1 w-fit">
+                        ⚠️ Earthquake Insurance Recommended
                       </Badge>
-                      {(profile.riskAssessment.earthquakeRisk.riskLevel === 'High' || profile.riskAssessment.earthquakeRisk.riskLevel === 'Very High') && (
-                        <Badge variant="destructive" className="text-xs px-2 py-1">
-                          ⚠️ Earthquake Insurance Recommended
-                        </Badge>
-                      )}
-                    </div>
+                    )}
                     {profile.riskAssessment.earthquakeRisk.description && (
                       <p className="text-xs text-muted-foreground">
                         {profile.riskAssessment.earthquakeRisk.description}
@@ -252,27 +248,25 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
                 label="Wildfire Risk Assessment"
                 value={
                   <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <Badge 
-                        variant="outline" 
-                        className={`text-xs px-2 py-1 ${
-                          profile.riskAssessment.wildfireRisk.riskLevel === 'Low'
-                            ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
-                            : profile.riskAssessment.wildfireRisk.riskLevel === 'Moderate'
-                            ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800'
-                            : profile.riskAssessment.wildfireRisk.riskLevel === 'High'
-                            ? 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
-                            : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800'
-                        }`}
-                      >
-                        🔥 {profile.riskAssessment.wildfireRisk.riskLevel} Risk (WUI: {profile.riskAssessment.wildfireRisk.wuiZone})
+                    <Badge 
+                      variant="outline" 
+                      className={`text-xs px-2 py-1 w-fit ${
+                        profile.riskAssessment.wildfireRisk.riskLevel === 'Low'
+                          ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800'
+                          : profile.riskAssessment.wildfireRisk.riskLevel === 'Moderate'
+                          ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800'
+                          : profile.riskAssessment.wildfireRisk.riskLevel === 'High'
+                          ? 'bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-800'
+                          : 'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-400 dark:border-red-800'
+                      }`}
+                    >
+                      🔥 {profile.riskAssessment.wildfireRisk.riskLevel} Risk (WUI: {profile.riskAssessment.wildfireRisk.wuiZone})
+                    </Badge>
+                    {(profile.riskAssessment.wildfireRisk.riskLevel === 'High' || profile.riskAssessment.wildfireRisk.riskLevel === 'Very High') && (
+                      <Badge variant="destructive" className="text-xs px-2 py-1 w-fit">
+                        ⚠️ Extended Coverage Recommended
                       </Badge>
-                      {(profile.riskAssessment.wildfireRisk.riskLevel === 'High' || profile.riskAssessment.wildfireRisk.riskLevel === 'Very High') && (
-                        <Badge variant="destructive" className="text-xs px-2 py-1">
-                          ⚠️ Extended Coverage Recommended
-                        </Badge>
-                      )}
-                    </div>
+                    )}
                     {profile.riskAssessment.wildfireRisk.description && (
                       <p className="text-xs text-muted-foreground">
                         {profile.riskAssessment.wildfireRisk.description}
@@ -373,15 +367,27 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
                         
                         {/* VIN with Registry Badge */}
                         {vehicle.vin && (
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-xs font-mono text-muted-foreground bg-muted px-2 py-0.5 rounded">
-                              VIN: {vehicle.vin}
-                            </span>
-                            {vehicle.enriched && vehicle.enrichmentSource && (
-                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800">
-                                <Check className="w-2.5 h-2.5 mr-1" />
-                                {vehicle.enrichmentSource} Registry
-                              </Badge>
+                          <div className="flex flex-col gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-xs font-mono text-muted-foreground bg-muted px-2 py-0.5 rounded">
+                                VIN: {vehicle.vin}
+                              </span>
+                              {vehicle.enriched && vehicle.enrichmentSource && (
+                                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-400 dark:border-green-800">
+                                  <Check className="w-2.5 h-2.5 mr-1" />
+                                  {vehicle.enrichmentSource} Registry
+                                </Badge>
+                              )}
+                              {!vehicle.enriched && (vehicle as any).enrichmentError && (
+                                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800">
+                                  ⚠️ Not Verified
+                                </Badge>
+                              )}
+                            </div>
+                            {!vehicle.enriched && (vehicle as any).enrichmentError && (
+                              <p className="text-xs text-muted-foreground">
+                                Unable to verify VIN with NHTSA registry. {(vehicle as any).enrichmentError}
+                              </p>
                             )}
                           </div>
                         )}
@@ -509,11 +515,11 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
 
 function InfoItem({ icon, label, value }: { icon: React.ReactNode, label: string, value: React.ReactNode }) {
   return (
-    <div className="flex items-start gap-2 p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
-      <div className="mt-0.5 text-primary">{icon}</div>
-      <div className="flex-1 min-w-0">
-        <div className="text-xs text-muted-foreground mb-0.5">{label}</div>
-        <div className="text-sm text-foreground truncate">{value}</div>
+    <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors overflow-hidden">
+      <div className="mt-0.5 text-primary flex-shrink-0">{icon}</div>
+      <div className="flex-1 min-w-0 overflow-hidden">
+        <div className="text-xs text-muted-foreground mb-1">{label}</div>
+        <div className="text-sm text-foreground break-words overflow-hidden">{value}</div>
       </div>
     </div>
   )

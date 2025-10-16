@@ -1460,62 +1460,6 @@ Unlike generic insurance advice, I provide personalized guidance based on your u
           </div>
         </ScrollArea>
 
-        {/* Document Upload Option - Show after initial greeting */}
-        {messages.length <= 3 && !isLoading && !isUploadingDocument && (
-          <div className="px-4 py-3 border-t border-border bg-muted/20">
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isUploadingDocument}
-              >
-                <Upload className="w-4 h-4 mr-2" />
-                Upload Document
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => cameraInputRef.current?.click()}
-                disabled={isUploadingDocument}
-                title="Take photo"
-              >
-                <Camera className="w-4 h-4" />
-              </Button>
-            </div>
-            {/* File upload input */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/jpeg,image/png,image/jpg"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0]
-                if (file) {
-                  handleFileUpload(file)
-                  e.target.value = '' // Reset input
-                }
-              }}
-            />
-            {/* Camera capture input */}
-            <input
-              ref={cameraInputRef}
-              type="file"
-              accept="image/*"
-              capture="environment"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0]
-                if (file) {
-                  handleFileUpload(file)
-                  e.target.value = '' // Reset input
-                }
-              }}
-            />
-            <p className="text-xs text-muted-foreground mt-2 text-center">
-              Upload your insurance policy, card, or vehicle registration
-            </p>
-          </div>
-        )}
 
         {/* Suggested Prompts */}
         <SuggestedPrompts

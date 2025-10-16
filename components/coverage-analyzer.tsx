@@ -17,6 +17,12 @@ interface ExtractedCoverage {
   effectiveDate?: string
   expirationDate?: string
   coverageType?: 'auto' | 'home' | 'life' | 'renters' | 'pet' | 'health' | 'disability' | 'umbrella'
+  
+  // Customer information
+  customerName?: string
+  email?: string
+  phone?: string
+  address?: string
 
   // Auto insurance specific
   vehicles?: Array<{
@@ -505,7 +511,7 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
                 </p>
               </div>
               <p className="text-xs text-green-700 ml-7">
-                Successfully extracted {Object.keys(extractedData).filter(key => extractedData[key] != null && extractedData[key] !== '').length} fields from your policy document
+                Successfully extracted {Object.keys(extractedData).filter(key => (extractedData as any)[key] != null && (extractedData as any)[key] !== '').length} fields from your policy document
                 {extractedData.carrier && ` (${extractedData.carrier})`}
                 {extractedData.policyNumber && ` - Policy #${extractedData.policyNumber}`}
               </p>
@@ -614,11 +620,11 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
               {(extractedData.email || extractedData.phone || extractedData.address) && (
                 <div className="mt-4 pt-4 border-t border-blue-200">
                   <p className="text-xs font-medium text-gray-700 mb-2">Contact Information</p>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                  <div className="space-y-2 text-sm">
                     {extractedData.email && (
                       <div className="flex items-center gap-2">
                         <span className="text-gray-500">📧</span>
-                        <span>{extractedData.email}</span>
+                        <span className="truncate">{extractedData.email}</span>
                       </div>
                     )}
                     {extractedData.phone && (
@@ -630,7 +636,7 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
                     {extractedData.address && (
                       <div className="flex items-center gap-2">
                         <span className="text-gray-500">📍</span>
-                        <span className="text-xs">{extractedData.address}</span>
+                        <span className="text-xs break-words">{extractedData.address}</span>
                       </div>
                     )}
                   </div>

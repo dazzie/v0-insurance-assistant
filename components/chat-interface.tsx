@@ -129,6 +129,18 @@ export function ChatInterface({ customerProfile }: ChatInterfaceProps) {
     const hasCurrentPolicy = customerProfile?.carrier || customerProfile?.policyNumber
     const hasRequestedCoverages = customerProfile?.requestedCoverages && customerProfile.requestedCoverages.length > 0
     
+    // Debug logging to see what data we have
+    console.log('[ChatInterface] 🔍 Profile data check:', {
+      hasVehicleData,
+      hasEnrichedVehicles,
+      hasAddressEnrichment,
+      hasRiskAssessment,
+      hasCurrentPolicy,
+      vehicles: customerProfile?.vehicles,
+      riskAssessment: customerProfile?.riskAssessment,
+      addressEnrichment: customerProfile?.addressEnrichment
+    })
+    
     // If we have rich profile data, acknowledge it and move forward
     const hasRichData = (hasEnrichedVehicles || hasAddressEnrichment || hasRiskAssessment || hasCurrentPolicy)
     
@@ -168,7 +180,7 @@ export function ChatInterface({ customerProfile }: ChatInterfaceProps) {
       summary += `2. 💡 **Review Coverage Recommendations** - Discuss any gaps or optimizations\n`
       summary += `3. ✏️ **Update Details** - Make changes to your profile or add more information\n`
       summary += `4. ❓ **Ask Questions** - Get advice on coverage, carriers, or pricing\n\n`
-      summary += `Just let me know how I can help!`
+      summary += `**I can generate quotes from multiple carriers right now based on your profile!** Just say "get quotes" or "show me quotes" to see your options.`
       
       return summary
     }
@@ -357,6 +369,34 @@ Do you currently have ${insuranceType} insurance? If yes, do you have your polic
       extractedProfile.zipCode ||
       extractedProfile.email ||
       extractedProfile.needs?.length > 0
+    
+    // 🛡️ PROTECT ENRICHED DATA: Check if profile has enriched data before overwriting
+    const currentProfile = profileManager.loadProfile()
+    const hasEnrichedData = 
+      currentProfile?.vehicles?.some(v => v.enriched) ||
+      currentProfile?.riskAssessment ||
+      currentProfile?.addressEnrichment?.enriched ||
+      customerProfile?.vehicles?.some(v => v.enriched) ||
+      customerProfile?.riskAssessment ||
+      customerProfile?.addressEnrichment?.enriched
+    
+    if (hasEnrichedData) {
+      console.log('[ChatInterface] 🚫 BLOCKING UPDATE - profile has enriched data, not overwriting')
+      console.log('[ChatInterface] 🔍 Enriched data detected:', {
+        hasEnrichedVehicles: currentProfile?.vehicles?.some(v => v.enriched),
+        hasRiskAssessment: !!currentProfile?.riskAssessment,
+        hasAddressEnrichment: !!currentProfile?.addressEnrichment?.enriched
+      })
+      // Don't update the profile at all if it has enriched data
+      return
+    }
+    
+    // 🚫 FINAL PROTECTION: If we have enriched data, completely block any updates
+    if (hasEnrichedData) {
+      console.log('[ChatInterface] 🚫 FINAL BLOCK - enriched data detected, completely blocking update')
+      // Don't update the profile at all if it has enriched data
+      return
+    }
     
     if (hasMeaningfulData) {
       console.log('[ChatInterface] Updating profile with meaningful data:', extractedProfile)

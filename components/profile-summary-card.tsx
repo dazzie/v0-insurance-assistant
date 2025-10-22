@@ -2,16 +2,26 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Check, User, MapPin, Car, Calendar, Shield } from "lucide-react"
+import { Check, User, MapPin, Car, Calendar, Shield, Loader2 } from "lucide-react"
 import { CustomerProfile } from "@/lib/customer-profile"
 import { useEffect, useState } from "react"
 
 interface ProfileSummaryCardProps {
   profile: CustomerProfile
+  isEnriching?: boolean
+  enrichmentProgress?: string[]
 }
 
-export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
+export function ProfileSummaryCard({ profile, isEnriching = false, enrichmentProgress = [] }: ProfileSummaryCardProps) {
   const [isVisible, setIsVisible] = useState(false)
+  
+  // Debug logging to see what data we're receiving
+  console.log('[ProfileCard] 🔍 Profile data:', profile)
+  console.log('[ProfileCard] 🔍 Risk assessment:', profile?.riskAssessment)
+  console.log('[ProfileCard] 🔍 Risk assessment keys:', profile?.riskAssessment ? Object.keys(profile.riskAssessment) : 'none')
+  console.log('[ProfileCard] 🔍 Flood risk:', profile?.riskAssessment?.floodRisk)
+  console.log('[ProfileCard] 🔍 Crime risk:', profile?.riskAssessment?.crimeRisk)
+  console.log('[ProfileCard] 🔍 Vehicles:', profile?.vehicles)
 
   // Show card only if we have some data
   useEffect(() => {
@@ -328,6 +338,60 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
               />
             )}
 
+            {/* Loading Risk Assessments */}
+            {isEnriching && (
+              <>
+                {!profile.riskAssessment?.floodRisk && (
+                  <InfoItem
+                    icon={<Shield className="w-4 h-4 text-blue-600" />}
+                    label="Flood Risk Assessment"
+                    value={
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                        <span className="text-sm text-muted-foreground">Assessing flood risk...</span>
+                      </div>
+                    }
+                  />
+                )}
+                {!profile.riskAssessment?.crimeRisk && (
+                  <InfoItem
+                    icon={<Shield className="w-4 h-4 text-red-600" />}
+                    label="Crime Risk Assessment"
+                    value={
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin text-red-600" />
+                        <span className="text-sm text-muted-foreground">Assessing crime risk...</span>
+                      </div>
+                    }
+                  />
+                )}
+                {!profile.riskAssessment?.earthquakeRisk && (
+                  <InfoItem
+                    icon={<Shield className="w-4 h-4 text-purple-600" />}
+                    label="Earthquake Risk Assessment"
+                    value={
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
+                        <span className="text-sm text-muted-foreground">Assessing earthquake risk...</span>
+                      </div>
+                    }
+                  />
+                )}
+                {!profile.riskAssessment?.wildfireRisk && (
+                  <InfoItem
+                    icon={<Shield className="w-4 h-4 text-orange-600" />}
+                    label="Wildfire Risk Assessment"
+                    value={
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin text-orange-600" />
+                        <span className="text-sm text-muted-foreground">Assessing wildfire risk...</span>
+                      </div>
+                    }
+                  />
+                )}
+              </>
+            )}
+
             {/* Drivers & Vehicles */}
             {(profile.driversCount || profile.vehiclesCount) && (
               <InfoItem
@@ -381,6 +445,12 @@ export function ProfileSummaryCard({ profile }: ProfileSummaryCardProps) {
                               {!vehicle.enriched && (vehicle as any).enrichmentError && (
                                 <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-800">
                                   ⚠️ Not Verified
+                                </Badge>
+                              )}
+                              {isEnriching && !vehicle.enriched && !(vehicle as any).enrichmentError && (
+                                <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-400 dark:border-blue-800">
+                                  <Loader2 className="w-2.5 h-2.5 mr-1 animate-spin" />
+                                  Enriching...
                                 </Badge>
                               )}
                             </div>

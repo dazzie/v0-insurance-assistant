@@ -124,9 +124,49 @@ export function PolicyHealthCard({ analysis, onFixGap, requestedCoverages = [] }
           <div className="pt-4 border-t">
             <p className="text-xs font-semibold text-muted-foreground mb-2">Sources:</p>
             <ul className="text-xs text-muted-foreground space-y-1">
-              {citations.map((citation, idx) => (
-                <li key={idx}>• {citation}</li>
-              ))}
+              {citations.map((citation, idx) => {
+                // Create clickable links for known sources
+                const getSourceUrl = (source: string) => {
+                  if (source.includes('State DOI') || source.includes('Department of Insurance')) {
+                    return 'https://www.iii.org/'
+                  }
+                  if (source.includes('Consumer Reports')) {
+                    return 'https://www.consumerreports.org/'
+                  }
+                  if (source.includes('Insurance Information Institute')) {
+                    return 'https://www.iii.org/'
+                  }
+                  if (source.includes('FBI')) {
+                    return 'https://www.fbi.gov/services/cjis/ucr'
+                  }
+                  if (source.includes('USGS')) {
+                    return 'https://www.usgs.gov/'
+                  }
+                  if (source.includes('First Street')) {
+                    return 'https://firststreet.org/'
+                  }
+                  return null
+                }
+                
+                const sourceUrl = getSourceUrl(citation)
+                
+                return (
+                  <li key={idx}>
+                    • {sourceUrl ? (
+                      <a 
+                        href={sourceUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 underline"
+                      >
+                        {citation}
+                      </a>
+                    ) : (
+                      citation
+                    )}
+                  </li>
+                )
+              })}
             </ul>
           </div>
         )}
@@ -190,7 +230,18 @@ function GapCard({ gap, onFix, isRequested }: { gap: PolicyGap; onFix?: (gapId: 
 
       {/* Source */}
       <p className="text-xs text-muted-foreground">
-        <span className="font-semibold">Source:</span> {gap.source}
+        <span className="font-semibold">Source:</span> {gap.sourceUrl ? (
+          <a 
+            href={gap.sourceUrl} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 underline ml-1"
+          >
+            {gap.source}
+          </a>
+        ) : (
+          gap.source
+        )}
       </p>
 
       {/* Action Button */}

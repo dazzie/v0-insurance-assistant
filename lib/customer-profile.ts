@@ -145,6 +145,27 @@ export interface CustomerProfile {
     requestedAt: string
   }>
 
+  // Policy Analysis Results
+  policyAnalysis?: {
+    healthScore: number
+    gaps: Array<{
+      id: string
+      type: 'critical' | 'warning' | 'optimization'
+      category: 'compliance' | 'protection' | 'cost'
+      title: string
+      message: string
+      reasoning: string
+      recommendation: string
+      source: string
+      sourceUrl?: string
+      potentialSavings?: number
+      potentialRisk?: string
+      priority: number
+    }>
+    summary: string
+    citations: string[]
+  }
+
   // Metadata
   createdAt?: string
   updatedAt?: string
@@ -257,6 +278,64 @@ export const profileManager = {
       console.log('[Profile Update] No enriched vehicles, allowing update')
     }
     
+    // 🛡️ PROTECT ENRICHED DATA: If we have enriched data, don't allow overwrites
+    const hasEnrichedData = 
+      current.vehicles?.some(v => v.enriched) ||
+      updates.vehicles?.some(v => v.enriched) ||
+      current.riskAssessment ||
+      updates.riskAssessment ||
+      current.addressEnrichment?.enriched ||
+      updates.addressEnrichment?.enriched
+    
+    if (hasEnrichedData) {
+      console.log('[Profile Update] 🛡️ Enriched data detected, protecting from overwrite...')
+      
+      // Don't allow updates that would overwrite enriched data
+      if (!updates.vehicles || updates.vehicles.length === 0) {
+        console.log('[Profile Update] ⚠️ No vehicles in update, preserving enriched vehicles')
+        updates.vehicles = current.vehicles
+      }
+      
+      if (!updates.riskAssessment) {
+        console.log('[Profile Update] ⚠️ No risk assessment in update, preserving enriched risk data')
+        updates.riskAssessment = current.riskAssessment
+      }
+      
+      if (!updates.addressEnrichment) {
+        console.log('[Profile Update] ⚠️ No address enrichment in update, preserving enriched address data')
+        updates.addressEnrichment = current.addressEnrichment
+      }
+    }
+    
+    // 🔒 CRITICAL: If we have enriched data, completely block any updates that would overwrite it
+    if (hasEnrichedData) {
+      console.log('[Profile Update] 🚫 BLOCKING UPDATE - enriched data detected, not allowing overwrite')
+      
+      // Check if this is a meaningful update or just a chat interface overwrite
+      const isMeaningfulUpdate = 
+        (updates.vehicles && updates.vehicles.length > 0) ||
+        updates.driversCount ||
+        updates.address ||
+        updates.city ||
+        updates.state ||
+        updates.zipCode ||
+        updates.email ||
+        (updates.needs && updates.needs.length > 0)
+      
+      if (!isMeaningfulUpdate) {
+        console.log('[Profile Update] 🚫 BLOCKING - no meaningful data in update, preserving enriched data')
+        // Don't apply any updates, just return the current profile
+        return
+      }
+    }
+    
+    // 🚫 FINAL PROTECTION: If we have enriched data, completely block any updates
+    if (hasEnrichedData) {
+      console.log('[Profile Update] 🚫 FINAL BLOCK - enriched data detected, completely blocking update')
+      // Don't apply any updates, just return the current profile
+      return
+    }
+    
     // Smart merge for address - preserve OpenCage enriched address data
     if (current.addressEnrichment?.enriched) {
       console.log('[Profile Update] ✓ Enriched address detected, applying protection...')
@@ -298,7 +377,7 @@ export const profileManager = {
             return {
               ...currentDriver, // Keep existing driver data
               age: updatedDriver.age ?? currentDriver.age, // ✏️ Editable
-              dateOfBirth: updatedDriver.dateOfBirth ?? currentDriver.dateOfBirth, // ✏️ Editable
+              // dateOfBirth: updatedDriver.dateOfBirth ?? currentDriver.dateOfBirth, // ✏️ Editable
               yearsLicensed: updatedDriver.yearsLicensed ?? currentDriver.yearsLicensed, // ✏️ Editable
               violations: updatedDriver.violations ?? currentDriver.violations, // ✏️ Editable
               accidents: updatedDriver.accidents ?? currentDriver.accidents, // ✏️ Editable
@@ -454,7 +533,7 @@ export function extractProfileFromConversation(messages: any[]): Partial<Custome
     if (emailMatch && !extracted.email && !hasEnrichedEmail) {
       extracted.email = emailMatch[0]
       // Mark for verification (will be handled in chat API)
-      extracted._emailNeedsVerification = true
+      // extracted._emailNeedsVerification = true
     }
 
     // Extract phone

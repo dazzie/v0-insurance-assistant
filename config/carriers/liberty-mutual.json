@@ -1,0 +1,48 @@
+{
+  "id": "liberty-mutual",
+  "name": "Liberty Mutual",
+  "displayName": "Liberty Mutual Insurance",
+  "logo": "/carriers/liberty-mutual.png",
+  "marketShare": 5.8,
+  "rating": "A",
+  "enabled": true,
+  "website": "https://www.libertymutual.com",
+  "phone": "1-800-837-5254",
+  
+  "adjustments": {
+    "profileTypes": {
+      "youngDriver": 0.98,
+      "seniorDriver": 1.02,
+      "goodCredit": 0.93,
+      "bundled": 0.87,
+      "cleanRecord": 0.94,
+      "standard": 1.00
+    },
+    "regions": {
+      "midwest": 0.99,
+      "south": 1.01,
+      "west": 1.04,
+      "northeast": 0.96
+    }
+  },
+  
+  "discounts": [
+    {
+      "type": "multiPolicy",
+      "value": 0.15,
+      "description": "Multi-Policy Discount",
+      "applies": ["auto", "home", "renters"]
+    },
+    {
+      "type": "rightTrack",
+      "value": 0.20,
+      "description": "RightTrack Usage-Based Discount",
+      "applies": ["auto"]
+    }
+  ],
+  
+  "variance": {"enabled": true, "range": 0.06},
+  "strengths": ["Customizable Coverage", "24/7 Claims Support"],
+  "bestFor": ["Custom Coverage Needs", "Northeast Residents"]
+}
+

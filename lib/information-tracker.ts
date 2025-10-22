@@ -251,6 +251,18 @@ export function extractCollectedInfo(messages: Array<{ role: string; content: st
     }
   }
   
+  // If customer profile has ZIP code saved, use it
+  if (customerProfile?.zipCode && !info.location.zipCode) {
+    console.log('[Info Tracker] Using ZIP code from profile:', customerProfile.zipCode)
+    // Extract just the 5-digit ZIP if it's ZIP+4 format
+    const zipMatch = customerProfile.zipCode.match(/^(\d{5})/)
+    if (zipMatch) {
+      info.location.zipCode = zipMatch[1]
+    } else {
+      info.location.zipCode = customerProfile.zipCode
+    }
+  }
+  
   // If customer profile has enriched vehicles (from policy scan), use them
   if (customerProfile?.vehicles && customerProfile.vehicles.length > 0) {
     const enrichedVehicles = customerProfile.vehicles.filter((v: any) => v.enriched)

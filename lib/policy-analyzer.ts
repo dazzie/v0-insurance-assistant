@@ -475,3 +475,4 @@ function estimateVehicleValue(year: number, age: number): number {
   return Math.round(value)
 }
 
+

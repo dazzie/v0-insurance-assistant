@@ -1,0 +1,75 @@
+{
+  "id": "progressive",
+  "name": "Progressive",
+  "displayName": "Progressive Insurance",
+  "logo": "/carriers/progressive.png",
+  "marketShare": 13.8,
+  "rating": "A+",
+  "enabled": true,
+  "website": "https://www.progressive.com",
+  "phone": "1-800-PROGRESSIVE",
+  
+  "adjustments": {
+    "profileTypes": {
+      "youngDriver": 0.88,
+      "seniorDriver": 1.08,
+      "goodCredit": 0.92,
+      "bundled": 0.86,
+      "cleanRecord": 0.89,
+      "standard": 1.00
+    },
+    "regions": {
+      "midwest": 0.97,
+      "south": 0.95,
+      "west": 1.00,
+      "northeast": 1.05
+    }
+  },
+  
+  "discounts": [
+    {
+      "type": "snapshot",
+      "value": 0.20,
+      "description": "Snapshot Usage-Based Discount",
+      "applies": ["auto"]
+    },
+    {
+      "type": "multiPolicy",
+      "value": 0.12,
+      "description": "Multi-Policy Bundle",
+      "applies": ["auto", "home", "renters"]
+    },
+    {
+      "type": "continuousInsurance",
+      "value": 0.10,
+      "description": "Continuous Insurance Discount",
+      "applies": ["auto"]
+    },
+    {
+      "type": "onlineQuote",
+      "value": 0.07,
+      "description": "Online Quote Discount",
+      "applies": ["auto", "home"]
+    }
+  ],
+  
+  "variance": {
+    "enabled": true,
+    "range": 0.07
+  },
+  
+  "strengths": [
+    "Usage-Based Insurance Leader",
+    "Competitive for High-Risk Drivers",
+    "Name Your Price Tool",
+    "Innovative Technology"
+  ],
+  
+  "bestFor": [
+    "High-Risk Drivers",
+    "Young Drivers",
+    "Tech Adopters",
+    "Low-Mileage Drivers"
+  ]
+}
+

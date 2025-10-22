@@ -1,0 +1,31 @@
+{
+  "tiers": {
+    "excellent": {
+      "multiplier": 0.75,
+      "range": "750-850",
+      "description": "Excellent credit"
+    },
+    "good": {
+      "multiplier": 0.90,
+      "range": "700-749",
+      "description": "Good credit"
+    },
+    "fair": {
+      "multiplier": 1.10,
+      "range": "650-699",
+      "description": "Fair credit"
+    },
+    "poor": {
+      "multiplier": 1.45,
+      "range": "Below 650",
+      "description": "Poor credit"
+    },
+    "unknown": {
+      "multiplier": 1.15,
+      "range": "N/A",
+      "description": "No credit history"
+    }
+  },
+  "note": "Credit-based insurance scoring is prohibited in CA, HI, MA, MD (uses alternative factors)"
+}
+

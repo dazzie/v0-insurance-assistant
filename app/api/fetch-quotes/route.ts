@@ -1,18 +1,23 @@
 import { NextResponse } from 'next/server'
+import { QuoteEngine } from '@/lib/quote-engine/engine'
+import type { QuoteRequest as EngineQuoteRequest } from '@/lib/quote-engine/types'
 
 /**
  * API Route: /api/fetch-quotes
  * 
- * This route integrates with insurance aggregator APIs (like Insurify)
- * to fetch real-time insurance quotes from multiple carriers.
+ * This route generates insurance quotes using our high-performance rating engine
+ * with configurable carrier data and rating factors.
  * 
  * Flow:
  * 1. Receive customer profile from frontend
- * 2. Transform data to aggregator API format
- * 3. Call aggregator API (Insurify, SmartFinancial, etc.)
- * 4. Transform response back to our QuoteResults format
- * 5. Return quotes to frontend
+ * 2. Transform data to quote engine format
+ * 3. Calculate quotes using rating engine (JSON config-based)
+ * 4. Transform response to frontend format
+ * 5. Return quotes
  */
+
+// Initialize quote engine (singleton, stays in memory)
+const quoteEngine = new QuoteEngine()
 
 // Type definitions for better type safety
 interface CustomerProfile {
@@ -225,6 +230,25 @@ function getCarrierWebsite(carrierName: string): string {
 }
 
 /**
+ * Helper: Get carrier phone number
+ */
+function getCarrierPhone(carrierId: string): string {
+  const phones: { [key: string]: string } = {
+    'state-farm': '1-800-STATE-FARM',
+    'geico': '1-800-861-8380',
+    'progressive': '1-800-PROGRESSIVE',
+    'allstate': '1-800-ALLSTATE',
+    'usaa': '1-800-531-USAA',
+    'liberty-mutual': '1-800-837-5254',
+    'farmers': '1-800-FARMERS',
+    'nationwide': '1-800-421-3535',
+    'travelers': '1-800-252-4633',
+    'american-family': '1-800-692-6326',
+  }
+  return phones[carrierId] || '1-800-INSURANCE'
+}
+
+/**
  * Call Insurify API
  */
 async function fetchInsurifyQuotes(payload: any): Promise<any> {
@@ -288,65 +312,210 @@ export async function POST(req: Request) {
       )
     }
 
-    // Check if API key is configured
-    const apiKey = process.env.INSURIFY_API_KEY
+    // Transform to quote engine format
+    const engineRequest: EngineQuoteRequest = transformToEngineFormat(request)
+    
+    console.log('[Fetch Quotes] Generating quotes with rating engine...')
+    const result = quoteEngine.generateQuotes(engineRequest)
+    
+    console.log(`[Fetch Quotes] ✅ Generated ${result.quotes.length} quotes in ${result.meta.calculationTime.toFixed(2)}ms`)
+    console.log('[Fetch Quotes] Sample quote from engine:', result.quotes[0])
 
-    if (!apiKey) {
-      console.log('[Fetch Quotes] API key not configured, using mock data')
-      const mockQuotes = generateMockQuotes(request)
-      return NextResponse.json({
-        success: true,
-        source: 'mock',
-        quotes: mockQuotes,
-        message: 'Using mock data (API key not configured)',
-      })
-    }
+    // Transform to frontend format
+    const quotes = result.quotes.map((quote, index) => ({
+      carrierName: quote.carrierName,
+      rating: parseFloat(quote.rating.replace(/\+/g, '')),
+      monthlyPremium: quote.monthlyPremium,
+      annualPremium: quote.annualPremium,
+      coverageAmount: request.customerProfile.vehicles?.[0] 
+        ? 'Actual Cash Value' 
+        : request.insuranceType === 'home' ? '$500,000' : '$50,000',
+      deductible: engineRequest.deductible?.toString() || '1000',
+      features: generateFeatures(request.insuranceType),
+      strengths: quote.strengths,
+      contactInfo: {
+        phone: quote.phone,
+        website: quote.website,
+      },
+      savings: quote.savings,
+      bestFor: quote.bestFor,
+      nextSteps: generateNextSteps(quote.carrierName),
+    }))
 
-    // Transform request to Insurify format
-    const insurifyPayload = transformToInsurifyFormat(request)
-    console.log('[Fetch Quotes] Calling Insurify API...')
+    console.log('[Fetch Quotes] Sample transformed quote:', quotes[0])
 
+    return NextResponse.json({
+      success: true,
+      source: 'rating_engine',
+      quotes,
+      requestId: result.meta.requestId,
+      message: `Generated ${quotes.length} quotes using rating engine`,
+      meta: {
+        calculationTime: result.meta.calculationTime,
+        carriersEvaluated: result.meta.carriersEvaluated,
+      },
+    })
+
+  } catch (error: any) {
+    console.error('[Fetch Quotes] Error:', error)
+    
+    // Fallback to mock data on error
     try {
-      // Call Insurify API
-      const insurifyResponse = await fetchInsurifyQuotes(insurifyPayload)
-      console.log('[Fetch Quotes] Insurify response received:', {
-        quotesCount: insurifyResponse.quotes?.length || 0,
-      })
-
-      // Transform response
-      const quotes = transformInsurifyResponse(insurifyResponse)
-
-      return NextResponse.json({
-        success: true,
-        source: 'insurify',
-        quotes,
-        requestId: insurifyResponse.request_id,
-        message: `Retrieved ${quotes.length} quotes from Insurify`,
-      })
-
-    } catch (apiError: any) {
-      console.error('[Fetch Quotes] Insurify API failed:', apiError.message)
-      
-      // Fallback to mock data on API error
       const mockQuotes = generateMockQuotes(request)
       return NextResponse.json({
         success: true,
         source: 'mock_fallback',
         quotes: mockQuotes,
-        error: apiError.message,
-        message: 'Using mock data (API call failed)',
+        error: error.message,
+        message: 'Using mock data (rating engine failed)',
       })
+    } catch {
+      return NextResponse.json(
+        { 
+          error: 'Internal server error',
+          message: error.message,
+        },
+        { status: 500 }
+      )
     }
+  }
+}
 
-  } catch (error: any) {
-    console.error('[Fetch Quotes] Error:', error)
-    return NextResponse.json(
-      { 
-        error: 'Internal server error',
-        message: error.message,
-      },
-      { status: 500 }
-    )
+/**
+ * Transform frontend request to quote engine format
+ */
+function transformToEngineFormat(request: QuoteRequest): EngineQuoteRequest {
+  const { customerProfile, insuranceType } = request
+  
+  const age = typeof customerProfile.age === 'string' 
+    ? parseInt(customerProfile.age) 
+    : customerProfile.age || 30
+
+  // Extract state from ZIP or location
+  let state = customerProfile.zipCode?.substring(0, 2) || 'CA'
+  if (customerProfile.location?.includes(',')) {
+    const parts = customerProfile.location.split(',')
+    if (parts.length >= 2) {
+      const stateAbbr = parts[parts.length - 1].trim().split(' ')
+      if (stateAbbr.length > 0) {
+        state = stateAbbr[0].substring(0, 2).toUpperCase()
+      }
+    }
+  }
+
+  const engineRequest: EngineQuoteRequest = {
+    state,
+    insuranceType: insuranceType.toLowerCase() as any,
+    age,
+    zipCode: customerProfile.zipCode || '00000',
+  }
+
+  // Auto insurance specific
+  if (insuranceType.toLowerCase() === 'auto' && customerProfile.vehicles?.length) {
+    const vehicle = customerProfile.vehicles[0]
+    engineRequest.vehicleYear = vehicle.year
+    engineRequest.vehicleType = determineVehicleType(vehicle.make, vehicle.model)
+    engineRequest.annualMileage = vehicle.annualMileage || 12000
+    engineRequest.coverageLevel = 'standard'
+    engineRequest.deductible = 1000
+    engineRequest.violations = 0
+    engineRequest.creditTier = 'good'
+  }
+
+  // Home insurance specific
+  if (insuranceType.toLowerCase() === 'home') {
+    engineRequest.coverageLevel = 'standard'
+    engineRequest.creditTier = 'good'
+  }
+
+  // Renters insurance specific
+  if (insuranceType.toLowerCase() === 'renters') {
+    engineRequest.creditTier = 'good'
+  }
+
+  // Determine if military (for USAA eligibility)
+  engineRequest.isMilitary = false
+
+  // Bundle discount
+  engineRequest.bundleHome = customerProfile.homeOwnership === 'own'
+  engineRequest.isHomeowner = customerProfile.homeOwnership === 'own'
+
+  return engineRequest
+}
+
+/**
+ * Determine vehicle type from make/model
+ */
+function determineVehicleType(make?: string, model?: string): string {
+  if (!make || !model) return 'sedan'
+  
+  const combined = `${make} ${model}`.toLowerCase()
+  
+  if (combined.includes('suv') || combined.includes('explorer') || combined.includes('pilot')) return 'suv'
+  if (combined.includes('truck') || combined.includes('f-150') || combined.includes('silverado')) return 'truck'
+  if (combined.includes('corvette') || combined.includes('mustang') || combined.includes('911')) return 'sports'
+  if (combined.includes('bmw') || combined.includes('mercedes') || combined.includes('audi') || combined.includes('lexus')) return 'luxury'
+  if (combined.includes('tesla') || combined.includes('leaf') || combined.includes('bolt')) return 'electric'
+  if (combined.includes('prius') || combined.includes('hybrid')) return 'hybrid'
+  if (combined.includes('odyssey') || combined.includes('caravan')) return 'minivan'
+  
+  return 'sedan'
+}
+
+/**
+ * Generate features based on insurance type
+ */
+function generateFeatures(insuranceType: string): string[] {
+  const baseFeatures = [
+    '24/7 Claims Support',
+    'Online Policy Management',
+    'Mobile App',
+    'Flexible Payment Options',
+  ]
+  
+  if (insuranceType.toLowerCase() === 'auto') {
+    return [
+      ...baseFeatures,
+      'Roadside Assistance',
+      'Rental Car Coverage',
+      'Comprehensive Coverage',
+      'Collision Coverage',
+    ]
+  }
+  
+  return baseFeatures
+}
+
+/**
+ * Generate next steps for carrier
+ */
+function generateNextSteps(carrierName: string) {
+  return {
+    discountInquiries: [
+      'Ask about multi-policy discount',
+      'Inquire about safe driver discount',
+      'Check for loyalty discounts',
+    ],
+    coverageDiscussion: [
+      'Discuss liability limits',
+      'Review deductible options',
+      'Consider additional coverage',
+    ],
+    claimsProcess: [
+      'Understand claims filing process',
+      'Ask about claims response time',
+      'Verify repair shop network',
+    ],
+    policyFlexibility: [
+      'Discuss payment options',
+      'Ask about policy modification process',
+      'Understand cancellation terms',
+    ],
+    actionItems: [
+      `Contact ${carrierName} for final quote`,
+      'Request detailed policy information',
+      'Schedule consultation with agent',
+    ],
   }
 }
 

@@ -1,0 +1,81 @@
+{
+  "id": "usaa",
+  "name": "USAA",
+  "displayName": "USAA Insurance",
+  "logo": "/carriers/usaa.png",
+  "marketShare": 6.4,
+  "rating": "A++",
+  "enabled": true,
+  "website": "https://www.usaa.com",
+  "phone": "1-800-531-USAA",
+  
+  "adjustments": {
+    "profileTypes": {
+      "youngDriver": 0.85,
+      "seniorDriver": 0.93,
+      "goodCredit": 0.86,
+      "bundled": 0.82,
+      "cleanRecord": 0.84,
+      "military": 0.80,
+      "standard": 1.00
+    },
+    "regions": {
+      "midwest": 0.91,
+      "south": 0.88,
+      "west": 0.94,
+      "northeast": 0.98
+    }
+  },
+  
+  "discounts": [
+    {
+      "type": "militaryInstallation",
+      "value": 0.15,
+      "description": "Military Installation Discount",
+      "applies": ["auto"]
+    },
+    {
+      "type": "multiPolicy",
+      "value": 0.18,
+      "description": "Multi-Policy Bundle",
+      "applies": ["auto", "home", "renters", "life"]
+    },
+    {
+      "type": "safeDriver",
+      "value": 0.12,
+      "description": "Safe Driver Discount",
+      "applies": ["auto"]
+    },
+    {
+      "type": "loyaltyDiscount",
+      "value": 0.10,
+      "description": "Loyalty Discount",
+      "applies": ["auto", "home"]
+    }
+  ],
+  
+  "variance": {
+    "enabled": true,
+    "range": 0.04
+  },
+  
+  "eligibility": {
+    "requiresMilitary": true,
+    "description": "Available to military members, veterans, and their families"
+  },
+  
+  "strengths": [
+    "Exceptional Customer Service",
+    "Military-Specific Benefits",
+    "Comprehensive Coverage",
+    "Digital Excellence"
+  ],
+  
+  "bestFor": [
+    "Military Personnel",
+    "Veterans",
+    "Military Families",
+    "Bundle Seekers"
+  ]
+}
+

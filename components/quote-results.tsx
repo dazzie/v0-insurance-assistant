@@ -59,7 +59,7 @@ export function QuoteResults({ quoteData, onBack, onNewQuote }: QuoteResultsProp
 
       if (data.success && data.quotes && data.quotes.length > 0) {
         setComparisons(data.quotes)
-        setQuoteSource(data.source === 'insurify' ? 'api' : 'mock')
+        setQuoteSource(data.source === 'insurify' || data.source === 'rating_engine' ? 'api' : 'mock')
       } else {
         throw new Error('No quotes returned from API')
       }
@@ -120,7 +120,7 @@ export function QuoteResults({ quoteData, onBack, onNewQuote }: QuoteResultsProp
             </div>
             <p className="text-blue-100 text-lg">
               We found {comparisons.length} competitive quotes from top-rated carriers
-              {quoteSource === 'api' && <span className="ml-2 text-sm">✓ Live Pricing</span>}
+              {quoteSource === 'api' && <span className="ml-2 text-sm">✓ Real-Time Pricing</span>}
               {quoteSource === 'mock' && <span className="ml-2 text-sm">(Demo Mode)</span>}
             </p>
             <p className="text-blue-200 text-sm mt-1">Based on your profile and needs</p>
@@ -131,7 +131,7 @@ export function QuoteResults({ quoteData, onBack, onNewQuote }: QuoteResultsProp
             </Badge>
             {quoteSource === 'api' && (
               <Badge className="bg-green-500 text-white text-xs px-2 py-1">
-                🔗 Live API Data
+                ⚡ Rating Engine
               </Badge>
             )}
           </div>

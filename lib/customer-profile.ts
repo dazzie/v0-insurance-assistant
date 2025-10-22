@@ -41,9 +41,48 @@ export interface CustomerProfile {
     enrichmentError?: string
   }
 
+  // Risk Assessment (Proactive Agent)
+  riskAssessment?: {
+    floodRisk?: {
+      floodFactor: number  // 1-10 scale
+      riskLevel: string    // Minimal, Minor, Moderate, Major, Extreme
+      floodInsuranceRequired: boolean
+      climateChange30Year?: string
+      description?: string
+      enrichmentSource: 'First Street Foundation'
+    }
+    crimeRisk?: {
+      crimeIndex: number   // 0-100 scale (100 = highest crime)
+      riskLevel: string    // Low, Moderate, High, Very High
+      violentCrime: number
+      propertyCrime: number
+      enrichmentSource: 'FBI Crime Data'
+    }
+    earthquakeRisk?: {
+      earthquakeRisk: number    // 0-10 scale
+      riskLevel: string         // Low, Moderate, High, Very High
+      peakGroundAcceleration?: number  // PGA in g
+      seismicZone: number       // 1-4
+      description?: string
+      enrichmentSource: 'USGS Earthquake Hazards Program'
+    }
+    wildfireRisk?: {
+      wildfireRisk: number      // 0-10 scale
+      riskLevel: string         // Low, Moderate, High, Very High
+      wuiZone: string          // Wildland-Urban Interface zone
+      fireDangerIndex: number   // 0-100
+      description?: string
+      enrichmentSource: 'USGS Wildfire Risk to Communities'
+    }
+    lastAssessed?: string
+  }
+
   // Insurance Needs
   insuranceType?: 'auto' | 'home' | 'life' | 'renters' | 'pet' | 'health' | 'disability' | 'umbrella'
   needs?: string[]
+
+  // Conversation
+  initialMessage?: string  // Initial voice message from audio recording
 
   // Auto Insurance Specific
   driversCount?: number
@@ -97,6 +136,14 @@ export interface CustomerProfile {
   occupation?: string
   homeOwnership?: 'own' | 'rent' | 'other'
   creditRange?: 'excellent' | 'good' | 'fair' | 'poor' | 'prefer-not-to-say'
+
+  // Requested Additional Coverages (from policy analysis)
+  requestedCoverages?: Array<{
+    gapId: string
+    coverageType: string
+    title: string
+    requestedAt: string
+  }>
 
   // Metadata
   createdAt?: string

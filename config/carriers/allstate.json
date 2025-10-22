@@ -1,0 +1,75 @@
+{
+  "id": "allstate",
+  "name": "Allstate",
+  "displayName": "Allstate Insurance",
+  "logo": "/carriers/allstate.png",
+  "marketShare": 10.2,
+  "rating": "A+",
+  "enabled": true,
+  "website": "https://www.allstate.com",
+  "phone": "1-800-ALLSTATE",
+  
+  "adjustments": {
+    "profileTypes": {
+      "youngDriver": 1.02,
+      "seniorDriver": 0.98,
+      "goodCredit": 0.91,
+      "bundled": 0.84,
+      "cleanRecord": 0.92,
+      "standard": 1.00
+    },
+    "regions": {
+      "midwest": 0.94,
+      "south": 0.99,
+      "west": 1.06,
+      "northeast": 1.03
+    }
+  },
+  
+  "discounts": [
+    {
+      "type": "drivewise",
+      "value": 0.18,
+      "description": "Drivewise Safe Driving Bonus",
+      "applies": ["auto"]
+    },
+    {
+      "type": "multiPolicy",
+      "value": 0.16,
+      "description": "Multi-Policy Discount",
+      "applies": ["auto", "home", "renters"]
+    },
+    {
+      "type": "newCar",
+      "value": 0.10,
+      "description": "New Car Discount",
+      "applies": ["auto"]
+    },
+    {
+      "type": "safeDriver",
+      "value": 0.15,
+      "description": "Safe Driving Bonus",
+      "applies": ["auto"]
+    }
+  ],
+  
+  "variance": {
+    "enabled": true,
+    "range": 0.05
+  },
+  
+  "strengths": [
+    "Strong Local Agent Network",
+    "Accident Forgiveness",
+    "New Car Replacement",
+    "Comprehensive Coverage Options"
+  ],
+  
+  "bestFor": [
+    "Bundle Seekers",
+    "New Car Owners",
+    "Agent Relationship Preference",
+    "Midwest Residents"
+  ]
+}
+

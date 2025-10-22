@@ -1,0 +1,23 @@
+{
+  "id": "american-family",
+  "name": "American Family",
+  "displayName": "American Family Insurance",
+  "logo": "/carriers/american-family.png",
+  "marketShare": 2.1,
+  "rating": "A",
+  "enabled": true,
+  "website": "https://www.amfam.com",
+  "phone": "1-800-692-6326",
+  "adjustments": {
+    "profileTypes": {"youngDriver": 0.94, "seniorDriver": 1.00, "goodCredit": 0.90, "bundled": 0.85, "cleanRecord": 0.91, "standard": 1.00},
+    "regions": {"midwest": 0.90, "south": 1.03, "west": 1.08, "northeast": 1.10}
+  },
+  "discounts": [
+    {"type": "multiPolicy", "value": 0.17, "description": "Multi-Policy Discount", "applies": ["auto", "home"]},
+    {"type": "knowYourDrive", "value": 0.19, "description": "KnowYourDrive Program", "applies": ["auto"]}
+  ],
+  "variance": {"enabled": true, "range": 0.05},
+  "strengths": ["Regional Expertise", "Personalized Service"],
+  "bestFor": ["Midwest Residents", "Regional Preference"]
+}
+

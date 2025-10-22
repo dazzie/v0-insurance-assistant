@@ -1,0 +1,23 @@
+{
+  "id": "farmers",
+  "name": "Farmers",
+  "displayName": "Farmers Insurance",
+  "logo": "/carriers/farmers.png",
+  "marketShare": 4.5,
+  "rating": "A",
+  "enabled": true,
+  "website": "https://www.farmers.com",
+  "phone": "1-888-327-6335",
+  "adjustments": {
+    "profileTypes": {"youngDriver": 1.00, "seniorDriver": 1.00, "goodCredit": 0.94, "bundled": 0.89, "cleanRecord": 0.95, "standard": 1.00},
+    "regions": {"midwest": 1.02, "south": 1.00, "west": 0.96, "northeast": 1.05}
+  },
+  "discounts": [
+    {"type": "multiPolicy", "value": 0.14, "description": "Multi-Policy Discount", "applies": ["auto", "home", "renters"]},
+    {"type": "signal", "value": 0.15, "description": "Signal App Safe Driving", "applies": ["auto"]}
+  ],
+  "variance": {"enabled": true, "range": 0.05},
+  "strengths": ["Flexible Coverage Options", "Local Agent Support"],
+  "bestFor": ["West Coast Residents", "Agent Preference"]
+}
+

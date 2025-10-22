@@ -102,6 +102,39 @@ const insuranceTypeConfigs: Record<string, InsuranceTypeConfig> = {
       "Policy Endorsements"
     ]
   },
+  "Renters": {
+    basePrice: 25,
+    priceVariation: 30,
+    coverageOptions: ["$25,000", "$50,000", "$75,000", "$100,000"],
+    features: [
+      "Personal Property Protection",
+      "Liability Coverage",
+      "Additional Living Expenses",
+      "Medical Payments to Others",
+      "Loss of Use Coverage",
+      "Water Damage Protection"
+    ],
+    discountTypes: [
+      "Multi-Policy Discount",
+      "Claims-Free Discount",
+      "Security System Discount",
+      "Automatic Payment Discount",
+      "Smoke Detector Discount",
+      "Deadbolt Lock Discount"
+    ],
+    claimsProcess: [
+      "24/7 Claims Support",
+      "Mobile App Claims",
+      "Fast Reimbursement",
+      "Inventory Assistance"
+    ],
+    policyFlexibility: [
+      "Month-to-Month Options",
+      "Easy Coverage Updates",
+      "Digital Policy Management",
+      "Flexible Payment Options"
+    ]
+  },
   "Life": {
     basePrice: 50,
     priceVariation: 40,

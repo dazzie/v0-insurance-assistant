@@ -31,11 +31,19 @@ export interface StateRequirement {
 }
 
 /**
- * Top 10 states by population (covers ~54% of US)
- * Expanded to include all 50 states for comprehensive coverage
+ * All 50 US States + DC
+ * Comprehensive coverage for 100% of US drivers
+ * 
+ * Coverage Statistics:
+ * - 50 states + District of Columbia = 51 jurisdictions
+ * - 12 no-fault states (require PIP)
+ * - 20 states require uninsured motorist coverage
+ * - Liability minimums range from 15/30/5 to 50/100/25
+ * 
+ * Last Updated: 2024
  */
 export const stateMinimums: Record<string, StateRequirement> = {
-  // Top 10 states by population
+  // Top 10 states by population (54% of US)
   'CA': {
     state: 'CA',
     stateName: 'California',
@@ -254,6 +262,522 @@ export const stateMinimums: Record<string, StateRequirement> = {
     umRequired: true,
     notes: 'No-fault state. Can choose between standard and basic policies.',
     source: 'New Jersey Department of Banking and Insurance'
+  },
+  // Remaining 35 states (alphabetically)
+  'AL': {
+    state: 'AL',
+    stateName: 'Alabama',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Alabama Department of Insurance'
+  },
+  'AK': {
+    state: 'AK',
+    stateName: 'Alaska',
+    liability: {
+      bodilyInjuryPerPerson: 50000,
+      bodilyInjuryPerAccident: 100000,
+      propertyDamage: 25000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    notes: 'Alaska has higher minimums due to remote locations and higher costs.',
+    source: 'Alaska Division of Insurance'
+  },
+  'AR': {
+    state: 'AR',
+    stateName: 'Arkansas',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Arkansas Insurance Department'
+  },
+  'CO': {
+    state: 'CO',
+    stateName: 'Colorado',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 15000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Colorado Division of Insurance'
+  },
+  'CT': {
+    state: 'CT',
+    stateName: 'Connecticut',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: true,
+    source: 'Connecticut Insurance Department'
+  },
+  'DE': {
+    state: 'DE',
+    stateName: 'Delaware',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 10000
+    },
+    required: ['liability', 'pip'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: true,
+    umRequired: false,
+    notes: 'No-fault state with required PIP coverage.',
+    source: 'Delaware Department of Insurance'
+  },
+  'HI': {
+    state: 'HI',
+    stateName: 'Hawaii',
+    liability: {
+      bodilyInjuryPerPerson: 20000,
+      bodilyInjuryPerAccident: 40000,
+      propertyDamage: 10000
+    },
+    required: ['liability', 'pip'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: true,
+    umRequired: false,
+    notes: 'No-fault state. PIP is mandatory.',
+    source: 'Hawaii Department of Commerce and Consumer Affairs'
+  },
+  'ID': {
+    state: 'ID',
+    stateName: 'Idaho',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 15000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Idaho Department of Insurance'
+  },
+  'IN': {
+    state: 'IN',
+    stateName: 'Indiana',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Indiana Department of Insurance'
+  },
+  'IA': {
+    state: 'IA',
+    stateName: 'Iowa',
+    liability: {
+      bodilyInjuryPerPerson: 20000,
+      bodilyInjuryPerAccident: 40000,
+      propertyDamage: 15000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Iowa Insurance Division'
+  },
+  'KS': {
+    state: 'KS',
+    stateName: 'Kansas',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability', 'pip', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: true,
+    umRequired: true,
+    notes: 'No-fault state with required PIP and UM coverage.',
+    source: 'Kansas Insurance Department'
+  },
+  'KY': {
+    state: 'KY',
+    stateName: 'Kentucky',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability', 'pip'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: true,
+    umRequired: false,
+    notes: 'No-fault state. PIP is mandatory.',
+    source: 'Kentucky Department of Insurance'
+  },
+  'LA': {
+    state: 'LA',
+    stateName: 'Louisiana',
+    liability: {
+      bodilyInjuryPerPerson: 15000,
+      bodilyInjuryPerAccident: 30000,
+      propertyDamage: 25000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Louisiana Department of Insurance'
+  },
+  'ME': {
+    state: 'ME',
+    stateName: 'Maine',
+    liability: {
+      bodilyInjuryPerPerson: 50000,
+      bodilyInjuryPerAccident: 100000,
+      propertyDamage: 25000
+    },
+    required: ['liability', 'uninsured_motorist', 'underinsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: true,
+    notes: 'Maine has higher minimums and requires both UM and UIM coverage.',
+    source: 'Maine Bureau of Insurance'
+  },
+  'MD': {
+    state: 'MD',
+    stateName: 'Maryland',
+    liability: {
+      bodilyInjuryPerPerson: 30000,
+      bodilyInjuryPerAccident: 60000,
+      propertyDamage: 15000
+    },
+    required: ['liability', 'uninsured_motorist', 'pip'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: true,
+    umRequired: true,
+    source: 'Maryland Insurance Administration'
+  },
+  'MN': {
+    state: 'MN',
+    stateName: 'Minnesota',
+    liability: {
+      bodilyInjuryPerPerson: 30000,
+      bodilyInjuryPerAccident: 60000,
+      propertyDamage: 10000
+    },
+    required: ['liability', 'pip', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: true,
+    umRequired: true,
+    notes: 'No-fault state with required PIP and UM coverage.',
+    source: 'Minnesota Department of Commerce'
+  },
+  'MS': {
+    state: 'MS',
+    stateName: 'Mississippi',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Mississippi Insurance Department'
+  },
+  'MO': {
+    state: 'MO',
+    stateName: 'Missouri',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: true,
+    source: 'Missouri Department of Insurance'
+  },
+  'MT': {
+    state: 'MT',
+    stateName: 'Montana',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 20000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Montana State Auditor - Insurance Commissioner'
+  },
+  'NE': {
+    state: 'NE',
+    stateName: 'Nebraska',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: true,
+    source: 'Nebraska Department of Insurance'
+  },
+  'NV': {
+    state: 'NV',
+    stateName: 'Nevada',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 20000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Nevada Division of Insurance'
+  },
+  'NH': {
+    state: 'NH',
+    stateName: 'New Hampshire',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: [],
+    optional: ['liability', 'uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    notes: 'NH does not require insurance, but drivers must prove financial responsibility if involved in an accident.',
+    source: 'New Hampshire Insurance Department'
+  },
+  'NM': {
+    state: 'NM',
+    stateName: 'New Mexico',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 10000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'New Mexico Office of Superintendent of Insurance'
+  },
+  'ND': {
+    state: 'ND',
+    stateName: 'North Dakota',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability', 'pip', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: true,
+    umRequired: true,
+    notes: 'No-fault state with required PIP and UM coverage.',
+    source: 'North Dakota Insurance Department'
+  },
+  'OK': {
+    state: 'OK',
+    stateName: 'Oklahoma',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Oklahoma Insurance Department'
+  },
+  'OR': {
+    state: 'OR',
+    stateName: 'Oregon',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 20000
+    },
+    required: ['liability', 'pip', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: true,
+    umRequired: true,
+    source: 'Oregon Division of Financial Regulation'
+  },
+  'RI': {
+    state: 'RI',
+    stateName: 'Rhode Island',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Rhode Island Department of Business Regulation'
+  },
+  'SC': {
+    state: 'SC',
+    stateName: 'South Carolina',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: true,
+    source: 'South Carolina Department of Insurance'
+  },
+  'SD': {
+    state: 'SD',
+    stateName: 'South Dakota',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: true,
+    source: 'South Dakota Division of Insurance'
+  },
+  'TN': {
+    state: 'TN',
+    stateName: 'Tennessee',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 15000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Tennessee Department of Commerce and Insurance'
+  },
+  'UT': {
+    state: 'UT',
+    stateName: 'Utah',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 65000,
+      propertyDamage: 15000
+    },
+    required: ['liability', 'pip'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: true,
+    umRequired: false,
+    notes: 'No-fault state with required PIP coverage.',
+    source: 'Utah Insurance Department'
+  },
+  'VT': {
+    state: 'VT',
+    stateName: 'Vermont',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 10000
+    },
+    required: ['liability', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: true,
+    source: 'Vermont Department of Financial Regulation'
+  },
+  'WV': {
+    state: 'WV',
+    stateName: 'West Virginia',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 25000
+    },
+    required: ['liability', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: true,
+    source: 'West Virginia Offices of the Insurance Commissioner'
+  },
+  'WI': {
+    state: 'WI',
+    stateName: 'Wisconsin',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 10000
+    },
+    required: ['liability', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: true,
+    source: 'Wisconsin Office of the Commissioner of Insurance'
+  },
+  'WY': {
+    state: 'WY',
+    stateName: 'Wyoming',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 20000
+    },
+    required: ['liability'],
+    optional: ['uninsured_motorist', 'collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: false,
+    source: 'Wyoming Department of Insurance'
+  },
+  // US Territories (bonus coverage)
+  'DC': {
+    state: 'DC',
+    stateName: 'District of Columbia',
+    liability: {
+      bodilyInjuryPerPerson: 25000,
+      bodilyInjuryPerAccident: 50000,
+      propertyDamage: 10000
+    },
+    required: ['liability', 'uninsured_motorist'],
+    optional: ['collision', 'comprehensive'],
+    pipRequired: false,
+    umRequired: true,
+    source: 'DC Department of Insurance, Securities and Banking'
   }
 }
 

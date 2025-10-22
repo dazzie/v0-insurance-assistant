@@ -1,0 +1,23 @@
+{
+  "id": "travelers",
+  "name": "Travelers",
+  "displayName": "Travelers Insurance",
+  "logo": "/carriers/travelers.png",
+  "marketShare": 3.2,
+  "rating": "A++",
+  "enabled": true,
+  "website": "https://www.travelers.com",
+  "phone": "1-800-252-4633",
+  "adjustments": {
+    "profileTypes": {"youngDriver": 1.03, "seniorDriver": 0.97, "goodCredit": 0.91, "bundled": 0.86, "cleanRecord": 0.92, "standard": 1.00},
+    "regions": {"midwest": 0.98, "south": 1.00, "west": 1.05, "northeast": 0.95}
+  },
+  "discounts": [
+    {"type": "multiPolicy", "value": 0.13, "description": "Multi-Policy Discount", "applies": ["auto", "home"]},
+    {"type": "intelliDrive", "value": 0.17, "description": "IntelliDrive Usage-Based", "applies": ["auto"]}
+  ],
+  "variance": {"enabled": true, "range": 0.06},
+  "strengths": ["Business Insurance Specialist", "Strong Financial Backing"],
+  "bestFor": ["Northeast Residents", "Business Owners"]
+}
+

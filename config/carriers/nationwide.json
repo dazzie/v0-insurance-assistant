@@ -1,0 +1,23 @@
+{
+  "id": "nationwide",
+  "name": "Nationwide",
+  "displayName": "Nationwide Insurance",
+  "logo": "/carriers/nationwide.png",
+  "marketShare": 3.8,
+  "rating": "A+",
+  "enabled": true,
+  "website": "https://www.nationwide.com",
+  "phone": "1-877-669-6877",
+  "adjustments": {
+    "profileTypes": {"youngDriver": 0.96, "seniorDriver": 1.01, "goodCredit": 0.92, "bundled": 0.88, "cleanRecord": 0.93, "standard": 1.00},
+    "regions": {"midwest": 0.92, "south": 0.98, "west": 1.06, "northeast": 1.02}
+  },
+  "discounts": [
+    {"type": "multiPolicy", "value": 0.15, "description": "Multi-Policy Discount", "applies": ["auto", "home"]},
+    {"type": "smartRide", "value": 0.18, "description": "SmartRide Usage-Based", "applies": ["auto"]}
+  ],
+  "variance": {"enabled": true, "range": 0.05},
+  "strengths": ["Vanishing Deductible", "On Your Side Support"],
+  "bestFor": ["Midwest Residents", "Bundle Seekers"]
+}
+

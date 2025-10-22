@@ -1,0 +1,32 @@
+{
+  "auto": {
+    "brackets": [
+      { "min": 16, "max": 20, "multiplier": 2.20, "description": "Teen drivers - highest risk" },
+      { "min": 21, "max": 24, "multiplier": 1.65, "description": "Young adults" },
+      { "min": 25, "max": 29, "multiplier": 1.20, "description": "Young professionals" },
+      { "min": 30, "max": 49, "multiplier": 1.00, "description": "Prime age - baseline" },
+      { "min": 50, "max": 64, "multiplier": 0.95, "description": "Mature drivers - lower risk" },
+      { "min": 65, "max": 74, "multiplier": 1.05, "description": "Early senior" },
+      { "min": 75, "max": 120, "multiplier": 1.25, "description": "Senior drivers" }
+    ]
+  },
+  "life": {
+    "brackets": [
+      { "min": 18, "max": 29, "multiplier": 0.70, "description": "Young adults - lowest risk" },
+      { "min": 30, "max": 39, "multiplier": 0.85, "description": "Prime age" },
+      { "min": 40, "max": 49, "multiplier": 1.00, "description": "Middle age - baseline" },
+      { "min": 50, "max": 59, "multiplier": 1.50, "description": "Increased risk" },
+      { "min": 60, "max": 69, "multiplier": 2.50, "description": "Senior" },
+      { "min": 70, "max": 120, "multiplier": 4.50, "description": "High risk" }
+    ]
+  },
+  "disability": {
+    "brackets": [
+      { "min": 18, "max": 29, "multiplier": 0.85, "description": "Young workers" },
+      { "min": 30, "max": 49, "multiplier": 1.00, "description": "Prime working age" },
+      { "min": 50, "max": 59, "multiplier": 1.35, "description": "Higher risk" },
+      { "min": 60, "max": 67, "multiplier": 1.80, "description": "Pre-retirement" }
+    ]
+  }
+}
+

@@ -1,305 +1,182 @@
-# Deployment Guide - Personal Insurance Coverage Coach
+# 🚀 Vercel Deployment Guide
 
-This guide will help you deploy your insurance assistant application to production.
+## Prerequisites
 
-## 🚀 Deployment Options
-
-### Option 1: Vercel (Recommended for Next.js)
-
-Vercel is the easiest way to deploy Next.js applications.
-
-#### Prerequisites
-- GitHub account
-- Vercel account (free tier available)
-- Environment variables ready
-
-#### Steps:
-
-1. **Push to GitHub**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-   git push -u origin main
-   ```
-
-2. **Deploy to Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Click "New Project"
-   - Import your GitHub repository
-   - Configure project settings:
-     - Framework Preset: Next.js
-     - Build Command: `npm run build`
-     - Output Directory: `.next`
-
-3. **Set Environment Variables**
-   In Vercel dashboard → Settings → Environment Variables:
-   ```
-   OPENAI_API_KEY=your_openai_api_key_here
-   VECTORIZE_IO_API_KEY=your_vectorize_api_key_here
-   VECTORIZE_IO_PIPELINE_ID=your_pipeline_id_here
-   ```
-
-4. **Deploy**
-   - Click "Deploy"
-   - Wait for build to complete
-   - Your app will be live at: `https://your-project.vercel.app`
-
-#### Custom Domain (Optional)
-- Settings → Domains → Add your custom domain
-- Update DNS records as instructed
+1. **GitHub Account** (you already have this)
+2. **Vercel Account** - Sign up at [vercel.com](https://vercel.com) (free tier is perfect)
+3. **Environment Variables** - Your API keys
 
 ---
 
-### Option 2: Netlify
+## 📋 Step-by-Step Deployment
 
-#### Steps:
+### **Step 1: Push Your Code to GitHub**
 
-1. **Install Netlify CLI**
-   ```bash
-   npm install -g netlify-cli
-   ```
-
-2. **Build and Deploy**
-   ```bash
-   netlify login
-   netlify init
-   netlify deploy --prod
-   ```
-
-3. **Environment Variables**
-   - Go to Netlify dashboard
-   - Site settings → Environment variables
-   - Add the same variables as above
-
----
-
-### Option 3: Docker + Any Cloud Provider
-
-#### Create Dockerfile:
-
-```dockerfile
-FROM node:18-alpine AS base
-
-# Install dependencies
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
-
-COPY package.json package-lock.json ./
-RUN npm ci
-
-# Build the application
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-ENV NEXT_TELEMETRY_DISABLED 1
-RUN npm run build
-
-# Production image
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
-EXPOSE 3000
-
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-
-CMD ["node", "server.js"]
-```
-
-#### Deploy to:
-- **AWS ECS/Fargate**
-- **Google Cloud Run**
-- **Azure Container Instances**
-- **DigitalOcean App Platform**
-
----
-
-## 📋 Required Environment Variables
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `OPENAI_API_KEY` | OpenAI API key for GPT-4o Vision text extraction | Yes |
-| `VECTORIZE_IO_API_KEY` | Vectorize.io API key for insurance knowledge base | Yes |
-| `VECTORIZE_IO_PIPELINE_ID` | Vectorize.io pipeline ID | Yes |
-| `ANTHROPIC_API_KEY` | Anthropic API key (optional, if using Claude) | No |
-
----
-
-## 🔒 Security Checklist
-
-Before deploying, ensure:
-
-- [ ] All API keys are stored as environment variables (not in code)
-- [ ] `.env.local` is in `.gitignore`
-- [ ] HTTPS is enabled (automatic with Vercel/Netlify)
-- [ ] CORS is properly configured for your domain
-- [ ] Rate limiting is in place for API routes
-- [ ] Input validation is implemented
-
----
-
-## 🧪 Testing Production Build Locally
-
-Test your production build before deploying:
+Your code is already on GitHub in the `agentic-features` branch. You can deploy from this branch or merge to `main` first.
 
 ```bash
-# Build for production
-npm run build
+# Option A: Deploy from current branch (agentic-features)
+git push origin agentic-features
 
-# Start production server
-npm start
-
-# Test at http://localhost:3000
+# Option B: Merge to main first (recommended for production)
+git checkout main
+git merge agentic-features
+git push origin main
 ```
 
 ---
 
-## 📱 Mobile Considerations
+### **Step 2: Connect to Vercel**
 
-### Camera Permissions
-- Camera access requires HTTPS in production
-- Test camera functionality after deployment
-- Provide clear permission request messages
+1. Go to [vercel.com](https://vercel.com)
+2. Click **"Sign Up"** or **"Log In"** (use GitHub login for easiest setup)
+3. Click **"Add New Project"**
+4. **Import** your GitHub repository: `v0-insurance-assistant`
+5. Vercel will auto-detect it's a Next.js app ✅
 
-### Performance
-- Images are optimized with Next.js Image component
-- Lazy loading is enabled for better mobile performance
-- Responsive design adapts to all screen sizes
+---
+
+### **Step 3: Configure Environment Variables**
+
+In the Vercel project settings, add these environment variables:
+
+#### **Required:**
+```
+OPENAI_API_KEY=sk-proj-...your-key...
+```
+
+#### **Optional (for MCP enrichment):**
+```
+NHTSA_API_KEY=not_required
+OPENCAGE_API_KEY=your-opencage-key
+HUNTER_API_KEY=your-hunter-key
+FIRSTSTREET_API_KEY=your-firststreet-key
+```
+
+#### **How to Add in Vercel:**
+1. In your Vercel project dashboard
+2. Go to **Settings** → **Environment Variables**
+3. Add each variable:
+   - **Key**: `OPENAI_API_KEY`
+   - **Value**: `sk-proj-...`
+   - **Environments**: Check all (Production, Preview, Development)
+4. Click **"Save"**
+
+---
+
+### **Step 4: Deploy**
+
+1. Click **"Deploy"** in Vercel
+2. Wait 2-3 minutes for the build
+3. You'll get a live URL like: `https://v0-insurance-assistant.vercel.app`
+
+---
+
+## 🔧 Post-Deployment Configuration
+
+### **MCP Servers**
+
+⚠️ **Important:** MCP servers run as local processes and **won't work in Vercel's serverless environment**.
+
+**Options:**
+
+1. **Convert to API Routes** (Recommended for production)
+   - Move MCP server logic into Next.js API routes
+   - Example: `/api/nhtsa-vin-decode`, `/api/opencage-geocode`
+
+2. **Use External Services**
+   - Deploy MCP servers to Railway/Render/Fly.io
+   - Call them via HTTP from your Vercel app
+
+3. **Disable for Production** (Quick fix)
+   - The app will work without MCP enrichment
+   - Users just won't get VIN/address/email verification badges
+
+---
+
+## 📊 Monitoring & Logs
+
+- **Vercel Dashboard**: Real-time logs and analytics
+- **Vercel Analytics**: Automatically enabled (free)
+- **Error Tracking**: Built-in error reporting
 
 ---
 
 ## 🔄 Continuous Deployment
 
-### Vercel (Automatic)
-- Push to `main` branch → auto-deploys to production
-- Push to other branches → creates preview deployments
+Once connected, Vercel will **automatically deploy**:
+- ✅ Every push to `main` → Production
+- ✅ Every pull request → Preview deployment
+- ✅ Every push to other branches → Preview deployment
 
-### GitHub Actions (Manual Setup)
+---
 
-Create `.github/workflows/deploy.yml`:
+## 🌐 Custom Domain (Optional)
 
-```yaml
-name: Deploy to Production
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: npm ci
-      - run: npm run build
-      - run: npm run test # if you have tests
-      - uses: amondnet/vercel-action@v20
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.ORG_ID }}
-          vercel-project-id: ${{ secrets.PROJECT_ID }}
-```
+1. Go to **Settings** → **Domains**
+2. Add your custom domain (e.g., `insurance-coach.com`)
+3. Update DNS records as instructed
+4. SSL certificate is automatic ✅
 
 ---
 
 ## 🐛 Troubleshooting
 
 ### Build Fails
-- Check Node.js version (requires 18+)
-- Verify all dependencies are installed
-- Check for TypeScript errors: `npm run type-check`
+- Check Vercel build logs
+- Verify all dependencies are in `package.json`
+- Ensure `.env.local` variables are added to Vercel
 
-### API Routes Not Working
-- Verify environment variables are set
-- Check API route paths are correct
-- Look at server logs for errors
+### MCP Servers Not Working
+- Expected in serverless environment
+- See "Post-Deployment Configuration" above
 
-### Camera Not Working
-- Ensure HTTPS is enabled
-- Check browser console for permission errors
-- Test on different devices/browsers
-
-### Slow Performance
-- Enable Next.js image optimization
-- Check bundle size: `npm run analyze`
-- Use CDN for static assets
+### API Rate Limits
+- OpenAI: Monitor usage in OpenAI dashboard
+- Consider implementing rate limiting for production
 
 ---
 
-## 📊 Monitoring
+## 📈 Production Checklist
 
-### Vercel Analytics
-- Automatic with Vercel deployment
-- Real-time performance metrics
-- Web Vitals monitoring
-
-### Custom Monitoring
-Consider adding:
-- Sentry for error tracking
-- LogRocket for session replay
-- Google Analytics for usage metrics
+- [ ] Environment variables configured in Vercel
+- [ ] Production build tested locally (`npm run build`)
+- [ ] API keys secured (never commit to git)
+- [ ] Error boundaries in place
+- [ ] Analytics enabled
+- [ ] Custom domain configured (optional)
+- [ ] MCP servers converted to API routes or disabled
 
 ---
 
-## 🚀 Post-Deployment
+## 🎯 Quick Deploy Commands
 
-1. **Test Core Features**
-   - [ ] Customer profile form
-   - [ ] Chat interface
-   - [ ] Policy scanner (mobile camera)
-   - [ ] Quote generation
-   - [ ] Coverage analyzer
+```bash
+# Ensure you're on the right branch
+git status
 
-2. **Monitor Performance**
-   - Check loading times
-   - Monitor API response times
-   - Watch error rates
+# Push to GitHub
+git push origin agentic-features
 
-3. **Gather Feedback**
-   - Test on multiple devices
-   - Get user feedback
-   - Iterate and improve
+# Then deploy via Vercel dashboard or CLI:
+npx vercel --prod
+```
 
 ---
 
 ## 📞 Support
 
-For deployment issues:
-- Next.js Docs: https://nextjs.org/docs/deployment
-- Vercel Support: https://vercel.com/support
-- GitHub Issues: Create an issue in your repository
+- **Vercel Docs**: [vercel.com/docs](https://vercel.com/docs)
+- **Next.js Deployment**: [nextjs.org/docs/deployment](https://nextjs.org/docs/deployment)
+- **Vercel Discord**: [vercel.com/discord](https://vercel.com/discord)
 
 ---
 
-## 🎉 You're Ready to Deploy!
+## 🎉 Success!
 
-Your insurance assistant is production-ready with:
-- ✅ Mobile-optimized UI
-- ✅ Camera-based policy scanning
-- ✅ AI-powered insurance advice
-- ✅ Real-time profile management
-- ✅ Quote comparison system
+Once deployed, your app will be live at:
+```
+https://your-project-name.vercel.app
+```
 
-Choose your deployment platform and follow the steps above. Good luck! 🚀
-
+Share this URL with users and start collecting feedback! 🚀

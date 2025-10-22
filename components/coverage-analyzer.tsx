@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Upload, FileText, Image, CheckCircle, AlertCircle, Loader2, X, Camera, RotateCcw } from "lucide-react"
 import { PolicyHealthCard } from "@/components/policy-health-card"
+import { CoverageDetailCard } from "@/components/coverage-detail-card"
 import { analyzePolicy, type PolicyAnalysis } from "@/lib/policy-analyzer"
 import type { CustomerProfile } from "@/lib/customer-profile"
 
@@ -16,6 +17,12 @@ interface ExtractedCoverage {
   effectiveDate?: string
   expirationDate?: string
   coverageType?: 'auto' | 'home' | 'life' | 'renters' | 'pet' | 'health' | 'disability' | 'umbrella'
+  
+  // Customer information
+  customerName?: string
+  email?: string
+  phone?: string
+  address?: string
 
   // Auto insurance specific
   vehicles?: Array<{
@@ -195,6 +202,18 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
       setExtractedData(result.coverage)
       console.log('[Client] Extracted data set successfully')
 
+      // Log enrichment summary
+      if (result.enrichmentSummary) {
+        const { vehiclesEnriched, addressEnriched, floodRiskAssessed, crimeRiskAssessed, earthquakeRiskAssessed, wildfireRiskAssessed } = result.enrichmentSummary
+        console.log('[Client] 📊 Enrichment Summary:')
+        console.log('  🚗 Vehicles:', vehiclesEnriched ? '✅ Enriched with NHTSA data' : '⏭️ Skipped')
+        console.log('  🏠 Address:', addressEnriched ? '✅ Geocoded with OpenCage' : '⏭️ Skipped')
+        console.log('  🌊 Flood Risk:', floodRiskAssessed ? '✅ Assessed' : '⏭️ Skipped')
+        console.log('  🚨 Crime Risk:', crimeRiskAssessed ? '✅ Assessed' : '⏭️ Skipped')
+        console.log('  🏚️ Earthquake Risk:', earthquakeRiskAssessed ? '✅ Assessed' : '⏭️ Skipped')
+        console.log('  🔥 Wildfire Risk:', wildfireRiskAssessed ? '✅ Assessed' : '⏭️ Skipped')
+      }
+
       // Run autonomous policy analysis if customer profile is available
       if (customerProfile && result.coverage) {
         console.log('[Policy Analyzer] Running autonomous analysis...')
@@ -208,14 +227,15 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
         }
       }
 
-      // Show success confirmation
+      // Show success confirmation with enrichment info
       const fieldsExtracted = Object.keys(result.coverage).filter(key => result.coverage[key] != null).length
-      console.log(`✅ Policy analyzed successfully! ${fieldsExtracted} fields extracted.`)
+      const enrichmentsCompleted = result.message?.match(/\((\d+)\/\d+/)?.[1] || 0
+      console.log(`✅ Policy analyzed successfully! ${fieldsExtracted} fields extracted, ${enrichmentsCompleted} enrichments completed.`)
 
       // Optional: Show browser notification if permission granted
       if ('Notification' in window && Notification.permission === 'granted') {
         new Notification('Policy Analysis Complete!', {
-          body: `Successfully extracted ${fieldsExtracted} fields from your policy document.`,
+          body: result.message || `Successfully extracted ${fieldsExtracted} fields from your policy document.`,
           icon: '/icon.png'
         })
       }
@@ -491,7 +511,7 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
                 </p>
               </div>
               <p className="text-xs text-green-700 ml-7">
-                Successfully extracted {Object.keys(extractedData).filter(key => extractedData[key] != null && extractedData[key] !== '').length} fields from your policy document
+                Successfully extracted {Object.keys(extractedData).filter(key => (extractedData as any)[key] != null && (extractedData as any)[key] !== '').length} fields from your policy document
                 {extractedData.carrier && ` (${extractedData.carrier})`}
                 {extractedData.policyNumber && ` - Policy #${extractedData.policyNumber}`}
               </p>
@@ -501,7 +521,11 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
             {policyAnalysis && (
               <PolicyHealthCard 
                 analysis={policyAnalysis}
+                requestedCoverages={customerProfile?.requestedCoverages || []}
                 onFixGap={(gapId) => {
+                  const gap = policyAnalysis.gaps.find(g => g.id === gapId)
+                  if (!gap) return
+                  
                   console.log('[Coverage Analyzer] User wants to fix gap:', gapId)
                   // TODO: Trigger quote flow to address this gap
                 }}
@@ -596,11 +620,11 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
               {(extractedData.email || extractedData.phone || extractedData.address) && (
                 <div className="mt-4 pt-4 border-t border-blue-200">
                   <p className="text-xs font-medium text-gray-700 mb-2">Contact Information</p>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                  <div className="space-y-2 text-sm">
                     {extractedData.email && (
                       <div className="flex items-center gap-2">
                         <span className="text-gray-500">📧</span>
-                        <span>{extractedData.email}</span>
+                        <span className="truncate">{extractedData.email}</span>
                       </div>
                     )}
                     {extractedData.phone && (
@@ -612,7 +636,7 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
                     {extractedData.address && (
                       <div className="flex items-center gap-2">
                         <span className="text-gray-500">📍</span>
-                        <span className="text-xs">{extractedData.address}</span>
+                        <span className="text-xs break-words">{extractedData.address}</span>
                       </div>
                     )}
                   </div>
@@ -659,22 +683,15 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
                     <h4 className="font-medium text-sm">Coverage Details</h4>
                     <div className="space-y-2">
                       {extractedData.coverages.map((coverage, idx) => (
-                        <div key={idx} className="p-3 bg-muted rounded-lg">
-                          <div className="flex items-center justify-between mb-2">
-                            <p className="font-medium text-sm">{coverage.type}</p>
-                            {coverage.premium && (
-                              <Badge variant="secondary">{coverage.premium}</Badge>
-                            )}
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-                            {coverage.limit && (
-                              <p>Limit: <span className="font-medium text-foreground">{coverage.limit}</span></p>
-                            )}
-                            {coverage.deductible && (
-                              <p>Deductible: <span className="font-medium text-foreground">{coverage.deductible}</span></p>
-                            )}
-                          </div>
-                        </div>
+                        <CoverageDetailCard 
+                          key={idx} 
+                          coverage={{
+                            name: coverage.type,
+                            premium: coverage.premium,
+                            limit: coverage.limit,
+                            deductible: coverage.deductible
+                          }} 
+                        />
                       ))}
                     </div>
                   </div>

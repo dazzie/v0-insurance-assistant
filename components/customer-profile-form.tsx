@@ -13,9 +13,12 @@ import type { CustomerProfile } from "@/lib/customer-profile"
 
 interface CustomerProfileFormProps {
   onSubmit: (profile: CustomerProfile) => void
+  onEnrichmentStart?: () => void
+  onEnrichmentProgress?: (progress: string[]) => void
+  onEnrichmentComplete?: (enrichedData: any) => void
 }
 
-export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
+export function CustomerProfileForm({ onSubmit, onEnrichmentStart, onEnrichmentProgress, onEnrichmentComplete }: CustomerProfileFormProps) {
   const [location, setLocation] = useState("")
   const [age, setAge] = useState("")
   const [needs, setNeeds] = useState("")
@@ -265,6 +268,12 @@ export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
                   needs: needs.split(',').map(n => n.trim()).filter(Boolean),
                   insuranceType: 'auto'
                 } as CustomerProfile}
+                onEnrichmentStart={onEnrichmentStart}
+                onEnrichmentProgress={onEnrichmentProgress}
+                onEnrichmentComplete={(enrichedData: any) => {
+                  console.log('[Profile] 🔄 Enrichment completed, updating profile...')
+                  onEnrichmentComplete?.(enrichedData)
+                }}
                 onAnalysisComplete={(coverage) => {
                   // Build comprehensive profile from extracted policy data
                   const profile: any = {}
@@ -277,14 +286,14 @@ export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
                   }
                   if (coverage.email) profile.email = coverage.email
                   if (coverage.phone) profile.phone = coverage.phone
-                  if (coverage.dateOfBirth) profile.dateOfBirth = coverage.dateOfBirth
+                  if ((coverage as any).dateOfBirth) profile.dateOfBirth = (coverage as any).dateOfBirth
 
                   // Location
                   if (coverage.address) profile.address = coverage.address
-                  if (coverage.city) profile.city = coverage.city
-                  if (coverage.state) profile.state = coverage.state
-                  if (coverage.zipCode) profile.zipCode = coverage.zipCode
-                  profile.location = coverage.city && coverage.state ? `${coverage.city}, ${coverage.state}` : coverage.zipCode || 'Unknown'
+                  if ((coverage as any).city) profile.city = (coverage as any).city
+                  if ((coverage as any).state) profile.state = (coverage as any).state
+                  if ((coverage as any).zipCode) profile.zipCode = (coverage as any).zipCode
+                  profile.location = (coverage as any).city && (coverage as any).state ? `${(coverage as any).city}, ${(coverage as any).state}` : (coverage as any).zipCode || 'Unknown'
 
                   // Insurance Details
                   profile.insuranceType = coverage.coverageType || 'auto'
@@ -335,9 +344,9 @@ export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
                   if (coverage.dwellingCoverage) profile.homeValue = coverage.dwellingCoverage
 
                   // Calculate age from date of birth if available
-                  if (coverage.dateOfBirth && !profile.age) {
+                  if ((coverage as any).dateOfBirth && !profile.age) {
                     try {
-                      const birthDate = new Date(coverage.dateOfBirth)
+                      const birthDate = new Date((coverage as any).dateOfBirth)
                       const age = new Date().getFullYear() - birthDate.getFullYear()
                       profile.age = age.toString()
                     } catch (e) {
@@ -346,17 +355,17 @@ export function CustomerProfileForm({ onSubmit }: CustomerProfileFormProps) {
                   }
 
                   // 🔒 Transfer OpenCage address enrichment
-                  if (coverage.addressEnrichment) {
-                    profile.addressEnrichment = coverage.addressEnrichment
-                    console.log('[Profile] ✓ OpenCage enrichment transferred:', coverage.addressEnrichment)
+                  if ((coverage as any).addressEnrichment) {
+                    profile.addressEnrichment = (coverage as any).addressEnrichment
+                    console.log('[Profile] ✓ OpenCage enrichment transferred:', (coverage as any).addressEnrichment)
                   }
 
                   // 🌊 Transfer Risk Assessment (Proactive Agent)
-                  if (coverage.riskAssessment) {
-                    profile.riskAssessment = coverage.riskAssessment
-                    console.log('[Profile] ✓ Risk assessment transferred:', coverage.riskAssessment)
-                    if (coverage.riskAssessment.floodRisk) {
-                      console.log('[Profile] 🌊 Flood risk:', coverage.riskAssessment.floodRisk.riskLevel)
+                  if ((coverage as any).riskAssessment) {
+                    profile.riskAssessment = (coverage as any).riskAssessment
+                    console.log('[Profile] ✓ Risk assessment transferred:', (coverage as any).riskAssessment)
+                    if ((coverage as any).riskAssessment.floodRisk) {
+                      console.log('[Profile] 🌊 Flood risk:', (coverage as any).riskAssessment.floodRisk.riskLevel)
                     }
                   }
 

@@ -1,0 +1,19 @@
+{
+  "violations": {
+    "0": 1,
+    "1": 1.25,
+    "2": 1.55,
+    "3+": 2.1
+  },
+  "accidents": {
+    "0": 1,
+    "1": 1.35,
+    "2": 1.75,
+    "3+": 2.25
+  },
+  "california_specific": {
+    "dui_impact": 2.5,
+    "speeding_impact": 1.3
+  },
+  "lastUpdated": "2025-10-15"
+}

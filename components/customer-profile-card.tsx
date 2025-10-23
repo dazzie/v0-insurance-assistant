@@ -117,10 +117,11 @@ export function CustomerProfileCard() {
           <div className="flex items-center space-x-2">
             {!isEditing ? (
               <>
-                <Button onClick={() => setIsEditing(true)} size="sm" variant="outline">
+                {/* Edit button disabled temporarily */}
+                {/* <Button onClick={() => setIsEditing(true)} size="sm" variant="outline">
                   <Edit className="h-4 w-4 mr-1" />
                   Edit
-                </Button>
+                </Button> */}
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button size="sm" variant="outline">

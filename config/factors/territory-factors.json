@@ -1,0 +1,17 @@
+{
+  "california": {
+    "urban": {
+      "san_francisco": 1.25,
+      "los_angeles": 1.2,
+      "san_diego": 1.15,
+      "oakland": 1.18
+    },
+    "suburban": {
+      "default": 1.05
+    },
+    "rural": {
+      "default": 0.9
+    }
+  },
+  "lastUpdated": "2025-10-15"
+}

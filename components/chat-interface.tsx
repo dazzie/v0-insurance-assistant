@@ -163,8 +163,20 @@ export function ChatInterface({ customerProfile }: ChatInterfaceProps) {
         summary += '\n'
       }
       
-      if (hasAddressEnrichment) {
-        summary += `📍 **Location:** ${customerProfile.addressEnrichment!.formattedAddress || location}\n`
+      // Show location from multiple possible sources
+      const locationParts = []
+      if (customerProfile.addressEnrichment?.formattedAddress) {
+        locationParts.push(customerProfile.addressEnrichment.formattedAddress)
+      } else if (customerProfile.address) {
+        locationParts.push(customerProfile.address)
+      } else {
+        if (customerProfile.city) locationParts.push(customerProfile.city)
+        if (customerProfile.state) locationParts.push(customerProfile.state)
+        if (customerProfile.zipCode) locationParts.push(customerProfile.zipCode)
+      }
+      
+      if (locationParts.length > 0) {
+        summary += `📍 **Location:** ${locationParts.join(', ')}\n`
       }
       
       if (hasRiskAssessment) {

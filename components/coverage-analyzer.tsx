@@ -618,32 +618,6 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
               </p>
             </div>
 
-            {/* Policy Health Score - Autonomous Analysis */}
-            {policyAnalysis && (
-              <PolicyHealthCard 
-                analysis={policyAnalysis}
-                requestedCoverages={customerProfile?.requestedCoverages || []}
-                onFixGap={(gapId) => {
-                  const gap = policyAnalysis.gaps.find(g => g.id === gapId)
-                  if (!gap) return
-                  
-                  console.log('[Coverage Analyzer] User wants to fix gap:', gapId)
-                  
-                  // Save policy analysis to customer profile
-                  if (customerProfile) {
-                    const updatedProfile = {
-                      ...customerProfile,
-                      policyAnalysis: policyAnalysis
-                    }
-                    profileManager.saveProfile(updatedProfile)
-                    console.log('[Coverage Analyzer] Policy analysis saved to profile')
-                  }
-                  
-                  // TODO: Trigger quote flow to address this gap
-                }}
-              />
-            )}
-
             {/* Raw Data Display (Debug) */}
             <details className="border rounded-lg p-4 bg-gray-50">
               <summary className="cursor-pointer font-medium text-sm">
@@ -1068,6 +1042,32 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
                 )}
               </TabsContent>
             </Tabs>
+
+            {/* Policy Health Score - Autonomous Analysis */}
+            {policyAnalysis && (
+              <PolicyHealthCard 
+                analysis={policyAnalysis}
+                requestedCoverages={customerProfile?.requestedCoverages || []}
+                onFixGap={(gapId) => {
+                  const gap = policyAnalysis.gaps.find(g => g.id === gapId)
+                  if (!gap) return
+                  
+                  console.log('[Coverage Analyzer] User wants to fix gap:', gapId)
+                  
+                  // Save policy analysis to customer profile
+                  if (customerProfile) {
+                    const updatedProfile = {
+                      ...customerProfile,
+                      policyAnalysis: policyAnalysis
+                    }
+                    profileManager.saveProfile(updatedProfile)
+                    console.log('[Coverage Analyzer] Policy analysis saved to profile')
+                  }
+                  
+                  // TODO: Trigger quote flow to address this gap
+                }}
+              />
+            )}
 
             {/* Enrichment Progress */}
             {isEnriching && enrichmentProgress.length > 0 && (

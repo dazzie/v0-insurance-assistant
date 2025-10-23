@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Mic, Square } from "lucide-react"
 import { CoverageAnalyzer } from "@/components/coverage-analyzer"
 import type { CustomerProfile } from "@/lib/customer-profile"
 
@@ -23,9 +22,6 @@ export function CustomerProfileForm({ onSubmit, onEnrichmentStart, onEnrichmentP
   const [age, setAge] = useState("")
   const [needs, setNeeds] = useState("")
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [isRecording, setIsRecording] = useState(false)
-  const [isProcessing, setIsProcessing] = useState(false)
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null)
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -51,92 +47,6 @@ export function CustomerProfileForm({ onSubmit, onEnrichmentStart, onEnrichmentP
           .map((need) => need.trim())
           .filter((need) => need.length > 0),
       })
-    }
-  }
-
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      const recorder = new MediaRecorder(stream)
-      const chunks: Blob[] = []
-
-      recorder.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          chunks.push(e.data)
-        }
-      }
-
-      recorder.onstop = async () => {
-        const audioBlob = new Blob(chunks, { type: 'audio/webm' })
-        await handleAudioSubmit(audioBlob)
-        stream.getTracks().forEach(track => track.stop())
-      }
-
-      recorder.start()
-      setMediaRecorder(recorder)
-      setIsRecording(true)
-    } catch (error) {
-      console.error('Error accessing microphone:', error)
-      alert('Unable to access microphone. Please check permissions.')
-    }
-  }
-
-  const stopRecording = () => {
-    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-      mediaRecorder.stop()
-      setIsRecording(false)
-    }
-  }
-
-  const handleAudioSubmit = async (audioBlob: Blob) => {
-    setIsProcessing(true)
-
-    try {
-      // Convert audio to FormData
-      const formData = new FormData()
-      formData.append('audio', audioBlob, 'recording.webm')
-
-      // Send to transcription endpoint
-      const transcribeResponse = await fetch('/api/transcribe', {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (!transcribeResponse.ok) {
-        throw new Error('Transcription failed')
-      }
-
-      const { text } = await transcribeResponse.json()
-      console.log('[Audio Form] Transcribed:', text)
-
-      // Parse the transcribed text to extract information
-      // Simple parsing - look for patterns
-      const lowerText = text.toLowerCase()
-      
-      // Extract location (look for ZIP codes, city names)
-      const zipMatch = text.match(/\b\d{5}\b/)
-      const cityStateMatch = text.match(/\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*),?\s+([A-Z]{2})\b/)
-      
-      // Extract age
-      const ageMatch = text.match(/\b(?:age|i'm|im|i am)\s+(\d{2})\b/i)
-      
-      // Extract insurance needs
-      const insuranceTypes = ['auto', 'home', 'life', 'renters', 'pet', 'health', 'disability', 'umbrella']
-      const foundNeeds = insuranceTypes.filter(type => lowerText.includes(type))
-
-      // Skip the form and go directly to chat with the full context
-      onSubmit({
-        location: zipMatch?.[0] || cityStateMatch?.[0] || text.match(/\b\d{5}(?:-\d{4})?\b/)?.[0] || location || 'Unknown',
-        age: ageMatch?.[1] || age || '30',
-        needs: foundNeeds.length > 0 ? foundNeeds : needs.split(',').map(n => n.trim()).filter(Boolean),
-        initialMessage: `🎤 ${text}`, // Pass the full audio message as initial context
-      } as CustomerProfile)
-
-    } catch (error) {
-      console.error('Error processing audio:', error)
-      alert('Sorry, I had trouble processing your audio message. Please try again or use the form.')
-    } finally {
-      setIsProcessing(false)
     }
   }
 
@@ -195,68 +105,6 @@ export function CustomerProfileForm({ onSubmit, onEnrichmentStart, onEnrichmentP
             <Button type="submit" className="w-full" size="lg">
               Start Research
             </Button>
-
-            {/* OR Divider */}
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">Or skip manual entry</span>
-              </div>
-            </div>
-
-            {/* Audio Recording Option */}
-            <div className="space-y-4">
-              <div className="border rounded-lg p-6 bg-muted/30">
-                <div className="flex items-start gap-3 mb-4">
-                  <Mic className="w-5 h-5 text-primary mt-0.5" />
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-sm mb-1">Record Voice Message</h3>
-                    <p className="text-xs text-muted-foreground">
-                      Leave a voice message with your insurance needs, just like calling an insurance agent
-                    </p>
-                  </div>
-                </div>
-                
-                <Button
-                  type="button"
-                  variant={isRecording ? "destructive" : "outline"}
-                  size="lg"
-                  className="w-full"
-                  onClick={isRecording ? stopRecording : startRecording}
-                  disabled={isProcessing}
-                >
-                  {isProcessing ? (
-                    <>
-                      <span className="mr-2">⏳</span>
-                      Processing your message...
-                    </>
-                  ) : isRecording ? (
-                    <>
-                      <Square className="w-4 h-4 mr-2" />
-                      Stop Recording
-                    </>
-                  ) : (
-                    <>
-                      <Mic className="w-4 h-4 mr-2" />
-                      Start Recording
-                    </>
-                  )}
-                </Button>
-
-                {isRecording && (
-                  <div className="mt-3 flex items-center justify-center gap-2 text-sm text-destructive animate-pulse">
-                    <div className="w-2 h-2 bg-destructive rounded-full" />
-                    Recording... Click "Stop Recording" when finished
-                  </div>
-                )}
-
-                <p className="text-xs text-muted-foreground mt-3 text-center">
-                  Example: "Hi, I'm John Smith from San Francisco, 94122. I'm 35 years old and looking for auto and home insurance."
-                </p>
-              </div>
-            </div>
 
             {/* Coverage Analyzer */}
             <div className="pt-2">

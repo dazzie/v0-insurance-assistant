@@ -722,7 +722,15 @@ function checkBasicCoverage(
   const gaps: PolicyGap[] = []
   
   // Check for missing liability coverage
-  if (!coverage.liability) {
+  // First check if there's a liability field, then check coverages array for liability-related items
+  const hasLiabilityField = !!coverage.liability
+  const hasLiabilityCoverages = coverage.coverages?.some((cov: any) => 
+    cov.type?.toLowerCase().includes('liability') || 
+    cov.type?.toLowerCase().includes('bodily injury') ||
+    cov.type?.toLowerCase().includes('property damage')
+  )
+  
+  if (!hasLiabilityField && !hasLiabilityCoverages) {
     gaps.push({
       id: 'missing_liability',
       type: 'critical',

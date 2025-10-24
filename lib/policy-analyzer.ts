@@ -220,7 +220,17 @@ function checkStateCompliance(
     })
   }
 
-  if (stateReq.umRequired && !coverage.uninsuredMotorist && !coverage.underinsuredMotorist) {
+  // Check for required UM/UIM coverage in multiple formats
+  const hasUninsuredMotorist = coverage.uninsuredMotorist || 
+                              coverage.underinsuredMotorist ||
+                              coverage.coverages?.some((cov: any) => 
+                                cov.type?.toLowerCase().includes('uninsured') ||
+                                cov.type?.toLowerCase().includes('underinsured') ||
+                                cov.type?.toLowerCase().includes('um') ||
+                                cov.type?.toLowerCase().includes('uim')
+                              )
+
+  if (stateReq.umRequired && !hasUninsuredMotorist) {
     gaps.push({
       id: 'missing_required_um',
       type: 'critical',
@@ -338,7 +348,17 @@ function checkLifeStageNeeds(
 
   // Young drivers (under 25) → Recommend higher UM/UIM
   if (profile.age && typeof profile.age === 'number' && profile.age < 25) {
-    if (!coverage.uninsuredMotorist && !coverage.underinsuredMotorist) {
+    // Check for uninsured motorist coverage in multiple formats
+    const hasUninsuredMotorist = coverage.uninsuredMotorist || 
+                                coverage.underinsuredMotorist ||
+                                coverage.coverages?.some((cov: any) => 
+                                  cov.type?.toLowerCase().includes('uninsured') ||
+                                  cov.type?.toLowerCase().includes('underinsured') ||
+                                  cov.type?.toLowerCase().includes('um') ||
+                                  cov.type?.toLowerCase().includes('uim')
+                                )
+
+    if (!hasUninsuredMotorist) {
       gaps.push({
         id: 'young_driver_um',
         type: 'warning',
@@ -582,7 +602,17 @@ function checkUninsuredMotorist(
 ): PolicyGap[] {
   const gaps: PolicyGap[] = []
 
-  if (!coverage.uninsuredMotorist && !coverage.underinsuredMotorist) {
+  // Check for uninsured motorist coverage in multiple formats
+  const hasUninsuredMotorist = coverage.uninsuredMotorist || 
+                              coverage.underinsuredMotorist ||
+                              coverage.coverages?.some((cov: any) => 
+                                cov.type?.toLowerCase().includes('uninsured') ||
+                                cov.type?.toLowerCase().includes('underinsured') ||
+                                cov.type?.toLowerCase().includes('um') ||
+                                cov.type?.toLowerCase().includes('uim')
+                              )
+
+  if (!hasUninsuredMotorist) {
     citations.add(industryRecommendations.uninsuredMotorist.source)
     
     gaps.push({

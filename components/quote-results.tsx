@@ -1,11 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useSession } from 'next-auth/react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 // import { Separator } from "@/components/ui/separator"
 import { InsuranceSummaryComparison } from "@/components/insurance-summary-comparison"
+import { PostQuoteSignup } from "@/components/post-quote-signup"
 import { generateInsuranceComparisons } from "@/lib/insurance-comparison-generator"
 import { carriers } from "@/lib/carrier-database"
 
@@ -16,16 +18,30 @@ interface QuoteResultsProps {
 }
 
 export function QuoteResults({ quoteData, onBack, onNewQuote }: QuoteResultsProps) {
+  const { data: session } = useSession()
   const [viewMode, setViewMode] = useState<'summary' | 'detailed'>('summary')
   const [comparisons, setComparisons] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [quoteSource, setQuoteSource] = useState<'mock' | 'api' | 'error'>('mock')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [showSignup, setShowSignup] = useState(false)
 
   // Fetch real quotes from aggregator API on mount
   useEffect(() => {
     fetchRealQuotes()
   }, [quoteData])
+
+  // Show signup prompt after quotes are loaded for non-authenticated users
+  useEffect(() => {
+    if (!isLoading && comparisons.length > 0 && !session) {
+      // Show signup prompt after a short delay to let user see quotes first
+      const timer = setTimeout(() => {
+        setShowSignup(true)
+      }, 3000) // 3 second delay
+
+      return () => clearTimeout(timer)
+    }
+  }, [isLoading, comparisons.length, session])
 
   async function fetchRealQuotes() {
     setIsLoading(true)
@@ -60,6 +76,16 @@ export function QuoteResults({ quoteData, onBack, onNewQuote }: QuoteResultsProp
       if (data.success && data.quotes && data.quotes.length > 0) {
         setComparisons(data.quotes)
         setQuoteSource(data.source === 'insurify' || data.source === 'rating_engine' ? 'api' : 'mock')
+        
+        // Auto-save quotes to localStorage for authenticated users
+        localStorage.setItem('savedQuotes', JSON.stringify(data.quotes))
+        
+        // Trigger auto-save to server if user is authenticated
+        if (session?.user?.id) {
+          setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('triggerAutoSave'))
+          }, 1000)
+        }
       } else {
         throw new Error('No quotes returned from API')
       }
@@ -76,6 +102,16 @@ export function QuoteResults({ quoteData, onBack, onNewQuote }: QuoteResultsProp
         4
       )
       setComparisons(mockComparisons)
+      
+      // Auto-save mock quotes to localStorage
+      localStorage.setItem('savedQuotes', JSON.stringify(mockComparisons))
+      
+      // Trigger auto-save to server if user is authenticated
+      if (session?.user?.id) {
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent('triggerAutoSave'))
+        }, 1000)
+      }
     } finally {
       setIsLoading(false)
     }
@@ -281,6 +317,21 @@ export function QuoteResults({ quoteData, onBack, onNewQuote }: QuoteResultsProp
             </p>
           </CardContent>
         </Card>
+      )}
+
+      {/* Post-Quote Signup Prompt for Non-Authenticated Users */}
+      {showSignup && !session && (
+        <div className="my-8">
+          <PostQuoteSignup
+            customerProfile={quoteData.customerProfile}
+            quotes={comparisons}
+            onSave={() => {
+              setShowSignup(false)
+              // Optionally refresh the page or show a success message
+            }}
+            onSkip={() => setShowSignup(false)}
+          />
+        </div>
       )}
 
       {/* Additional Information */}

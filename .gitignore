@@ -45,3 +45,6 @@ next-env.d.ts
 
 # Documentation archive
 docs-archive/
+
+# User data directory (file-based database)
+.data/

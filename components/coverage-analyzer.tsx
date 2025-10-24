@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
+import { useSession } from 'next-auth/react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -8,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Upload, FileText, Image, CheckCircle, AlertCircle, Loader2, X, Camera, RotateCcw } from "lucide-react"
 import { PolicyHealthCard } from "@/components/policy-health-card"
 import { CoverageDetailCard } from "@/components/coverage-detail-card"
+import { PostQuoteSignup } from "@/components/post-quote-signup"
 import { analyzePolicy, type PolicyAnalysis } from "@/lib/policy-analyzer"
 import type { CustomerProfile } from "@/lib/customer-profile"
 import { profileManager } from "@/lib/customer-profile"
@@ -106,6 +108,7 @@ interface CoverageAnalyzerProps {
 }
 
 export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerProfile, onEnrichmentStart, onEnrichmentProgress, onEnrichmentComplete }: CoverageAnalyzerProps) {
+  const { data: session } = useSession()
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
@@ -116,6 +119,7 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
   const [error, setError] = useState<string | null>(null)
   const [isScanning, setIsScanning] = useState(false)
   const [showCamera, setShowCamera] = useState(false)
+  const [showSignupPrompt, setShowSignupPrompt] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -334,6 +338,13 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
                 
                 // Pass enriched data to parent
                 onEnrichmentComplete?.(data.coverage)
+                
+                // Show signup prompt for non-authenticated users after enrichment
+                if (!session) {
+                  setTimeout(() => {
+                    setShowSignupPrompt(true)
+                  }, 2000) // 2 second delay after enrichment completes
+                }
               } else if (data.type === 'error') {
                 console.error('[Coverage] ❌ Enrichment error:', data.error)
                 setEnrichmentProgress(prev => [...prev, `❌ ${data.message}`])
@@ -1108,6 +1119,21 @@ export function CoverageAnalyzer({ onAnalysisComplete, insuranceType, customerPr
                 </Button>
               )}
             </div>
+          </div>
+        )}
+
+        {/* Post-Analysis Signup Prompt for Non-Authenticated Users */}
+        {showSignupPrompt && !session && extractedData && (
+          <div className="mt-6 pt-6 border-t">
+            <PostQuoteSignup
+              customerProfile={customerProfile}
+              quotes={[]} // No quotes yet, just saving the policy analysis
+              onSave={() => {
+                setShowSignupPrompt(false)
+                // Optionally show a success message
+              }}
+              onSkip={() => setShowSignupPrompt(false)}
+            />
           </div>
         )}
       </CardContent>

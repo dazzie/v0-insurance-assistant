@@ -187,12 +187,31 @@ export function ChatInterface({ customerProfile }: ChatInterfaceProps) {
         summary += `✅ **Additional Coverages:** ${customerProfile.requestedCoverages!.length} coverage${customerProfile.requestedCoverages!.length > 1 ? 's' : ''} added to quote\n`
       }
       
-      summary += `\n**Ready to get you personalized quotes!**\n\n**What would you like to do?**\n\n`
-      summary += `1. 📊 **Get Comparison Quotes** - See rates from top carriers with your requested coverages\n`
-      summary += `2. 💡 **Review Coverage Recommendations** - Discuss any gaps or optimizations\n`
-      summary += `3. ✏️ **Update Details** - Make changes to your profile or add more information\n`
-      summary += `4. ❓ **Ask Questions** - Get advice on coverage, carriers, or pricing\n\n`
-      summary += `**I can generate quotes from multiple carriers right now based on your profile!** Just say "get quotes" or "show me quotes" to see your options.`
+      // Check for saved quotes
+      const savedQuotes = localStorage.getItem('savedQuotes')
+      const hasQuotes = savedQuotes && JSON.parse(savedQuotes).length > 0
+      
+      if (hasQuotes) {
+        const quotes = JSON.parse(savedQuotes)
+        summary += `💰 **Saved Quotes:** ${quotes.length} quotes from previous session\n`
+      }
+      
+      summary += `\n**Welcome back! Your data has been restored.**\n\n**What would you like to do?**\n\n`
+      
+      if (hasQuotes) {
+        summary += `1. 📊 **View Your Saved Quotes** - Review your previous quote comparisons\n`
+        summary += `2. 🔄 **Get New Quotes** - Generate fresh quotes with updated rates\n`
+        summary += `3. 💡 **Review Coverage Recommendations** - Discuss any gaps or optimizations\n`
+        summary += `4. ✏️ **Update Profile** - Make changes to your information\n`
+        summary += `5. ❓ **Ask Questions** - Get advice on coverage, carriers, or pricing\n\n`
+        summary += `**I can show your saved quotes or generate new ones!** Just say "show my quotes" or "get new quotes".`
+      } else {
+        summary += `1. 📊 **Get Comparison Quotes** - See rates from top carriers with your profile\n`
+        summary += `2. 💡 **Review Coverage Recommendations** - Discuss any gaps or optimizations\n`
+        summary += `3. ✏️ **Update Details** - Make changes to your profile or add more information\n`
+        summary += `4. ❓ **Ask Questions** - Get advice on coverage, carriers, or pricing\n\n`
+        summary += `**I can generate quotes from multiple carriers right now based on your profile!** Just say "get quotes" or "show me quotes" to see your options.`
+      }
       
       return summary
     }
@@ -277,6 +296,54 @@ Do you currently have ${insuranceType} insurance? If yes, do you have your polic
       
       // Just update local state - don't save to localStorage (parent already did that)
       setLiveProfile(customerProfile)
+    }
+  }, [customerProfile])
+
+  // Check for restored quotes on mount and when profile changes
+  useEffect(() => {
+    const checkRestoredQuotes = () => {
+      const restoredQuoteData = localStorage.getItem('restoredQuoteData')
+      const shouldShow = localStorage.getItem('shouldShowRestoredQuotes')
+      
+      if (restoredQuoteData && shouldShow === 'true') {
+        try {
+          const quotesData = JSON.parse(restoredQuoteData)
+          console.log('[ChatInterface] 🔄 Found restored quotes:', quotesData)
+          
+          // Show the quotes in the interface immediately
+          setQuoteData(quotesData)
+          setShowQuoteResults(true)
+          
+          // Clear the flags after using them
+          localStorage.removeItem('restoredQuoteData')
+          localStorage.removeItem('shouldShowRestoredQuotes')
+          
+          console.log('[ChatInterface] ✅ Restored quotes displayed automatically')
+        } catch (error) {
+          console.error('[ChatInterface] Error loading restored quotes:', error)
+        }
+      }
+    }
+
+    // Check immediately on mount
+    checkRestoredQuotes()
+
+    // Also check when quotes are restored
+    const handleQuotesRestored = () => {
+      setTimeout(checkRestoredQuotes, 1000) // Longer delay to ensure all data is loaded
+    }
+
+    // Check when data restoration completes
+    const handleDataRestored = () => {
+      setTimeout(checkRestoredQuotes, 1500) // Even longer delay for complete restoration
+    }
+
+    window.addEventListener('quotesRestored', handleQuotesRestored)
+    window.addEventListener('dataRestored', handleDataRestored)
+    
+    return () => {
+      window.removeEventListener('quotesRestored', handleQuotesRestored)
+      window.removeEventListener('dataRestored', handleDataRestored)
     }
   }, [customerProfile])
 
@@ -450,13 +517,59 @@ Do you currently have ${insuranceType} insurance? If yes, do you have your polic
     setMessages((prev) => [...prev, userMessage])
     setInput("")
 
-    // Check if user is asking for quotes/comparisons
+    // Check if user is asking to show saved quotes
+    const isShowSavedQuotes = promptText.toLowerCase().includes('show my quotes') ||
+                             promptText.toLowerCase().includes('view my quotes') ||
+                             promptText.toLowerCase().includes('saved quotes') ||
+                             promptText.toLowerCase().includes('previous quotes')
+    
+    // Check if user is asking for new quotes/comparisons
     // Include "1" as a shortcut trigger since the AI prompts users to type "1" or "get quotes"
     const isQuoteRequest = promptText.trim() === '1' ||
                           promptText.toLowerCase().includes('quote') ||
                           promptText.toLowerCase().includes('compare') ||
                           promptText.toLowerCase().includes('price') ||
                           promptText.toLowerCase().includes('get insurance')
+
+    // Handle showing saved quotes
+    if (isShowSavedQuotes) {
+      const savedQuotes = localStorage.getItem('savedQuotes')
+      if (savedQuotes) {
+        try {
+          const quotes = JSON.parse(savedQuotes)
+          const quotesData = {
+            insuranceType: liveProfile.needs?.[0] || liveProfile.insuranceType || 'auto',
+            customerProfile: liveProfile,
+            quotes: quotes,
+            isRestored: true
+          }
+          
+          console.log('[ChatInterface] 📊 Displaying saved quotes:', quotes.length, 'quotes')
+          setQuoteData(quotesData)
+          setShowQuoteResults(true)
+          return
+        } catch (error) {
+          console.error('[ChatInterface] Error loading saved quotes:', error)
+          const errorMessage: Message = {
+            id: Date.now().toString(),
+            role: "assistant",
+            content: "❌ Sorry, I couldn't load your saved quotes. They may have been corrupted. Would you like me to generate new quotes instead?",
+            createdAt: new Date(),
+          }
+          setMessages(prev => [...prev, errorMessage])
+          return
+        }
+      } else {
+        const noQuotesMessage: Message = {
+          id: Date.now().toString(),
+          role: "assistant",
+          content: "📊 You don't have any saved quotes yet. Would you like me to generate some quotes for you based on your profile?",
+          createdAt: new Date(),
+        }
+        setMessages(prev => [...prev, noQuotesMessage])
+        return
+      }
+    }
 
     if (isQuoteRequest) {
       // Determine insurance type from profile
